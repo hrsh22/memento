@@ -10,7 +10,12 @@
     "test": "vitest run",
     "agent:once": "tsx --env-file=.env.local scripts/agent.ts --once",
     "agent:watch": "tsx --env-file=.env.local scripts/agent.ts",
-    "wallet:status": "tsx --env-file=.env.local scripts/wallet.ts"
+    "wallet:status": "tsx --env-file=.env.local scripts/wallet.ts",
+    "evidence:verify": "tsx --env-file-if-exists=.env.local scripts/verify-evidence.ts",
+    "evidence:export": "tsx --env-file-if-exists=.env.local scripts/export-evidence.ts",
+    "test:live": "tsx --env-file=.env.local scripts/validate-live.ts",
+    "typecheck": "tsc --noEmit --incremental false",
+    "format:check": "prettier --check src scripts next.config.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

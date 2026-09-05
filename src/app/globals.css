@@ -2286,3 +2286,113 @@ input[type="range"] {
   font-size: 8px;
   color: #94a17f;
 }
+@media (max-width: 680px) {
+  .sidebar {
+    visibility: hidden;
+  }
+  .sidebar.is-open {
+    visibility: visible;
+  }
+  .sculpture {
+    width: 200px;
+    top: 25px;
+    right: -5px;
+  }
+}
+.receipt-budget {
+  background: #f5f8ed;
+  border: 1px solid #e3ead6;
+  border-radius: 6px;
+  padding: 14px;
+  display: grid;
+  gap: 11px;
+}
+.receipt-budget > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 10px;
+  color: #7c8f65;
+}
+.receipt-budget strong {
+  font-family: var(--font-mono-body);
+  font-size: 10px;
+  font-weight: 400;
+  color: #5b7844;
+}
+.verification-result {
+  background: #edf5e3;
+  border: 1px solid #dbe9c8;
+  border-radius: 6px;
+  padding: 15px;
+  color: #638646;
+}
+.verification-result > strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.verification-result p {
+  font-size: 10px;
+  line-height: 1.8;
+  margin-top: 5px;
+}
+.verification-result > span {
+  display: block;
+  font-size: 9px;
+  line-height: 1.7;
+  color: #82986d;
+  margin-top: 9px;
+}
+.verification-error {
+  color: #b16847;
+  background: #fff5e9;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.evidence-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dbe6cd;
+  background: #f0f5e7;
+  border-radius: 7px;
+  padding: 12px 15px;
+  margin-bottom: 19px;
+  color: #718d54;
+}
+.evidence-strip strong {
+  font-size: 11px;
+  font-weight: 500;
+  display: block;
+  color: #5f7c47;
+}
+.evidence-strip span {
+  font-size: 10px;
+  color: #859771;
+  display: block;
+  margin-top: 3px;
+}
+.evidence-strip button {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 10px;
+  color: #67844d;
+}
+@media (max-width: 680px) {
+  .evidence-strip {
+    flex-wrap: wrap;
+    gap: 9px;
+  }
+  .evidence-strip span {
+    font-size: 9px;
+  }
+  .evidence-strip button {
+    margin-left: 31px;
+    font-size: 9px;
+  }
+}

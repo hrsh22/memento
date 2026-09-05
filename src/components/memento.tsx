@@ -349,6 +349,25 @@ export function Memento() {
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
   const [newImportance, setNewImportance] = useState(60);
+  const [verifying, setVerifying] = useState(false);
+  const [verification, setVerification] = useState<{
+    verified: boolean;
+    signatureValid: boolean;
+    hashMatches: boolean;
+    decisionSignatureValid?: boolean | null;
+    onchainConfirmed: boolean;
+    bytes: number;
+    checkedAt: string;
+    onchainCopies: {
+      providerId: string;
+      dataSetId: string;
+      live: boolean;
+      pieceIncluded: boolean;
+      nextChallengeEpoch: string | null;
+    }[];
+  } | null>(null);
+  const [verifyError, setVerifyError] = useState("");
+  const refreshing = useRef(false);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [labReceipts, setLabReceipts] = useState<
     { at: string; plan: DecisionPlan }[]
@@ -364,25 +383,49 @@ export function Memento() {
     [memories, balance, policy],
   );
   const refresh = useCallback(async () => {
+    if (refreshing.current) return;
+    refreshing.current = true;
     setLoading(true);
-    try {
-      const [c, a] = await Promise.all([
-        fetch("/api/chain", { cache: "no-store" }),
-        fetch("/api/agent", { cache: "no-store" }),
-      ]);
-      const data = await c.json();
-      if (!c.ok) throw new Error(data.error);
-      setChain(data);
+    const [c, a] = await Promise.allSettled([
+      fetch("/api/chain", { cache: "no-store" }).then(async (r) => {
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error);
+        return data;
+      }),
+      fetch("/api/agent", { cache: "no-store" }).then(async (r) => {
+        if (!r.ok) throw new Error("Evidence unavailable");
+        return r.json();
+      }),
+    ]);
+    if (c.status === "fulfilled") {
+      setChain(c.value);
       setChainError("");
-      if (a.ok) setAgent(await a.json());
-    } catch (e) {
+    } else {
       setChainError(
-        e instanceof Error ? e.message : "Unable to read Calibration.",
+        c.reason instanceof Error
+          ? c.reason.message
+          : "Calibration is unavailable.",
       );
-    } finally {
-      setLoading(false);
     }
+    if (a.status === "fulfilled") setAgent(a.value);
+    refreshing.current = false;
+    setLoading(false);
   }, []);
+  async function verify(id: string) {
+    setVerifying(true);
+    setVerifyError("");
+    setVerification(null);
+    try {
+      const r = await fetch("/api/verify?id=" + encodeURIComponent(id));
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error);
+      setVerification(data);
+    } catch (e) {
+      setVerifyError(e instanceof Error ? e.message : "Verification failed.");
+    } finally {
+      setVerifying(false);
+    }
+  }
   useEffect(() => {
     const pending = timers.current;
     const start = setTimeout(() => {
@@ -395,10 +438,16 @@ export function Memento() {
   }, [refresh]);
   useEffect(() => {
     if (mode !== "live") return;
+    const initial = setTimeout(() => {
+      void refresh();
+    }, 0);
     const timer = setInterval(() => {
       void refresh();
     }, 15000);
-    return () => clearInterval(timer);
+    return () => {
+      clearTimeout(initial);
+      clearInterval(timer);
+    };
   }, [mode, refresh]);
   useEffect(() => {
     if (!toast) return;
@@ -642,6 +691,27 @@ export function Memento() {
               </button>
             </div>
           )}
+          {mode === "lab" &&
+            agent.receipts.some((r) => r.action === "stored" && r.verified) && (
+              <div className="evidence-strip">
+                <Fingerprint size={19} />
+                <div>
+                  <strong>Beyond the simulation.</strong>
+                  <span>
+                    Real archives on Filecoin. Signed decisions. Independently
+                    verifiable.
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    setMode("live");
+                    navigate("receipts");
+                  }}
+                >
+                  Inspect live evidence <ArrowUpRight size={14} />
+                </button>
+              </div>
+            )}
           {view === "overview" && (
             <>
               <section className="overview-grid">
@@ -962,7 +1032,9 @@ export function Memento() {
                           <span className="status-dot" />{" "}
                           {agent.running
                             ? "Cycle in progress"
-                            : "Read-only observer"}{" "}
+                            : agent.evidenceMode === "recorded"
+                              ? "Recorded evidence · live treasury"
+                              : "Read-only observer"}{" "}
                           · refreshes every 15s
                         </span>
                         <Button
@@ -1265,7 +1337,11 @@ export function Memento() {
                     <button
                       className="receipt-card panel"
                       key={r.id}
-                      onClick={() => setReceipt(r)}
+                      onClick={() => {
+                        setReceipt(r);
+                        setVerification(null);
+                        setVerifyError("");
+                      }}
                     >
                       <div className="receipt-symbol">
                         <Fingerprint size={25} />
@@ -1274,9 +1350,13 @@ export function Memento() {
                         <h3>
                           {r.action === "stored"
                             ? "Memory archive committed"
-                            : r.action === "deferred"
-                              ? "Write deferred autonomously"
-                              : "Cycle stopped"}
+                            : r.action === "funded"
+                              ? "Reserve topped up autonomously"
+                              : r.action === "pending"
+                                ? "Commit in progress"
+                                : r.action === "deferred"
+                                  ? "Write deferred autonomously"
+                                  : "Cycle stopped"}
                         </h3>
                         <p>
                           Epoch {r.snapshot.epoch} · {r.id.slice(0, 8)}
@@ -1636,7 +1716,53 @@ export function Memento() {
                 </span>
                 <span>Epoch {receipt.snapshot.epoch}</span>
               </div>
-              <p className="receipt-reason">{receipt.reason}</p>
+              <p className="receipt-reason">
+                {receipt.reason.replace(/Content fingerprint .*/i, "")}
+              </p>
+              <div className="receipt-budget">
+                <div>
+                  <span>Available when observed</span>
+                  <strong>
+                    {fmt(Number(receipt.snapshot.availableFunds), 4)} USDFC
+                  </strong>
+                </div>
+                <div>
+                  <span>Reserve at decision</span>
+                  <strong>
+                    {receipt.snapshot.runwayDays === null
+                      ? "No active spend"
+                      : fmt(receipt.snapshot.runwayDays, 2) + " days"}
+                  </strong>
+                </div>
+                {receipt.quote && (
+                  <>
+                    <div>
+                      <span>Exact archive quote</span>
+                      <strong>
+                        {receipt.quote.archiveBytes.toLocaleString()} bytes
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Projected monthly rate</span>
+                      <strong>
+                        {fmt(Number(receipt.quote.projectedMonthlyUsdfc), 6)}{" "}
+                        USDFC
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Required deposit</span>
+                      <strong>
+                        {fmt(Number(receipt.quote.depositNeededUsdfc), 6)} USDFC
+                      </strong>
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className="detail-meta">
+                <span>{receipt.plan.protectedCount} protected</span>
+                <span>{receipt.plan.compactedCount} compacted</span>
+                <span>{receipt.plan.deferredCount} deferred</span>
+              </div>
               {receipt.payloadHash && (
                 <div className="proof-field">
                   <label>ARCHIVE SHA-256</label>
@@ -1647,6 +1773,54 @@ export function Memento() {
                 <div className="proof-field">
                   <label>FILECOIN PIECE CID</label>
                   <code>{receipt.pieceCid}</code>
+                </div>
+              )}
+              {receipt.pieceCid && (
+                <Button
+                  onClick={() => void verify(receipt.id)}
+                  disabled={verifying}
+                >
+                  <ShieldCheck size={15} className={verifying ? "spin" : ""} />
+                  {verifying
+                    ? "Checking chain & retrieving…"
+                    : "Verify independently now"}
+                </Button>
+              )}
+              {verifyError && (
+                <p role="alert" className="verification-error">
+                  {verifyError}
+                </p>
+              )}
+              {verification && (
+                <div className="verification-result" role="status">
+                  <strong>
+                    {verification.verified
+                      ? "Fresh verification passed"
+                      : "Verification did not pass"}
+                  </strong>
+                  <p>
+                    {verification.signatureValid ? "✓" : "×"} Agent archive
+                    signature · {verification.hashMatches ? "✓" : "×"} Retrieved
+                    SHA-256
+                  </p>
+                  <p>
+                    {verification.onchainConfirmed ? "✓" : "×"} PieceCID
+                    included in both live PDP datasets
+                  </p>
+                  {verification.decisionSignatureValid !== null && (
+                    <p>
+                      {verification.decisionSignatureValid ? "✓" : "×"}{" "}
+                      Financial decision receipt signature
+                    </p>
+                  )}
+                  <p>
+                    {verification.bytes.toLocaleString()} bytes retrieved ·{" "}
+                    {new Date(verification.checkedAt).toLocaleTimeString()}
+                  </p>
+                  <span>
+                    Dataset inclusion and retrieval integrity. Not a claim of
+                    future availability or semantic correctness.
+                  </span>
                 </div>
               )}
               {receipt.copies?.map((c) => (

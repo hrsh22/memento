@@ -11,13 +11,14 @@ export async function GET() {
 }
 export async function POST(request: Request) {
   const expected = process.env.AGENT_API_TOKEN;
-  const provided = request.headers
-    .get("authorization")
-    ?.replace(/^Bearer /, "");
+  const authorization = request.headers.get("authorization");
+  const provided = authorization?.startsWith("Bearer ")
+    ? authorization.slice(7)
+    : undefined;
   if (
     !expected ||
     !provided ||
-    provided.length !== expected.length ||
+    Buffer.byteLength(provided) !== Buffer.byteLength(expected) ||
     !timingSafeEqual(Buffer.from(provided), Buffer.from(expected))
   )
     return Response.json(

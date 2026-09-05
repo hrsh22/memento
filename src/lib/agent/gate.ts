@@ -11,6 +11,8 @@ export function budgetGate(input: GateInput): {
   allowed: boolean;
   reason: string;
 } {
+  if (Object.values(input).some((v) => v < 0n))
+    return { allowed: false, reason: "Financial inputs must be nonnegative." };
   if (input.projectedRate > input.monthlyCap)
     return {
       allowed: false,

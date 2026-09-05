@@ -96,7 +96,7 @@ export interface Receipt {
   address: string;
   snapshot: ChainSnapshot;
   plan: DecisionPlan;
-  action: "stored" | "deferred" | "failed";
+  action: "stored" | "deferred" | "failed" | "funded" | "pending";
   reason: string;
   payloadHash?: string;
   signature?: string;
@@ -109,8 +109,19 @@ export interface Receipt {
   }[];
   verified?: boolean;
   depositTx?: string;
+  contentFingerprint?: string;
+  decisionSignature?: string;
+  broadcastAttempted?: boolean;
+  quote?: {
+    projectedMonthlyUsdfc: string;
+    depositNeededUsdfc: string;
+    operationFeesUsdfc: string;
+    archiveBytes: number;
+  };
 }
 export interface AgentState {
+  evidenceMode?: "recorded";
+  exportedAt?: string;
   running: boolean;
   events: AgentEvent[];
   receipts: Receipt[];

@@ -9,6 +9,13 @@ const mono = DM_Mono({
   weight: ["400", "500"],
 });
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000",
+  ),
   title: "Memento — A memory worth keeping",
   description:
     "An autonomous memory treasury for AI agents. Watch it protect useful knowledge, respect its storage budget, and verify every byte on Filecoin.",

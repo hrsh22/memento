@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import { formatUnits, parseUnits } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { planMemories } from "../agent/engine";
+import { memoriesSchema, policySchema } from "../agent/schema";
+import { maintainReserve } from "./maintain";
 import { budgetGate } from "../agent/gate";
 import { DEFAULT_POLICY, SEED_MEMORIES } from "../agent/memories";
 import type { Memory, Policy, Receipt } from "../agent/types";
@@ -20,8 +22,20 @@ export async function runCycle(
   policy: Policy = DEFAULT_POLICY,
   memories: Memory[] = SEED_MEMORIES,
 ): Promise<Receipt> {
+  policy = policySchema.parse(policy);
+  memories = memoriesSchema.parse(memories);
   return withAgentLock(async () => {
     let state = await readState();
+    if (
+      state.receipts.some(
+        (r) =>
+          r.action === "pending" ||
+          (r.action === "failed" && r.broadcastAttempted),
+      )
+    )
+      throw new Error(
+        "An earlier broadcast needs reconciliation. Inspect the receipt and transaction before resuming the worker.",
+      );
     state.running = true;
     state.lastError = undefined;
     await writeState(state);
@@ -68,19 +82,16 @@ export async function runCycle(
         plan.explanation,
       );
       const contentFingerprint = sha256(JSON.stringify({ memories, policy }));
+      receipt.contentFingerprint = contentFingerprint;
       const previous = (await readState()).receipts.find(
         (r) =>
+          r.address.toLowerCase() === snapshot.address.toLowerCase() &&
           r.action === "stored" &&
           r.verified &&
-          r.reason.includes(contentFingerprint),
+          (r.contentFingerprint === contentFingerprint ||
+            r.reason.includes(contentFingerprint)),
       );
-      if (previous) {
-        receipt.reason =
-          "The same memory set and policy already have a verified archive. Avoid a duplicate paid write.";
-        await addEvent("act", "Duplicate write prevented", receipt.reason);
-        await saveReceipt(receipt);
-        return receipt;
-      }
+      if (previous) return await maintainReserve(receipt);
       // Capture a byte-identical archive that can be independently verified. Receipt's
       // payload hash and signature are external, avoiding self-referential hashing.
       const archive = JSON.stringify(
@@ -93,6 +104,7 @@ export async function runCycle(
             epoch: snapshot.epoch,
             address: snapshot.address,
           },
+          financialSnapshot: snapshot,
           policy,
           memories: plan.decisions.filter((d) => d.action !== "defer"),
           deferred: plan.decisions
@@ -133,6 +145,12 @@ export async function runCycle(
         maxTopUp: parseUnits(process.env.AGENT_MAX_TOPUP_USDFC || "2", 18),
         gasBalance: parseUnits(snapshot.walletFil, 18),
       });
+      receipt.quote = {
+        projectedMonthlyUsdfc: formatUnits(projectedRate, 18),
+        depositNeededUsdfc: formatUnits(prep.costs.depositNeeded, 18),
+        operationFeesUsdfc: formatUnits(prep.costs.fees.total, 18),
+        archiveBytes: data.byteLength,
+      };
       receipt.reason = gate.reason;
       await addEvent(
         "decide",
@@ -143,14 +161,22 @@ export async function runCycle(
         await saveReceipt(receipt);
         return receipt;
       }
+      receipt.action = "pending";
+      receipt.broadcastAttempted = true;
+      await saveReceipt(receipt);
       if (prep.transaction) {
         await addEvent(
           "act",
           "Funding storage reserve",
           "Executing the SDK deposit/approval transaction on Calibration only.",
         );
-        const { hash } = await prep.transaction.execute();
+        const { hash } = await prep.transaction.execute({
+          onHash: (hash) => {
+            receipt!.depositTx = hash;
+          },
+        });
         receipt.depositTx = hash;
+        await saveReceipt(receipt);
         await addEvent("act", "Reserve transaction confirmed", hash);
       }
       receipt.payloadHash = sha256(data);
@@ -191,7 +217,8 @@ export async function runCycle(
       receipt.verified = sha256(downloaded) === receipt.payloadHash;
       if (!receipt.verified)
         throw new Error("The retrieved bytes did not match the archive hash.");
-      receipt.reason = `Stored two copies and verified retrieval. Content fingerprint ${contentFingerprint}`;
+      receipt.reason =
+        "Stored two copies and verified retrieval. The original sources remain local.";
       await addEvent(
         "verify",
         "Every byte accounted for",
@@ -214,6 +241,7 @@ export async function runCycle(
         receipt.reason = message;
         state.receipts = state.receipts.filter((r) => r.id !== receipt!.id);
         state.receipts.unshift(receipt);
+        delete receipt.decisionSignature;
       }
       await writeState(state);
       throw e;
@@ -228,6 +256,6 @@ export async function loadMemories() {
   if (process.env.MEMENTO_MEMORIES_PATH)
     return JSON.parse(
       await readFile(process.env.MEMENTO_MEMORIES_PATH, "utf8"),
-    ) as Memory[];
+    );
   return SEED_MEMORIES;
 }

@@ -22,7 +22,8 @@ do {
     );
   } catch (e) {
     console.error(e instanceof Error ? e.message : e);
-    if (once) process.exitCode = 1;
+    process.exitCode = 1;
+    stopped = true;
   }
   if (!once && !stopped) await new Promise((r) => setTimeout(r, 60000));
 } while (!once && !stopped);

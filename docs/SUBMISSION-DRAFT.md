@@ -63,30 +63,29 @@ Balances, payment rails, and proofs are real and onchain on Calibration. Nothing
 `/api/decide` projects recurring cost from the live price list; the funded worker additionally obtains an exact Synapse quote before broadcasting. `/watch` is a signed event-log visualization, not a screen recording. Spending limits are application-level policy, not a deployed spending-limit contract. Receipts prove integrity, not semantic correctness.
 
 
-## Paste-ready commands
+## How to submit
 
-The CLI has no X-post flag (`loops project update --help` lists name, tagline, pitch, description, repo-url, demo-url, video-url, logo-url, screenshot-urls, bounty-ids). Put the X URL in the description, and fill the dedicated field if the Loops web form has one.
-
-`docs/pitch.txt` and `docs/description.txt` are written, and the published X post URL is already in the description. Run these as-is from the repo root.
+Everything is filled in and verified. One command, from the repo root:
 
 ```sh
-loops project create --event filecointldr-builder-challenge-cycle-4 \
-  --name "Memento" \
-  --repo-url "https://github.com/hrsh22/memento" \
-  --tagline "An agent that knows what it can afford to remember."
-
-loops project update --event filecointldr-builder-challenge-cycle-4 \
-  --demo-url "https://memento-sigma-rosy.vercel.app/live" \
-  --video-url "https://memento-sigma-rosy.vercel.app/watch" \
-  --logo-url "https://memento-sigma-rosy.vercel.app/logo.png" \
-  --screenshot-urls "https://memento-sigma-rosy.vercel.app/shots/01-landing.png" \
-  --screenshot-urls "https://memento-sigma-rosy.vercel.app/shots/02-live-refusal.png" \
-  --screenshot-urls "https://memento-sigma-rosy.vercel.app/shots/03-watch.png" \
-  --pitch "$(cat docs/pitch.txt)" \
-  --description "$(cat docs/description.txt)"
+bash docs/submit.sh
 ```
 
-`--bounty-ids` is omitted deliberately: 1st/2nd/3rd Prize are placement awards, not selectable tracks, and the CLI exposes no ids for them. Update is a PATCH, so omitting the flag preserves whatever the platform sets.
+It checks `docs/pitch.txt` and `docs/description.txt` are present and that no
+placeholder URL survives, prints who you are authenticated as, then calls
+`loops project create` with every field at once and reads the record back.
+
+`loops project create` accepts all the fields, so no follow-up `update` is
+needed. If a project somehow already exists the call fails rather than
+overwriting — change `create` to `update` in the script and re-run.
+
+`--bounty-ids` is omitted deliberately: 1st/2nd/3rd Prize are placement awards,
+not selectable tracks, and the CLI exposes no ids for them. Update is a PATCH,
+so omitting the flag preserves whatever the platform sets.
+
+Do check whether the Loops web form has a dedicated **Public X post** field.
+The CLI has no flag for it, so the URL is carried in the description; if the
+web form asks for it separately, paste it there too.
 
 ## Remaining user actions
 

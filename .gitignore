@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local agent state, downloaded references, and installed event skills
+/data/
+/docs/research/
+/.agents/
+/.claude/
+!.env.example

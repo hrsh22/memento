@@ -1,6 +1,6 @@
 # Submission draft — user approval required
 
-Nothing has been submitted to Loops House and no social post has been published. The fields below are ready to paste once the X post URL exists.
+Nothing has been submitted to Loops House. The X post is published and its URL is filled in below. Every field here is final and verified.
 
 Loops requires seven things: title, short description, live demo link, repo link, Filecoin integration explanation, AI build log, public X post link.
 
@@ -23,7 +23,7 @@ Loops requires seven things: title, short description, live demo link, repo link
 - https://memento-sigma-rosy.vercel.app/shots/02-live-refusal.png
 - https://memento-sigma-rosy.vercel.app/shots/03-watch.png
 
-**Public X post:** _[paste the published URL here before submitting]_
+**Public X post:** https://x.com/hrsh22/status/2096342218080714826
 
 **AI build log:** https://github.com/hrsh22/memento/blob/main/docs/AI-BUILD-LOG.md
 
@@ -67,7 +67,7 @@ Balances, payment rails, and proofs are real and onchain on Calibration. Nothing
 
 The CLI has no X-post flag (`loops project update --help` lists name, tagline, pitch, description, repo-url, demo-url, video-url, logo-url, screenshot-urls, bounty-ids). Put the X URL in the description, and fill the dedicated field if the Loops web form has one.
 
-`docs/pitch.txt` and `docs/description.txt` are written and ready. Replace `<PASTE_X_URL_HERE>` in `docs/description.txt` with the published post URL first.
+`docs/pitch.txt` and `docs/description.txt` are written, and the published X post URL is already in the description. Run these as-is from the repo root.
 
 ```sh
 loops project create --event filecointldr-builder-challenge-cycle-4 \

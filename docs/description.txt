@@ -25,4 +25,4 @@ https://github.com/hrsh22/memento/blob/main/docs/AI-BUILD-LOG.md
 STATED LIMITS
 /api/decide projects recurring cost from the live onchain price list; the funded worker additionally obtains an exact Synapse quote before broadcasting. Spending limits are application-level policy, not a deployed spending-limit contract. Receipts prove integrity, not semantic correctness. The runtime is a deterministic policy workflow, not an LLM improvising financial decisions; AI was used to design, build, critique, and test it.
 
-X POST: <PASTE_X_URL_HERE>
+X POST: https://x.com/hrsh22/status/2096342218080714826

@@ -6,7 +6,7 @@ Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It r
 
 The decision is the product. An unfunded agent refuses a write. A funded agent preserves what matters. **An over-budget quote is rejected even when the wallet is full.**
 
-[Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/live) · [Watch the recordings](https://memento-sigma-rosy.vercel.app/watch)
+[Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/live) · [Watch the recordings](https://memento-sigma-rosy.vercel.app/watch) · [Public post](https://x.com/hrsh22/status/2096342218080714826)
 
 ## For judges: four checks, about 90 seconds
 

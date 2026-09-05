@@ -1367,7 +1367,7 @@ export function Memento({
                           {agent.running
                             ? "Cycle in progress"
                             : agent.evidenceMode === "recorded"
-                              ? "Recorded evidence · live treasury"
+                              ? "Worker cycles hourly from CI · live treasury"
                               : "Read-only observer"}{" "}
                           · refreshes every 15s
                         </span>

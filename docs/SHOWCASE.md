@@ -17,27 +17,57 @@ The captioned video visualizes 22 events captured during an actual 135-second Ca
 
 ## X post draft
 
-Most "AI storage agents" just call an upload API.
+X allows 280 characters. Any URL counts as 23 regardless of length, and attached
+media is free, so the raw character count reads longer than X will measure.
+All options below are under 256 as measured by X.
 
-Memento reads its own Filecoin Pay balance and runway, then decides what it can afford to remember.
+**Recommended (254):**
 
-Drag the spending cap and watch a funded wallet refuse its own write — live, onchain, no signup:
-https://memento-sigma-rosy.vercel.app/demo
+```
+Having funds doesn't mean spending them.
 
-Built for @FilecoinTLDR Builder Challenge Cycle 4.
+Memento reads its own Filecoin Pay runway and refuses writes it can't afford — even with a full wallet.
 
-### Shorter variant
+Move the cap yourself, live onchain, no signup:
+https://memento-sigma-rosy.vercel.app/demo?live=1
 
-An agent that knows what it can afford to remember.
+@FilecoinTLDR Builder Challenge C4
+```
 
-Memento reads its Filecoin Pay runway and refuses writes it can't afford — even with a full wallet. Move the cap yourself and watch it change its mind:
-https://memento-sigma-rosy.vercel.app/demo
+Echoes the hero card on the landing page, so the post and the site reinforce
+each other, and leads with the counterintuitive part.
 
-4 real decisions. 2 verifiable copies. @FilecoinTLDR
+**Alternate, positions against the field (255):**
 
-**Attach `public/showcase/live-decision.mp4`** — the 25-second screen capture. It is shorter, it is real footage rather than an animation, and the approved-to-refused flip is legible on a phone. Keep `memento-demo.mp4` for the site.
+```
+Most AI storage agents just call an upload API.
 
-The user publishes this post and supplies the real URL for submission. Nothing has been posted by the agent.
+Memento reads its own Filecoin Pay runway, then decides what it can afford to remember.
+
+Drag the cap. Watch a funded wallet refuse its own write:
+https://memento-sigma-rosy.vercel.app/demo?live=1
+
+@FilecoinTLDR Builder Challenge C4
+```
+
+**Shortest, if you want room for a reply thread (203):**
+
+```
+Most storage agents just call an upload API.
+
+Memento reads its own Filecoin Pay runway and refuses what it can't afford. Move the cap and watch it change its mind:
+https://memento-sigma-rosy.vercel.app/demo?live=1
+
+@FilecoinTLDR
+```
+
+**Attach `public/showcase/live-decision.mp4`** — the 25-second screen capture. It
+is shorter than the worker-run video, it is real footage rather than an
+animation, and the approved-to-refused flip is legible on a phone. Media does
+not count against the character limit. Keep `memento-demo.mp4` for the site.
+
+The user publishes this post and supplies the real URL for submission. Nothing
+has been posted by the agent.
 
 ## Reproducing the media
 

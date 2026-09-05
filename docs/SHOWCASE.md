@@ -38,9 +38,7 @@ Use the browser at normal desktop size, hide unrelated tabs, and record a short 
 
 Built Memento for @FilecoinTLDR: an agent that knows what it can afford to remember.
 
-It reads Filecoin Pay, protects core memories, compacts useful context, refuses over-budget writes, and tops up its own reserve.
-
-Real Calibration storage. Two providers. Signed decisions. Verify the archive yourself.
+Real Filecoin Pay. Budget refusals. Reserve top-ups. Two-provider archives with signed, verifiable decisions.
 
 Demo: [ADD VERCEL URL]
 Code: https://github.com/hrsh22/memento

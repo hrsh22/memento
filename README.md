@@ -120,7 +120,7 @@ The worker runs independently of the browser, once a minute. It re-checks runway
 ## Verification
 
 ```bash
-npm run test        # 44 tests
+npm run test        # 45 tests
 npm run lint
 npm run build
 npm run evidence:verify

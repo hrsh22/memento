@@ -29,7 +29,7 @@ Recordings: https://memento-sigma-rosy.vercel.app/watch
 - **Recorded execution that re-verifies.** `public/showcase/run.json` holds a
   signed run including receipt `0a94e53e`, where 0.022 already reserved plus
   0.022 requested exceeded a 0.03 allowance and the write was refused.
-- **44 tests**, lint, TypeScript and a production build all pass.
+- **45 tests**, lint, TypeScript and a production build all pass.
 
 ## Where a skeptical reviewer has a point
 

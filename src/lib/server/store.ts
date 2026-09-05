@@ -61,6 +61,7 @@ export async function addEvent(
       JSON.stringify(event) + "\n",
     );
 }
+export const NOOP_RECEIPT_HISTORY = 15;
 export async function saveReceipt(receipt: Receipt) {
   const state = await readState();
   if (process.env.FILECOIN_PRIVATE_KEY)
@@ -71,14 +72,17 @@ export async function saveReceipt(receipt: Receipt) {
     });
   state.receipts = state.receipts.filter((r) => r.id !== receipt.id);
   state.receipts.unshift(receipt);
-  // Retain successful archives as a durable deduplication ledger. Only no-op history is bounded.
+  // Retain successful archives as a durable deduplication ledger: evicting one
+  // would let the agent pay to store the same bytes twice. Only no-op history
+  // is bounded, and it is kept short because the public bundle is polled by the
+  // browser and each receipt carries a full plan.
   let noops = 0;
   state.receipts = state.receipts.filter(
     (r) =>
       r.action === "stored" ||
       r.action === "funded" ||
       r.broadcastAttempted ||
-      ++noops <= 30,
+      ++noops <= NOOP_RECEIPT_HISTORY,
   );
   await writeState(state);
 }

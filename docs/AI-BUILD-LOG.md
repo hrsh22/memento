@@ -1,6 +1,32 @@
-# AI build log, 5 September 2026
+# AI build log
 
-Built collaboratively by Harsh Gupta and Codex for FilecoinTLDR Builder Challenge Cycle 4.
+Built by Harsh Gupta with AI coding agents for FilecoinTLDR Builder Challenge
+Cycle 4, in one session on 5 September 2026 UTC. 22 commits.
+
+## Short version
+
+I used AI agents (Codex, then Claude Code) to plan, write, review and test the
+whole thing. I made the calls that cost money or go public: funding a fresh
+Calibration wallet, deploying, posting to X, submitting.
+
+The useful part was not code generation, it was having something argue with me.
+The agents found failure modes I had not thought about: duplicate paid writes,
+reserve top ups getting skipped when content was unchanged, broadcasts whose
+outcome is unknown, two cycles running at once. Those turned into durable intent
+records, a filesystem lock, and rolling spending allowances that survive a
+restart.
+
+They also got things wrong, and I kept the corrections. The Loops mentor told me
+the judging weights summed to 100 when the published ones sum to 90, so I kept
+the published numbers. It later recommended I build a live decision endpoint that
+I had already shipped, so I fed it the deployed URLs and asked again. The sponsor
+knowledge graph returned nothing useful on two queries, so I read the Synapse SDK
+source and the official Filecoin docs instead of letting a model guess at API
+behaviour.
+
+Everything below is the longer trail if you want it.
+
+## Full log
 
 1. Read the installed Loops skill, the full challenge, sponsor resources, and visible judging criteria in Chrome. Confirmed the deadline as 6 September 2026, 00:00 UTC. Confirmed there was no existing project submission.
 2. Consulted the Loops mentor for concept comparison. Queried the sponsor knowledge graph twice; both calls returned no relevant evidence. Used official Filecoin documentation and the installed Synapse SDK 2.0.0 source instead of inventing API behavior. The mentor incorrectly said 30+25+20+15=100; retained the actual published weights (90 total).
@@ -15,7 +41,7 @@ Built collaboratively by Harsh Gupta and Codex for FilecoinTLDR Builder Challeng
 
 Runtime note: AI assisted the development and critique. The running agent is a transparent deterministic policy workflow. There is no hidden LLM API dependency or claim that a model inferred monetary decisions during the demo.
 
-## Judging feedback improvements, 6 September 2026
+## Judging feedback improvements
 
 Added durable rolling allowances for operation fees and reserve funding, preserving reservations before broadcast and across restarts. Added independent retrieval from both registered providers, decimal/URL-safe extraction with protected critical constraints, and explicit priority-retention labeling. Expanded regression coverage to 37 tests.
 
@@ -23,7 +49,7 @@ Captured an actual four-scenario Calibration run: refusal under a strict recurri
 
 The user retains X posting and final submission control. The evaluator supplies qualitative alignment instructions, not an official numeric score.
 
-## Live decision endpoint, 5 September 2026
+## Live decision endpoint
 
 Re-read the challenge brief against the deployed product and found the weakest point: the brief asks that a judge "see the agent notice something, weigh it, and act – not just read a log afterwards," and every decision on the site was recorded. The live tab paired current balances with stale events, which reads as a dashboard over history rather than an agent deciding.
 
@@ -33,7 +59,7 @@ Extracted `projectDecision` as a pure function so the lockup, fee, and deposit p
 
 Rewrote the README to lead with three checks a judge can run in about a minute and consolidated the honest caveats into one Limitations section, rather than interleaving them with the claims they qualify.
 
-## Screen recording and reasoning trace, 5 September 2026
+## Screen recording and reasoning trace
 
 Consulted the Loops mentor twice. Its first answer recommended building the live decision endpoint that had already shipped, so the session was corrected with the deployed URLs; the second answer, working from the real state, identified two gaps worth acting on and confirmed a third judgement.
 

@@ -28,7 +28,7 @@ export default function Page() {
           <a className={styles.source} href="https://github.com/hrsh22/memento">
             View source <ArrowUpRight size={14} />
           </a>
-          <Link href="/demo" className={styles.navLink}>
+          <Link href="/demo?live=1" className={styles.navLink}>
             Open app <ArrowRight size={15} />
           </Link>
         </nav>

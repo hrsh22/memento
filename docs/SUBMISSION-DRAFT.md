@@ -80,9 +80,18 @@ placeholder URL survives, prints who you are authenticated as, then calls
 needed. If a project somehow already exists the call fails rather than
 overwriting. Change `create` to `update` in the script and re-run.
 
-`--bounty-ids` is omitted deliberately: 1st/2nd/3rd Prize are placement awards,
-not selectable tracks, and the CLI exposes no ids for them. Update is a PATCH,
-so omitting the flag preserves whatever the platform sets.
+All three prizes are selected. They are placement tiers for the same judging
+rather than separate tracks, so selecting all three keeps every placement open
+and costs nothing. The web form ticks all three by default.
+
+The ids are not listed by any `loops` command, but they appear in the submit
+page payload:
+
+| Prize | Amount | Id |
+| --- | --- | --- |
+| 1st | $125 | `63cbe493-f496-4026-a8c1-1b26764a93cf` |
+| 2nd | $75 | `af1127fa-6f07-43fb-a804-42abd4b41477` |
+| 3rd | $50 | `b2a194ec-5bb7-484d-b781-7c9fde37f5de` |
 
 Do check whether the Loops web form has a dedicated **Public X post** field.
 The CLI has no flag for it, so the URL is carried in the description; if the

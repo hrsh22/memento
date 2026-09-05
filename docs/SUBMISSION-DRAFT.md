@@ -12,11 +12,16 @@ Loops requires seven things: title, short description, live demo link, repo link
 
 **Repository:** https://github.com/hrsh22/memento
 
-**Live demo:** https://memento-sigma-rosy.vercel.app
+**Live demo:** https://memento-sigma-rosy.vercel.app/demo?live=1
 
-**Video:** https://memento-sigma-rosy.vercel.app/watch (direct MP4: https://memento-sigma-rosy.vercel.app/showcase/memento-demo.mp4)
+**Video:** https://memento-sigma-rosy.vercel.app/watch
 
-**Project logo:** upload `public/logo.png` (512 × 512).
+**Project logo URL:** https://memento-sigma-rosy.vercel.app/logo.png
+
+**Screenshots:**
+- https://memento-sigma-rosy.vercel.app/shots/01-landing.png
+- https://memento-sigma-rosy.vercel.app/shots/02-live-refusal.png
+- https://memento-sigma-rosy.vercel.app/shots/03-watch.png
 
 **Public X post:** _[paste the published URL here before submitting]_
 
@@ -62,6 +67,8 @@ Balances, payment rails, and proofs are real and onchain on Calibration. Nothing
 
 The CLI has no X-post flag (`loops project update --help` lists name, tagline, pitch, description, repo-url, demo-url, video-url, logo-url, screenshot-urls, bounty-ids). Put the X URL in the description, and fill the dedicated field if the Loops web form has one.
 
+`docs/pitch.txt` and `docs/description.txt` are written and ready. Replace `<PASTE_X_URL_HERE>` in `docs/description.txt` with the published post URL first.
+
 ```sh
 loops project create --event filecointldr-builder-challenge-cycle-4 \
   --name "Memento" \
@@ -71,11 +78,15 @@ loops project create --event filecointldr-builder-challenge-cycle-4 \
 loops project update --event filecointldr-builder-challenge-cycle-4 \
   --demo-url "https://memento-sigma-rosy.vercel.app/demo?live=1" \
   --video-url "https://memento-sigma-rosy.vercel.app/watch" \
+  --logo-url "https://memento-sigma-rosy.vercel.app/logo.png" \
+  --screenshot-urls "https://memento-sigma-rosy.vercel.app/shots/01-landing.png" \
+  --screenshot-urls "https://memento-sigma-rosy.vercel.app/shots/02-live-refusal.png" \
+  --screenshot-urls "https://memento-sigma-rosy.vercel.app/shots/03-watch.png" \
   --pitch "$(cat docs/pitch.txt)" \
   --description "$(cat docs/description.txt)"
 ```
 
-Write `docs/pitch.txt` and `docs/description.txt` from the Pitch and Short description sections above, appending the published X post URL and the AI build log link to the description.
+`--bounty-ids` is omitted deliberately: 1st/2nd/3rd Prize are placement awards, not selectable tracks, and the CLI exposes no ids for them. Update is a PATCH, so omitting the flag preserves whatever the platform sets.
 
 ## Remaining user actions
 

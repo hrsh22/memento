@@ -1,0 +1,5 @@
+An agent that remembers everything eventually runs out of money. An agent that forgets indiscriminately becomes useless. Memento treats memory as a portfolio of future usefulness: preserve the irreplaceable, condense the useful, decline the noise.
+
+The decision is the product, so every decision is inspectable. budgetGate in src/lib/agent/gate.ts compares integer base units and returns one sentence; that exact sentence is what appears in the UI, the receipt, and the API response. There is no place where a refusal is narrated rather than computed.
+
+You can make it decide right now, without a wallet or a signup. Drag the monthly spending cap and press "Run a live decision now": Memento reads this wallet's Filecoin Pay balance, runway, payment rails, and the onchain price list at the current epoch, then runs the real policy engine and budget gate. Set the cap below the projected cost and the same funded account is refused, with a four-step trace showing what it observed, what it selected, what it priced, and which limit stopped it.

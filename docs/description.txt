@@ -1,0 +1,28 @@
+Memento is an autonomous memory treasury on Filecoin Pay + Synapse SDK. It reads its own onchain balance and runway, decides which memories are worth paying to keep, funds a bounded reserve within explicit limits, and leaves receipts anyone can verify.
+
+MAKE IT DECIDE, RIGHT NOW
+https://memento-sigma-rosy.vercel.app/demo?live=1 — drag the monthly cap and press "Run a live decision now". It reads Filecoin Pay at the current epoch and runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded wallet is refused. No wallet, key, or signup needed, and the deployment holds no private key, so no visitor can make it spend.
+
+  curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.5"  -> verdict "store"
+  curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.05" -> verdict "refuse"
+
+CONFIRM THE ARCHIVES ARE REALLY ON FILECOIN
+  curl -s https://memento-sigma-rosy.vercel.app/api/showcase
+Re-downloads both provider copies and checks PieceCID inclusion in two live PDP datasets. Returns verified: true in about a second.
+
+FOUR DECISIONS ALREADY ON RECORD
+From an actual Calibration worker run, each signed: a funded wallet refused by the recurring-cost cap; a 6,838-byte archive stored on two providers and hash-checked; a second write refused because 0.022 used + 0.022 requested exceeds a 0.03 tUSDFC rolling allowance; and a duplicate upload prevented. A fifth receipt shows the agent topping up its own reserve.
+
+HOW FILECOIN IS USED
+Synapse SDK 2.0.0 reads Filecoin Pay account summaries, reserves, runway, wallet balances, live price lists, and rails. The agent quotes exact archive bytes against two resolved provider contexts, enforces integer recurring-cost limits plus durable rolling operation-fee and reserve-funding allowances, executes the preparation deposit/approval when affordable, and stores selected memories on Filecoin Warm Storage. Independent verification checks signatures, fresh retrieval from each registered provider, and PieceCID inclusion in both live PDP datasets. Balances, rails, and proofs are real and onchain on Calibration. Nothing is hardcoded or simulated outside the clearly labelled Decision lab. No mainnet funds.
+
+WATCH IT
+https://memento-sigma-rosy.vercel.app/watch opens with a 25-second screen recording of the deployed app — real footage, not an animation — where the cap moves from 0.50 to 0.10 USDFC against an unchanged 0.24 cost and the wallet is refused. Below it, a 93-second visualization of the worker run that actually spent funds.
+
+AI BUILD LOG
+https://github.com/hrsh22/memento/blob/main/docs/AI-BUILD-LOG.md
+
+STATED LIMITS
+/api/decide projects recurring cost from the live onchain price list; the funded worker additionally obtains an exact Synapse quote before broadcasting. Spending limits are application-level policy, not a deployed spending-limit contract. Receipts prove integrity, not semantic correctness. The runtime is a deterministic policy workflow, not an LLM improvising financial decisions; AI was used to design, build, critique, and test it.
+
+X POST: <PASTE_X_URL_HERE>

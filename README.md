@@ -8,7 +8,7 @@ The decision is the product. An unfunded agent refuses a write. A funded agent p
 
 [Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/live) · [Watch the recordings](https://memento-sigma-rosy.vercel.app/watch) · [Public post](https://x.com/hrsh22/status/2096347741018619918)
 
-## For judges: four checks, about 90 seconds
+## For judges: five checks, about two minutes
 
 **1. Make it decide, right now.** Open [the live tab](https://memento-sigma-rosy.vercel.app/live), drag the monthly cap, and press **Run a live decision now**. It reads this wallet's Filecoin Pay balance, runway, rails, and the onchain price list at the current epoch, then runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded account is refused. No wallet, key, or signup needed.
 
@@ -29,7 +29,17 @@ curl -s https://memento-sigma-rosy.vercel.app/api/showcase | jq '.verified, .arc
 
 **3. Watch it happen, if you would rather not click.** [`/watch`](https://memento-sigma-rosy.vercel.app/watch) opens with a 25-second **screen recording of the deployed app**, real footage rather than an animation, where the cap moves from 0.50 to 0.10 USDFC against an unchanged 0.24 cost and the funded wallet is refused. Below it is the 93-second visualization of the worker run that actually spent funds.
 
-**4. Read the account yourself.** `GET /api/chain` returns the raw Calibration snapshot with epoch, rails, lockup and runway. Or check [the wallet on Blockscout](https://filecoin-testnet.blockscout.com/address/0xA704353cB48030557c307cB743581D49eFA1eF80).
+**4. See the worker's own decision history.** `GET /api/agent` is public and needs no auth. It returns every event and receipt the funded worker produced, with timestamps, reasons and PieceCIDs:
+
+```bash
+curl -s https://memento-sigma-rosy.vercel.app/api/agent | jq '{events: (.events|length), receipts: (.receipts|length), latest: .events[0]}'
+```
+
+A [scheduled GitHub Action](.github/workflows/agent.yml) runs a cycle every hour and commits the result, so that history keeps growing on its own. The [run history](https://github.com/hrsh22/memento/actions/workflows/agent.yml) is public.
+
+The worker keeps three things that must survive between runs: a rolling 30-day spend ledger, a duplicate-write ledger, and its receipts. A stateless function would reset all three and let the agent quietly exceed its own limits, so it does not run as a Vercel cron. In the Action, state round-trips through the committed evidence bundle and git is the durable store. This deployment still holds no key, so nothing a visitor touches can spend.
+
+**5. Read the account yourself.** `GET /api/chain` returns the raw Calibration snapshot with epoch, rails, lockup and runway. Or check [the wallet on Blockscout](https://filecoin-testnet.blockscout.com/address/0xA704353cB48030557c307cB743581D49eFA1eF80).
 
 ## What decides, and where
 

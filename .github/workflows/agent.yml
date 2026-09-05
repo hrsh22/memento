@@ -1,0 +1,81 @@
+name: Autonomous agent cycle
+
+# The worker keeps three things that must survive between runs: the rolling
+# 30-day spend ledger, the duplicate-write ledger, and its receipts. A stateless
+# function would reset all three and let the agent exceed its own limits, which
+# is why this is not a Vercel cron. Here the state round-trips through the
+# committed evidence bundle, so git is the durable store.
+#
+# Pushing the bundle also refreshes the public site, since the deployed app
+# falls back to public/evidence/latest.json when no local worker state exists.
+
+on:
+  schedule:
+    # Hourly. Every push redeploys the site, so this stays well inside
+    # deployment limits while keeping the public cycle history fresh.
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: agent-cycle
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Restore worker state from the committed evidence
+        run: |
+          mkdir -p data
+          cp public/evidence/latest.json data/agent.json
+
+      # A transient RPC failure should not show up as a broken build. The agent
+      # records its own errors as events, so a bad cycle lands in the audit
+      # trail rather than as a red cross with no explanation.
+      - name: Run one cycle
+        id: cycle
+        continue-on-error: true
+        env:
+          FILECOIN_PRIVATE_KEY: ${{ secrets.FILECOIN_PRIVATE_KEY }}
+          FILECOIN_RPC_URL: https://api.calibration.node.glif.io/rpc/v1
+          NEXT_PUBLIC_AGENT_ADDRESS: "0xA704353cB48030557c307cB743581D49eFA1eF80"
+          AGENT_MAX_TOPUP_USDFC: "2"
+          AGENT_MAX_ROLLING_FEES_USDFC: "0.10"
+          AGENT_MAX_ROLLING_TOPUPS_USDFC: "2"
+        run: npx tsx scripts/agent.ts --once
+
+      - name: Export public evidence
+        run: npx tsx scripts/export-evidence.ts
+
+      - name: Publish the cycle
+        run: |
+          git config user.name "memento-agent"
+          git config user.email "memento-agent@users.noreply.github.com"
+          git add public/evidence/latest.json
+          if git diff --staged --quiet; then
+            echo "Agent produced no state change this cycle."
+            exit 0
+          fi
+          git commit -m "chore(agent): autonomous cycle at $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
+
+      - name: Report outcome
+        run: |
+          echo "cycle outcome: ${{ steps.cycle.outcome }}"
+          node -e "
+            const s = require('./public/evidence/latest.json');
+            const e = s.events[0];
+            console.log('latest event:', e && e.at, '|', e && e.title);
+            console.log('receipts:', s.receipts.length);
+          "

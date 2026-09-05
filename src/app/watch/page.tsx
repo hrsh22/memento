@@ -18,7 +18,7 @@ export default async function WatchPage() {
         </Link>
       </header>
       <main id="main">
-        <p className="watch-eyebrow">FOUR DECISIONS. ONE REAL WORKER RUN.</p>
+        <p className="watch-eyebrow">TWO RECORDINGS. NOTHING STAGED.</p>
         <h1>
           Watch an agent
           <br />
@@ -28,6 +28,35 @@ export default async function WatchPage() {
           A funded wallet. A useful memory. A second request that goes too far.
           Follow Memento as it reads Filecoin, weighs the cost, and acts.
         </p>
+        <p className="watch-step">01 — A LIVE DECISION, SCREEN-RECORDED</p>
+        <div className="watch-video">
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            poster="/showcase/live-decision-poster.png"
+            aria-label="Screen recording of a live budget decision changing from approved to refused"
+          >
+            <source src="/showcase/live-decision.mp4" type="video/mp4" />
+            Your browser does not support video playback.
+          </video>
+        </div>
+        <p className="watch-caption">
+          An actual screen capture of the deployed app, not an animation. The
+          monthly cap moves from 0.50 to 0.10 USDFC while the account&rsquo;s
+          own cost stays at 0.24, and the same funded wallet is refused. Two
+          idle pauses were cut; nothing else is edited, and the numbers are read
+          from Calibration at the epoch shown on screen.
+        </p>
+        <div className="watch-actions">
+          <Link href="/demo?live=1" className="watch-primary">
+            Do this yourself <ArrowUpRight size={15} />
+          </Link>
+          <a href="/showcase/live-decision.mp4" download>
+            <Download size={15} /> Download clip
+          </a>
+        </div>
+        <p className="watch-step">02 — THE WORKER RUN THAT SPENT REAL FUNDS</p>
         <div className="watch-video">
           <video
             controls

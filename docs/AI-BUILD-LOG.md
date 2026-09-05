@@ -32,3 +32,13 @@ Added `GET /api/decide`. It reads Filecoin Pay at the current epoch and runs the
 Extracted `projectDecision` as a pure function so the lockup, fee, and deposit projection is testable, and covered every refusal branch the gate can return. Test count went from 37 to 44.
 
 Rewrote the README to lead with three checks a judge can run in about a minute and consolidated the honest caveats into one Limitations section, rather than interleaving them with the claims they qualify.
+
+## Screen recording and reasoning trace, 5 September 2026
+
+Consulted the Loops mentor twice. Its first answer recommended building the live decision endpoint that had already shipped, so the session was corrected with the deployed URLs; the second answer, working from the real state, identified two gaps worth acting on and confirmed a third judgement.
+
+Gap one: the live panel reported a verdict and six figures with no visible inference, which reads as a black box. Added a four-step trace — observe the account at this epoch, select under policy, price against the onchain price list, gate — rendered from the same response, plus one plain sentence for a reader who does not know what a payment rail is.
+
+Gap two: no artifact per live decision. Added a JSON download. Live decisions are deliberately unsigned because the public deployment holds no key; that is now stated as a safety property rather than buried as a caveat.
+
+Confirmed judgement: replacing the event-log animation was worth doing. Drove the deployed app under browser automation and captured a real screen recording of the cap moving from 0.50 to 0.10 USDFC while the account cost stayed at 0.24, flipping the same funded wallet from approved to refused. Converted to H.264, cut two idle stretches, and made it the first thing on `/watch`; the worker-run visualization follows it as the record of transactions that actually spent funds. Both videos are labelled for what they are.

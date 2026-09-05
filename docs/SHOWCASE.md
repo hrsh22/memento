@@ -1,6 +1,12 @@
 # Public showcase kit
 
-## Ready-to-share recording
+## Ready-to-share recordings
+
+Two videos, two kinds of evidence.
+
+**A. Live decision (real screen capture, 25s)** — `public/showcase/live-decision.mp4` (1280 x 800, H.264, ~536 KB). Captured from the deployed app on 5 September 2026. The monthly cap moves 0.50 -> 0.10 USDFC against an unchanged 0.24 cost and the funded wallet is refused. Two idle pauses were cut; nothing else is edited. Poster: `public/showcase/live-decision-poster.png`.
+
+**B. Worker run (event-log visualization, 93s)** — the run that actually spent funds.
 
 - Watch: https://memento-sigma-rosy.vercel.app/watch
 - MP4: https://memento-sigma-rosy.vercel.app/showcase/memento-demo.mp4
@@ -29,7 +35,9 @@ https://memento-sigma-rosy.vercel.app/demo
 
 4 real decisions. 2 verifiable copies. @FilecoinTLDR
 
-Attach `public/showcase/memento-demo.mp4`. The user publishes this post and supplies the real URL for submission. Nothing has been posted by the agent.
+**Attach `public/showcase/live-decision.mp4`** — the 25-second screen capture. It is shorter, it is real footage rather than an animation, and the approved-to-refused flip is legible on a phone. Keep `memento-demo.mp4` for the site.
+
+The user publishes this post and supplies the real URL for submission. Nothing has been posted by the agent.
 
 ## Reproducing the media
 

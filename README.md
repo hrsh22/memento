@@ -6,11 +6,11 @@ Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It r
 
 The decision is the product. An unfunded agent refuses a write. A funded agent preserves what matters. **An over-budget quote is rejected even when the wallet is full.**
 
-[Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/demo) · [Watch a real run](https://memento-sigma-rosy.vercel.app/watch)
+[Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/demo?live=1) · [Watch the recordings](https://memento-sigma-rosy.vercel.app/watch)
 
-## For judges: three checks, about 60 seconds
+## For judges: four checks, about 90 seconds
 
-**1. Make it decide, right now.** Open [the live tab](https://memento-sigma-rosy.vercel.app/demo), pick **Live onchain**, drag the monthly cap, and press **Run a live decision now**. It reads this wallet's Filecoin Pay balance, runway, rails, and the onchain price list at the current epoch, then runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded account is refused. No wallet, key, or signup needed.
+**1. Make it decide, right now.** Open [the live tab](https://memento-sigma-rosy.vercel.app/demo?live=1), drag the monthly cap, and press **Run a live decision now**. It reads this wallet's Filecoin Pay balance, runway, rails, and the onchain price list at the current epoch, then runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded account is refused. No wallet, key, or signup needed.
 
 ```bash
 curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.5"  | jq '{verdict, headline}'
@@ -27,7 +27,9 @@ That endpoint holds no signer and never calls `createContexts` or `prepare`, so 
 curl -s https://memento-sigma-rosy.vercel.app/api/showcase | jq '.verified, .archive.onchainCopies'
 ```
 
-**3. Read the account yourself.** `GET /api/chain` returns the raw Calibration snapshot — epoch, rails, lockup, runway — or check [the wallet on Blockscout](https://filecoin-testnet.blockscout.com/address/0xA704353cB48030557c307cB743581D49eFA1eF80).
+**3. Watch it happen, if you would rather not click.** [`/watch`](https://memento-sigma-rosy.vercel.app/watch) opens with a 25-second **screen recording of the deployed app** — not an animation — where the cap moves from 0.50 to 0.10 USDFC against an unchanged 0.24 cost and the funded wallet is refused. Below it is the 93-second visualization of the worker run that actually spent funds.
+
+**4. Read the account yourself.** `GET /api/chain` returns the raw Calibration snapshot — epoch, rails, lockup, runway — or check [the wallet on Blockscout](https://filecoin-testnet.blockscout.com/address/0xA704353cB48030557c307cB743581D49eFA1eF80).
 
 ## What decides, and where
 
@@ -53,7 +55,7 @@ The gate is `budgetGate` in `src/lib/agent/gate.ts`. It compares integer base un
 | --- | --- |
 | `GET /api/decide` | Live chain read → real policy + gate. Read-only, judge-triggerable. |
 | `npm run agent:once` | The same decision, plus the exact Synapse quote, then executes. Needs a funded key. |
-| `/watch` | Four decisions from an actual recorded run, re-verified on demand. |
+| `/watch` | A screen recording of a live decision, plus four decisions from an actual worker run, re-verified on demand. |
 | `/demo` → Decision lab | Labelled simulation for exploring the policy without touching the chain. |
 
 ## The four decisions already on record
@@ -127,7 +129,7 @@ Filecoin's recurring price includes a per-dataset proving fee, so compressing a 
 
 - **Not an LLM making money decisions.** The runtime is a deterministic policy workflow. AI was used to design, build, critique, and test the product; no model infers monetary decisions at run time, and there is no hidden LLM dependency.
 - **`/api/decide` projects, it does not quote.** Recurring cost comes from the live onchain price list. The funded worker additionally obtains an exact Synapse quote for serialized bytes and resolved provider contexts before broadcasting.
-- **`/watch` is a visualization, not a screen recording.** It replays a signed event log with original timestamps; playback sends no transactions.
+- **Two videos, two kinds of evidence.** The live-decision clip is a real screen capture with two idle pauses cut. The worker-run video is a visualization of a signed event log with original timestamps, not a screen capture; playback sends no transactions.
 - **Spending limits are application-level policy**, not a separately deployed spending-limit contract. The Synapse preparation transaction also approves the Warm Storage operator.
 - **Receipts prove integrity, not meaning.** Signatures establish signer and record integrity; fresh retrieval checks both copies. Nothing here proves future availability, PDP challenge outcomes, or that compaction preserved every fact. "Priority retained" scores retained items — it is not a claim that compaction keeps everything.
 - **Accounting starts at activation.** The rolling ledger does not backfill earlier transactions. Full quoted amounts are reserved before broadcast; uncertain outcomes stay charged until reconciliation. tFIL gas is tracked separately.

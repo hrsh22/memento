@@ -170,6 +170,23 @@
   margin-top: 5px;
   overflow-wrap: anywhere;
 }
+.watch-step {
+  font: 9px var(--font-mono-body);
+  letter-spacing: 1.2px;
+  color: #8d9c7c;
+  margin: 46px 0 14px;
+  padding-top: 26px;
+  border-top: 1px solid #e6ecdd;
+}
+.watch-primary {
+  background: #2f4030;
+  color: #f4f8ec !important;
+  border-radius: 7px;
+  padding: 9px 14px;
+}
+.watch-primary:hover {
+  background: #22301f;
+}
 .watch-live {
   display: flex;
   align-items: center;

@@ -57,11 +57,32 @@ Balances, payment rails, and proofs are real and onchain on Calibration. Nothing
 
 `/api/decide` projects recurring cost from the live price list; the funded worker additionally obtains an exact Synapse quote before broadcasting. `/watch` is a signed event-log visualization, not a screen recording. Spending limits are application-level policy, not a deployed spending-limit contract. Receipts prove integrity, not semantic correctness.
 
+
+## Paste-ready commands
+
+The CLI has no X-post flag (`loops project update --help` lists name, tagline, pitch, description, repo-url, demo-url, video-url, logo-url, screenshot-urls, bounty-ids). Put the X URL in the description, and fill the dedicated field if the Loops web form has one.
+
+```sh
+loops project create --event filecointldr-builder-challenge-cycle-4 \
+  --name "Memento" \
+  --repo-url "https://github.com/hrsh22/memento" \
+  --tagline "An agent that knows what it can afford to remember."
+
+loops project update --event filecointldr-builder-challenge-cycle-4 \
+  --demo-url "https://memento-sigma-rosy.vercel.app/demo?live=1" \
+  --video-url "https://memento-sigma-rosy.vercel.app/watch" \
+  --pitch "$(cat docs/pitch.txt)" \
+  --description "$(cat docs/description.txt)"
+```
+
+Write `docs/pitch.txt` and `docs/description.txt` from the Pitch and Short description sections above, appending the published X post URL and the AI build log link to the description.
+
 ## Remaining user actions
 
 1. Publish the X post (copy in `docs/SHOWCASE.md`), attaching `public/showcase/memento-demo.mp4`.
-2. Paste its real URL into the Public X post field above.
-3. Push the repo so the live decision feature is deployed, and confirm https://memento-sigma-rosy.vercel.app/api/decide responds.
-4. Run `loops project create` / `loops project update` and submit.
+2. Paste its real URL into the Public X post field and into the description.
+3. Run the commands above and submit.
+
+Deployed and verified at 20:22 UTC on 5 September 2026: `/api/decide` returns `store` at the default cap and `refuse` at `cap=0.05`, and `/api/showcase` returns `verified: true` with both onchain copies confirmed.
 
 Every link must be real and public. Do not submit placeholders.

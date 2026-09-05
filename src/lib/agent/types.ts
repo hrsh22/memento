@@ -153,3 +153,21 @@ export interface SpendAssessment {
   requestedFeesUsdfc: string;
   requestedDepositUsdfc: string;
 }
+export interface LiveDecision {
+  decidedAt: string;
+  snapshot: ChainSnapshot;
+  policy: Policy;
+  plan: DecisionPlan;
+  projection: {
+    payloadBytes: number;
+    projectedMonthlyUsdfc: string;
+    additionalLockupUsdfc: string;
+    operationFeesUsdfc: string;
+    depositNeededUsdfc: string;
+  };
+  gate: { allowed: boolean; reason: string };
+  spending?: SpendAssessment;
+  verdict: "store" | "refuse";
+  headline: string;
+  basis: string;
+}

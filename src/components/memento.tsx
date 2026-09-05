@@ -51,6 +51,7 @@ import type {
   AgentState,
   ChainSnapshot,
   DecisionPlan,
+  LiveDecision,
   Memory,
   MemoryDecision,
   Policy,
@@ -378,6 +379,10 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
     }[];
   } | null>(null);
   const [verifyError, setVerifyError] = useState("");
+  const [deciding, setDeciding] = useState(false);
+  const [liveCap, setLiveCap] = useState(DEFAULT_POLICY.maxMonthlyUsdfc);
+  const [liveDecision, setLiveDecision] = useState<LiveDecision | null>(null);
+  const [decideError, setDecideError] = useState("");
   const refreshing = useRef(false);
   const receiptTitle = useRef<HTMLHeadingElement>(null);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
@@ -436,6 +441,25 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
       setVerifyError(e instanceof Error ? e.message : "Verification failed.");
     } finally {
       setVerifying(false);
+    }
+  }
+  async function decide(cap: number) {
+    setDeciding(true);
+    setDecideError("");
+    setLiveDecision(null);
+    try {
+      const r = await fetch("/api/decide?cap=" + encodeURIComponent(cap), {
+        cache: "no-store",
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error);
+      setLiveDecision(data);
+    } catch (e) {
+      setDecideError(
+        e instanceof Error ? e.message : "The live decision could not run.",
+      );
+    } finally {
+      setDeciding(false);
     }
   }
   useEffect(() => {
@@ -714,6 +738,175 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
                 {loading ? "Reading" : "Refresh"}
               </button>
             </div>
+          )}
+          {mode === "live" && (
+            <section className="decide-live" aria-labelledby="decide-live-title">
+              <div className="decide-head">
+                <div className="decide-intro">
+                  <span className="section-label">
+                    <Play size={14} /> DECIDE NOW
+                  </span>
+                  <h2 id="decide-live-title">
+                    Move the limit. Watch it change its mind.
+                  </h2>
+                  <p>
+                    Reads this wallet’s Filecoin Pay balance, runway, rails, and
+                    the onchain price list at the current epoch, then runs the
+                    same policy engine and budget gate the funded worker uses.
+                    Nothing is broadcast.
+                  </p>
+                </div>
+                <div className="decide-control">
+                  <div className="decide-cap">
+                    <label htmlFor="live-cap">Monthly spending cap</label>
+                    <strong>
+                      {fmt(liveCap, 2)} <small>USDFC</small>
+                    </strong>
+                  </div>
+                  <input
+                    id="live-cap"
+                    type="range"
+                    min="0.05"
+                    max="1"
+                    step="0.05"
+                    value={liveCap}
+                    disabled={deciding}
+                    onChange={(e) => {
+                      setLiveCap(Number(e.target.value));
+                      setLiveDecision(null);
+                      setDecideError("");
+                    }}
+                  />
+                  <div className="range-labels">
+                    <span>Refuses more</span>
+                    <span>Allows more</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="decide-run"
+                    onClick={() => void decide(liveCap)}
+                    disabled={deciding}
+                  >
+                    {deciding ? (
+                      <>
+                        <LoaderCircle size={15} className="spin" /> Reading
+                        Calibration…
+                      </>
+                    ) : (
+                      <>
+                        <Play size={15} /> Run a live decision now
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+              {decideError && (
+                <p className="decide-error" role="alert">
+                  {decideError}
+                </p>
+              )}
+              {liveDecision && (
+                <div className={cn("decide-result", liveDecision.verdict)}>
+                  <div className="decide-verdict">
+                    {liveDecision.verdict === "store" ? (
+                      <ShieldCheck size={20} />
+                    ) : (
+                      <LockKeyhole size={20} />
+                    )}
+                    <div>
+                      <strong>
+                        {liveDecision.verdict === "store"
+                          ? "Write approved"
+                          : "Write refused"}
+                      </strong>
+                      <p>{liveDecision.headline}</p>
+                    </div>
+                    <span className="decide-epoch">
+                      EPOCH{" "}
+                      {Number(liveDecision.snapshot.epoch).toLocaleString()}
+                    </span>
+                  </div>
+                  <dl className="decide-numbers">
+                    <div>
+                      <dt>Runway read onchain</dt>
+                      <dd>
+                        {liveDecision.snapshot.runwayDays === null
+                          ? "Unbounded"
+                          : `${fmt(liveDecision.snapshot.runwayDays, 1)} days`}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Available funds</dt>
+                      <dd>
+                        {fmt(Number(liveDecision.snapshot.availableFunds), 4)}{" "}
+                        USDFC
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Projected recurring</dt>
+                      <dd>
+                        {fmt(
+                          Number(liveDecision.projection.projectedMonthlyUsdfc),
+                          4,
+                        )}{" "}
+                        USDFC
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Against cap</dt>
+                      <dd>
+                        {fmt(liveDecision.policy.maxMonthlyUsdfc, 2)} USDFC
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Deposit required</dt>
+                      <dd>
+                        {fmt(
+                          Number(liveDecision.projection.depositNeededUsdfc),
+                          4,
+                        )}{" "}
+                        USDFC
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Selected payload</dt>
+                      <dd>{size(liveDecision.projection.payloadBytes)}</dd>
+                    </div>
+                  </dl>
+                  <p className="decide-plan">
+                    Policy mode <strong>{liveDecision.plan.mode}</strong> ·{" "}
+                    {liveDecision.plan.protectedCount} protected ·{" "}
+                    {liveDecision.plan.compactedCount} compacted ·{" "}
+                    {liveDecision.plan.deferredCount} deferred
+                  </p>
+                  {liveDecision.spending && (
+                    <p className="decide-plan">
+                      Rolling 30-day fees{" "}
+                      {fmt(Number(liveDecision.spending.feesUsedUsdfc), 3)}/
+                      {fmt(Number(liveDecision.spending.feeLimitUsdfc), 2)} USDFC
+                      · {liveDecision.spending.reason}
+                    </p>
+                  )}
+                  <p className="decide-basis">{liveDecision.basis}</p>
+                  <div className="decide-links">
+                    <a
+                      href={`/api/decide?cap=${liveCap}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open the raw decision <ArrowUpRight size={12} />
+                    </a>
+                    <a
+                      href={`${explorer}/address/${liveDecision.snapshot.address}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Check the account onchain <ArrowUpRight size={12} />
+                    </a>
+                  </div>
+                </div>
+              )}
+            </section>
           )}
           {mode === "lab" &&
             agent.receipts.some((r) => r.action === "stored" && r.verified) && (

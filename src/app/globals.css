@@ -2451,3 +2451,210 @@ button.workspace:hover {
   line-height: 1.5;
   display: block;
 }
+.decide-live {
+  background: #fff;
+  border: 1px solid #e2e7da;
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+.decide-head {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+.decide-intro h2 {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  margin: 11px 0 8px;
+}
+.decide-intro p {
+  margin: 0;
+  color: #6f776a;
+  font-size: 11px;
+  line-height: 1.65;
+  max-width: 46ch;
+}
+.decide-control {
+  border-left: 1px solid #edf0e7;
+  padding-left: 28px;
+}
+.decide-cap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.decide-cap label {
+  font-family: var(--font-mono-body);
+  font-size: 9px;
+  letter-spacing: 1.05px;
+  text-transform: uppercase;
+  color: #858f79;
+}
+.decide-cap strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+}
+.decide-cap small {
+  font-size: 9px;
+  letter-spacing: 0.7px;
+  color: #a7b197;
+}
+.decide-run {
+  width: 100%;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: 1px solid var(--primary);
+  border-radius: 7px;
+  padding: 11px 14px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.decide-run:hover:not(:disabled) {
+  background: #1d2d22;
+}
+.decide-run:disabled {
+  opacity: 0.72;
+}
+.decide-error {
+  margin: 18px 0 0;
+  padding: 12px 15px;
+  border-radius: 7px;
+  background: #fff8ed;
+  border: 1px solid #e9dbbf;
+  color: #ab734d;
+  font-size: 11px;
+}
+.decide-result {
+  margin-top: 22px;
+  border-top: 1px solid #edf0e7;
+  padding-top: 20px;
+}
+.decide-verdict {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid #dce8d2;
+  background: #f2f7ec;
+  color: #46603a;
+}
+.decide-result.refuse .decide-verdict {
+  border-color: #ecdcc4;
+  background: #fdf7ec;
+  color: #92663f;
+}
+.decide-verdict strong {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+.decide-verdict p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.55;
+  opacity: 0.86;
+}
+.decide-verdict > div {
+  flex: 1;
+}
+.decide-epoch {
+  font-family: var(--font-mono-body);
+  font-size: 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  opacity: 0.72;
+}
+.decide-numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin: 18px 0 0;
+  background: #edf0e7;
+  border: 1px solid #edf0e7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.decide-numbers > div {
+  background: #fff;
+  padding: 13px 15px;
+}
+.decide-numbers dt {
+  font-family: var(--font-mono-body);
+  font-size: 8px;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  color: #a0a995;
+  margin-bottom: 6px;
+}
+.decide-numbers dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+.decide-plan {
+  margin: 13px 0 0;
+  font-size: 10px;
+  color: #6f776a;
+  line-height: 1.6;
+}
+.decide-plan strong {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.decide-basis {
+  margin: 13px 0 0;
+  font-size: 9.5px;
+  line-height: 1.7;
+  color: #a0a995;
+  max-width: 92ch;
+}
+.decide-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 14px;
+}
+.decide-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #6e8b4d;
+  border-bottom: 1px solid #dbe6cd;
+  padding-bottom: 2px;
+}
+.decide-links a:hover {
+  color: #46603a;
+}
+@media (max-width: 900px) {
+  .decide-live {
+    padding: 19px 17px;
+  }
+  .decide-head {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .decide-control {
+    border-left: 0;
+    border-top: 1px solid #edf0e7;
+    padding: 20px 0 0;
+  }
+  .decide-numbers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .decide-verdict {
+    flex-wrap: wrap;
+  }
+}

@@ -68,7 +68,16 @@ jobs:
             exit 0
           fi
           git commit -m "chore(agent): autonomous cycle at $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-          git push
+          # A human push landing mid-cycle would otherwise reject this and lose
+          # the cycle. Rebase and retry; the bundle is the only file touched.
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "push rejected, rebasing (attempt $attempt)"
+            git pull --rebase --autostash origin main || true
+            sleep 5
+          done
+          echo "could not publish this cycle after 3 attempts" >&2
+          exit 1
 
       - name: Report outcome
         run: |

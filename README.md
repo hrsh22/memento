@@ -86,7 +86,11 @@ First verified archive:
 - PieceCID: `bafkzcibd6ivqsecksw5ufzydpbmlqhnhuda4vvmv76ni2g3vktatrpnzmwuuulzm`
 - Provider 4, dataset 33836; provider 2, dataset 33835
 
-The [public evidence bundle](public/evidence/latest.json) holds **10 real receipts and four archives**, with no private keys.
+The [public evidence bundle](public/evidence/latest.json) holds **four verified archives** plus the worker's decision history, and no private keys. The receipt count climbs on its own as the hourly cycle runs, so read it live rather than trusting a number written here:
+
+```bash
+curl -s https://memento-sigma-rosy.vercel.app/api/agent | jq '{receipts: (.receipts|length), archives: [.receipts[] | select(.action=="stored")] | length}'
+```
 
 ## How Filecoin is used
 

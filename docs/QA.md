@@ -58,7 +58,7 @@ The user has since deployed; public Chrome verification passed. Recorded evidenc
 
 - All 45 tests pass across eight files, including rolling-window expiry, cumulative refusal, deposits, account separation, clock rollback, invalid/duplicate ledger entries, persisted reservations across restart, missing-ledger refusal, six essential-fact compaction fixtures, signed-run verification, and transcript/financial tamper detection.
 - Lint, TypeScript, and production build passed after the upgrade.
-- Actual run 2026-09-05 19:39:59 to 19:42:14 UTC: recurring-cap refusal, stored archive `54587a5b`, rolling-fee refusal `0a94e53e`, duplicate prevention `ae818059`. Ten receipts and four archives now exported.
+- Actual run 2026-09-05 19:39:59 to 19:42:14 UTC: recurring-cap refusal, stored archive `54587a5b`, rolling-fee refusal `0a94e53e`, duplicate prevention `ae818059`. Ten receipts and four archives at the time of that run. The count grows as the scheduled cycle runs; `GET /api/agent` is the current figure.
 - New archive: 6,838 bytes, two providers. A 0.022 fee reservation caused the next 0.022 request to exceed a demonstration allowance of 0.03. No second upload occurred.
 - Chrome on the production build without signing credentials verified the manifest, all four decision signatures, and fresh independent retrieval of both copies at 01:22 IST.
 - Video metadata loaded successfully in Chrome: 92.916667 seconds. Transcript expansion and signed-run download links work.

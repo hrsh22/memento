@@ -1,7 +1,7 @@
 Memento is an autonomous memory treasury on Filecoin Pay + Synapse SDK. It reads its own onchain balance and runway, decides which memories are worth paying to keep, funds a bounded reserve within explicit limits, and leaves receipts anyone can verify.
 
 MAKE IT DECIDE, RIGHT NOW
-https://memento-sigma-rosy.vercel.app/demo?live=1 — drag the monthly cap and press "Run a live decision now". It reads Filecoin Pay at the current epoch and runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded wallet is refused. No wallet, key, or signup needed, and the deployment holds no private key, so no visitor can make it spend.
+https://memento-sigma-rosy.vercel.app/live — drag the monthly cap and press "Run a live decision now". It reads Filecoin Pay at the current epoch and runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded wallet is refused. No wallet, key, or signup needed, and the deployment holds no private key, so no visitor can make it spend.
 
   curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.5"  -> verdict "store"
   curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.05" -> verdict "refuse"

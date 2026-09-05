@@ -6,11 +6,11 @@ Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It r
 
 The decision is the product. An unfunded agent refuses a write. A funded agent preserves what matters. **An over-budget quote is rejected even when the wallet is full.**
 
-[Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/demo?live=1) · [Watch the recordings](https://memento-sigma-rosy.vercel.app/watch)
+[Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/live) · [Watch the recordings](https://memento-sigma-rosy.vercel.app/watch)
 
 ## For judges: four checks, about 90 seconds
 
-**1. Make it decide, right now.** Open [the live tab](https://memento-sigma-rosy.vercel.app/demo?live=1), drag the monthly cap, and press **Run a live decision now**. It reads this wallet's Filecoin Pay balance, runway, rails, and the onchain price list at the current epoch, then runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded account is refused. No wallet, key, or signup needed.
+**1. Make it decide, right now.** Open [the live tab](https://memento-sigma-rosy.vercel.app/live), drag the monthly cap, and press **Run a live decision now**. It reads this wallet's Filecoin Pay balance, runway, rails, and the onchain price list at the current epoch, then runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded account is refused. No wallet, key, or signup needed.
 
 ```bash
 curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.5"  | jq '{verdict, headline}'

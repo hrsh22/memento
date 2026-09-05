@@ -21,6 +21,11 @@ X allows 280 characters. Any URL counts as 23 regardless of length, and attached
 media is free, so the raw character count reads longer than X will measure.
 All options below are under 256 as measured by X.
 
+The link is `/live`, an alias configured in `next.config.ts` that redirects to
+`/demo?live=1`. Bare `/demo` opens the labelled Decision lab, which contradicts
+a post promising live onchain state; the alias keeps the query string out of a
+public link.
+
 **Recommended (254):**
 
 ```
@@ -29,7 +34,7 @@ Having funds doesn't mean spending them.
 Memento reads its own Filecoin Pay runway and refuses writes it can't afford — even with a full wallet.
 
 Move the cap yourself, live onchain, no signup:
-https://memento-sigma-rosy.vercel.app/demo?live=1
+https://memento-sigma-rosy.vercel.app/live
 
 @FilecoinTLDR Builder Challenge C4
 ```
@@ -45,7 +50,7 @@ Most AI storage agents just call an upload API.
 Memento reads its own Filecoin Pay runway, then decides what it can afford to remember.
 
 Drag the cap. Watch a funded wallet refuse its own write:
-https://memento-sigma-rosy.vercel.app/demo?live=1
+https://memento-sigma-rosy.vercel.app/live
 
 @FilecoinTLDR Builder Challenge C4
 ```
@@ -56,7 +61,7 @@ https://memento-sigma-rosy.vercel.app/demo?live=1
 Most storage agents just call an upload API.
 
 Memento reads its own Filecoin Pay runway and refuses what it can't afford. Move the cap and watch it change its mind:
-https://memento-sigma-rosy.vercel.app/demo?live=1
+https://memento-sigma-rosy.vercel.app/live
 
 @FilecoinTLDR
 ```

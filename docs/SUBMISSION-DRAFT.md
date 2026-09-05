@@ -12,7 +12,7 @@ Loops requires seven things: title, short description, live demo link, repo link
 
 **Repository:** https://github.com/hrsh22/memento
 
-**Live demo:** https://memento-sigma-rosy.vercel.app/demo?live=1
+**Live demo:** https://memento-sigma-rosy.vercel.app/live
 
 **Video:** https://memento-sigma-rosy.vercel.app/watch
 
@@ -76,7 +76,7 @@ loops project create --event filecointldr-builder-challenge-cycle-4 \
   --tagline "An agent that knows what it can afford to remember."
 
 loops project update --event filecointldr-builder-challenge-cycle-4 \
-  --demo-url "https://memento-sigma-rosy.vercel.app/demo?live=1" \
+  --demo-url "https://memento-sigma-rosy.vercel.app/live" \
   --video-url "https://memento-sigma-rosy.vercel.app/watch" \
   --logo-url "https://memento-sigma-rosy.vercel.app/logo.png" \
   --screenshot-urls "https://memento-sigma-rosy.vercel.app/shots/01-landing.png" \

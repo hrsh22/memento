@@ -6,7 +6,7 @@
 
 “Agents can store everything. But can they decide what is worth paying to remember? This is Memento: a memory treasury with a survival instinct.”
 
-Show the overview and the layered memory sculpture. Mention that the Decision Lab is a simulation and the Live Onchain tab contains actual evidence.
+Show the introduction, then click Try the decision lab to enter the overview. Mention that the Decision Lab is a simulation and the Live Onchain tab contains actual evidence.
 
 **0:15–0:40 · Visible decision**
 

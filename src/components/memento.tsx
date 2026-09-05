@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import {
   Activity,
   ArrowDownLeft,
@@ -322,9 +323,9 @@ function StageFeed({
     </div>
   );
 }
-export function Memento() {
-  const [view, setView] = useState<View>("overview");
-  const [mode, setMode] = useState<"lab" | "live">("lab");
+export function Memento({ evidence = false }: { evidence?: boolean }) {
+  const [view, setView] = useState<View>(evidence ? "receipts" : "overview");
+  const [mode, setMode] = useState<"lab" | "live">(evidence ? "live" : "lab");
   const [policy, setPolicy] = useState<Policy>(DEFAULT_POLICY);
   const [memories, setMemories] = useState<Memory[]>(SEED_MEMORIES);
   const [balance, setBalance] = useState(0.25);
@@ -333,6 +334,11 @@ export function Memento() {
   const [hasRun, setHasRun] = useState(false);
   const [selected, setSelected] = useState<MemoryDecision | null>(null);
   const [help, setHelp] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [profile, setProfile] = useState({
+    name: "Research agent",
+    workspace: "Personal workspace",
+  });
   const [add, setAdd] = useState(false);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
@@ -499,17 +505,25 @@ export function Memento() {
         Skip to main content
       </a>
       <aside className={cn("sidebar", mobile && "is-open")}>
-        <Logo />
-        <div className="workspace">
+        <Link href="/" aria-label="Memento introduction">
+          <Logo />
+        </Link>
+        <button
+          type="button"
+          className="workspace"
+          onClick={() => setProfileOpen(true)}
+          aria-label={`Edit agent profile: ${profile.name}`}
+          aria-haspopup="dialog"
+        >
           <div className="workspace-icon">
             <Sparkles size={16} />
           </div>
           <div>
-            <strong>Research agent</strong>
-            <span>Personal workspace</span>
+            <strong>{profile.name}</strong>
+            <span>{profile.workspace}</span>
           </div>
           <ChevronDown size={14} />
-        </div>
+        </button>
         <div className="nav-label">WORKSPACE</div>
         <nav>
           {navigation.map((n) => (
@@ -670,17 +684,17 @@ export function Memento() {
                     <>
                       Real Filecoin Pay telemetry{" "}
                       <span className="muted">/</span>{" "}
-                      <a
-                        href={`${explorer}/address/${chain?.address}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {short(
-                          chain?.address ||
-                            "0xA704353cB48030557c307cB743581D49eFA1eF80",
-                        )}{" "}
-                        <ArrowUpRight size={12} />
-                      </a>
+                      {chain ? (
+                        <a
+                          href={`${explorer}/address/${chain.address}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {short(chain.address)} <ArrowUpRight size={12} />
+                        </a>
+                      ) : (
+                        <span>Reading account…</span>
+                      )}
                     </>
                   )}
                 </span>
@@ -743,7 +757,7 @@ export function Memento() {
                   </div>
                   <div className="runway-number">
                     {mode === "live" && !chain
-                      ? "—"
+                      ? "N/A"
                       : activeDays == null
                         ? "∞"
                         : fmt(activeDays, 1)}
@@ -776,28 +790,28 @@ export function Memento() {
                       <div>
                         <span>Deposited in Filecoin Pay</span>
                         <strong>
-                          {chain ? fmt(Number(chain.funds), 4) : "—"}{" "}
+                          {chain ? fmt(Number(chain.funds), 4) : "N/A"}{" "}
                           <small>USDFC</small>
                         </strong>
                       </div>
                       <div>
                         <span>Locked reserve</span>
                         <strong>
-                          {chain ? fmt(Number(chain.totalLockup), 4) : "—"}{" "}
+                          {chain ? fmt(Number(chain.totalLockup), 4) : "N/A"}{" "}
                           <small>USDFC</small>
                         </strong>
                       </div>
                       <div>
                         <span>Wallet available for top-ups</span>
                         <strong>
-                          {chain ? fmt(Number(chain.walletUsdfc), 2) : "—"}{" "}
+                          {chain ? fmt(Number(chain.walletUsdfc), 2) : "N/A"}{" "}
                           <small>tUSDFC</small>
                         </strong>
                       </div>
                       <div>
                         <span>Gas balance</span>
                         <strong>
-                          {chain ? fmt(Number(chain.walletFil), 4) : "—"}{" "}
+                          {chain ? fmt(Number(chain.walletFil), 4) : "N/A"}{" "}
                           <small>tFIL</small>
                         </strong>
                       </div>
@@ -845,13 +859,13 @@ export function Memento() {
                     {mode === "live"
                       ? chain
                         ? fmt(Number(chain.availableFunds), 4)
-                        : "—"
+                        : "N/A"
                       : fmt(balance)}
                     <small>USDFC</small>
                   </strong>
                   <p>
                     {mode === "live"
-                      ? `${chain ? fmt(Number(chain.totalLockup), 4) : "—"} USDFC locked in reserve`
+                      ? `${chain ? fmt(Number(chain.totalLockup), 4) : "N/A"} USDFC locked in reserve`
                       : "Unreserved funds in this scenario"}
                   </p>
                 </div>
@@ -901,7 +915,7 @@ export function Memento() {
                     {mode === "live"
                       ? chain
                         ? fmt(Number(chain.monthlyRate), 4)
-                        : "—"
+                        : "N/A"
                       : fmt(plan.baselineFees - plan.plannedFees, 3)}
                     <small>USDFC</small>
                   </strong>
@@ -930,7 +944,7 @@ export function Memento() {
                             : "The evidence is the story."}
                       </h2>
                     </div>
-                    <span className="small-index">01 — 04</span>
+                    <span className="small-index">01 / 04</span>
                   </div>
                   {mode === "lab" ? (
                     <>
@@ -1563,6 +1577,51 @@ export function Memento() {
               </p>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+      <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
+        <DialogContent className="detail-dialog">
+          <DialogHeader>
+            <DialogTitle>Your agent profile</DialogTitle>
+            <DialogDescription>
+              Personalize the names shown in this demo session.
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            className="memory-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const data = new FormData(event.currentTarget);
+              const name = String(data.get("name") || "").trim();
+              const workspace = String(data.get("workspace") || "").trim();
+              if (!name || !workspace) return;
+              setProfile({ name, workspace });
+              setProfileOpen(false);
+              setToast("Agent profile updated for this session.");
+            }}
+          >
+            <label htmlFor="profile-name">Agent name</label>
+            <input
+              id="profile-name"
+              name="name"
+              defaultValue={profile.name}
+              required
+              maxLength={40}
+              pattern={".*\\S.*"}
+            />
+            <label htmlFor="profile-workspace">Workspace name</label>
+            <input
+              id="profile-workspace"
+              name="workspace"
+              defaultValue={profile.workspace}
+              required
+              maxLength={40}
+              pattern={".*\\S.*"}
+            />
+            <Button type="submit">
+              Save profile <Check size={15} />
+            </Button>
+          </form>
         </DialogContent>
       </Dialog>
       <Dialog open={help} onOpenChange={setHelp}>

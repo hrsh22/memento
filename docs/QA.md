@@ -44,3 +44,12 @@ Used the installed Chrome extension / computer-use browser, not a separate headl
 The decision lab is explicitly simulated. No lab transaction is broadcast. Its conservative fee projection is not the exact lifecycle reserve ledger. The real writer uses the SDK quote. Public archives contain synthetic research fixtures and actual integration findings, not user-private data. No mainnet transaction, Vercel deployment, X post, or final hackathon submission was made.
 
 Public deployment smoke testing remains for after the user deploys. Recorded evidence includes timestamps; it is not presented as a continuously running hosted writer.
+
+## Introduction and profile update, 6 September 2026
+
+- Added a static introduction at `/`, with plain-language context, a real recorded refusal example, and separate lab/evidence links.
+- Chrome verified the lab CTA, logo navigation back to the introduction, and direct live-receipt entry at `/demo?evidence=1`.
+- The previously inert workspace card opens an accessible profile dialog. Saving valid agent/workspace names updates the card; edits are scoped to the demo session. An HTML pattern-escaping issue found during browser testing was corrected.
+- Desktop full-page and 390×844 screenshots inspected. Mobile content width equals viewport width, with no horizontal overflow.
+- Removed all em dashes from application source and public text assets; checked rendered introduction text as well.
+- Scoped dashboard main-element spacing to the dashboard so the introduction keeps its own layout. Account explorer links now wait for an observed address.

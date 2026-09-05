@@ -15,6 +15,8 @@ npm run dev
 
 Open [localhost:3000](http://localhost:3000). **No wallet, API key, or paid service is needed to explore the app.**
 
+The home page introduces the memory-budget problem and a real recorded decision. Choose **Try the decision lab** to enter `/demo`, or **See real Filecoin evidence** to open the live receipt view directly. The sidebar agent card lets you customize the displayed agent and workspace names for the current demo session.
+
 - **Decision lab:** move the budget slider, run the decision, inspect verbatim retained text, add your own memory, and change the retention policy. Clearly labeled simulation; no transactions.
 - **Live onchain:** actual Calibration treasury reads alongside timestamped, recorded integration evidence. Inspect the funded/refused decisions and click **Verify independently now** to re-download a real archive, validate signatures, and check PieceCID inclusion in both live PDP datasets.
 - **Memory vault:** keep, compact, or defer decisions with explicit reasons and transparent utility scores.

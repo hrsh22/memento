@@ -391,7 +391,7 @@ svg {
 .mobile-menu {
   display: none;
 }
-main {
+.app-shell main {
   padding: 38px 42px 0;
   max-width: 1570px;
   margin: 0 auto;
@@ -1681,7 +1681,7 @@ input[type="range"] {
   }
 }
 @media (min-width: 1500px) {
-  main {
+  .app-shell main {
     padding: 45px 55px 0;
   }
   .hero-copy {
@@ -1717,7 +1717,7 @@ input[type="range"] {
     margin-left: 208px;
     width: calc(100% - 208px);
   }
-  main {
+  .app-shell main {
     padding: 30px 27px 0;
   }
   .topbar {
@@ -1809,7 +1809,7 @@ input[type="range"] {
     margin-left: 185px;
     width: calc(100% - 185px);
   }
-  main {
+  .app-shell main {
     padding: 26px 22px 0;
   }
   .overview-grid,
@@ -1973,7 +1973,7 @@ input[type="range"] {
   .testnet {
     font-size: 9px;
   }
-  main {
+  .app-shell main {
     padding: 28px 18px 0;
   }
   .page-heading h1 {
@@ -2395,4 +2395,24 @@ input[type="range"] {
     margin-left: 31px;
     font-size: 9px;
   }
+}
+
+button.workspace {
+  text-align: left;
+  width: calc(100% - 4px);
+  font-family: inherit;
+}
+button.workspace:hover {
+  background: #eef2e5;
+  border-color: #b7c7a0;
+}
+.workspace > div:nth-child(2) {
+  min-width: 0;
+}
+.workspace strong,
+.workspace span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
 }

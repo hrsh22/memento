@@ -7,7 +7,7 @@ The user will deploy this project. No Vercel deployment or Loops submission has 
 1. Open Vercel → Add New Project → import **hrsh22/memento**.
 2. Keep the **Next.js** framework preset, repository root directory, `npm run build`, and default output directory.
 3. Use Node.js **22.x**. No environment variables are required.
-4. Deploy. Open the result and test **Inspect live evidence → latest memory archive → Verify independently now**.
+4. Deploy. Open the introduction and test **See real Filecoin evidence → latest memory archive → Verify independently now**. Also check **Try the decision lab** and the editable agent profile card.
 5. Save the public demo URL for the submission. Confirm deployment protection allows judges to open it without signing in.
 
 The bundled `public/evidence/latest.json` preserves actual, timestamped Calibration receipts. `/api/chain` continues to read the real public wallet. `/api/verify` retrieves the archive and checks signatures and onchain dataset inclusion afresh. The evidence viewer labels recorded worker activity; it does not claim a worker is running on Vercel.

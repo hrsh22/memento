@@ -66,6 +66,27 @@ const fmt = (n: number, d = 2) =>
 const short = (s: string) => s.slice(0, 6) + "…" + s.slice(-4);
 const size = (n: number) => (n < 1024 ? `${n} B` : `${fmt(n / 1024, 1)} KB`);
 const explorer = "https://filecoin-testnet.blockscout.com";
+/** One plain sentence for a reader who does not know what a payment rail is. */
+function plainly(decision: LiveDecision): string {
+  const reason = decision.headline;
+  if (decision.verdict === "store")
+    return reason.startsWith("Existing funds")
+      ? "In plain terms: the money already set aside covers this, so the agent keeps the selected memories without asking for more."
+      : "In plain terms: this fits the monthly allowance, so the agent moves its own funds into the reserve and stores.";
+  if (reason.includes("recurring cost"))
+    return "In plain terms: the wallet has money, but keeping this data every month would cost more than the agent is allowed to spend. It declined rather than overcommit.";
+  if (reason.includes("top-up limit"))
+    return "In plain terms: this would need a bigger one-time deposit than the agent may make on its own, so it stopped and left the call to a human.";
+  if (reason.includes("fund the reserve"))
+    return "In plain terms: the wallet does not hold enough to cover the reserve this write requires, so the agent declined instead of failing halfway.";
+  if (reason.includes("test FIL"))
+    return "In plain terms: there is no gas left to pay for the transaction itself, so the agent stopped before it could get stuck.";
+  if (reason.includes("operation-fee"))
+    return "In plain terms: the agent has already spent its fee allowance for the last 30 days. It waits rather than quietly exceeding its own budget.";
+  if (reason.includes("reserve-funding"))
+    return "In plain terms: the agent has already topped itself up as much as it is allowed to this month, so it defers.";
+  return "In plain terms: a spending limit was not satisfied, so the agent declined the write.";
+}
 const navigation = [
   { id: "overview", name: "Overview", icon: Layers },
   { id: "memories", name: "Memory vault", icon: Database },
@@ -831,6 +852,7 @@ export function Memento({
                           : "Write refused"}
                       </strong>
                       <p>{liveDecision.headline}</p>
+                      <p className="decide-plain">{plainly(liveDecision)}</p>
                     </div>
                     <span className="decide-epoch">
                       EPOCH{" "}
@@ -884,22 +906,94 @@ export function Memento({
                       <dd>{size(liveDecision.projection.payloadBytes)}</dd>
                     </div>
                   </dl>
-                  <p className="decide-plan">
-                    Policy mode <strong>{liveDecision.plan.mode}</strong> ·{" "}
-                    {liveDecision.plan.protectedCount} protected ·{" "}
-                    {liveDecision.plan.compactedCount} compacted ·{" "}
-                    {liveDecision.plan.deferredCount} deferred
-                  </p>
-                  {liveDecision.spending && (
-                    <p className="decide-plan">
-                      Rolling 30-day fees{" "}
-                      {fmt(Number(liveDecision.spending.feesUsedUsdfc), 3)}/
-                      {fmt(Number(liveDecision.spending.feeLimitUsdfc), 2)}{" "}
-                      USDFC · {liveDecision.spending.reason}
-                    </p>
-                  )}
+                  <ol className="decide-trace">
+                    <li>
+                      <span>01 / OBSERVE</span>
+                      <p>
+                        Read{" "}
+                        <a
+                          href={`${explorer}/address/${liveDecision.snapshot.address}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {short(liveDecision.snapshot.address)}
+                        </a>{" "}
+                        at epoch{" "}
+                        {Number(liveDecision.snapshot.epoch).toLocaleString()}:{" "}
+                        {fmt(Number(liveDecision.snapshot.availableFunds), 4)}{" "}
+                        USDFC available,{" "}
+                        {liveDecision.snapshot.runwayDays === null
+                          ? "unbounded runway"
+                          : `${fmt(liveDecision.snapshot.runwayDays, 1)} days of runway`}
+                        , {liveDecision.snapshot.rails.length} payment rail
+                        {liveDecision.snapshot.rails.length === 1
+                          ? ""
+                          : "s"}{" "}
+                        costing{" "}
+                        {fmt(Number(liveDecision.snapshot.monthlyRate), 4)}{" "}
+                        USDFC / month.
+                      </p>
+                    </li>
+                    <li>
+                      <span>02 / DECIDE</span>
+                      <p>
+                        {liveDecision.plan.explanation} Kept{" "}
+                        {liveDecision.plan.protectedCount} protected, compacted{" "}
+                        {liveDecision.plan.compactedCount}, deferred{" "}
+                        {liveDecision.plan.deferredCount} —{" "}
+                        {size(liveDecision.plan.retainedBytes)} selected out of{" "}
+                        {size(liveDecision.plan.inputBytes)}.
+                      </p>
+                    </li>
+                    <li>
+                      <span>03 / PRICE</span>
+                      <p>
+                        Onchain price list:{" "}
+                        {liveDecision.snapshot.prices.storagePerTibMonth} USDFC
+                        per TiB / month,{" "}
+                        {liveDecision.snapshot.prices.addBaseFee} base +{" "}
+                        {liveDecision.snapshot.prices.addPieceFee} per piece,
+                        across 2 provider copies. That is{" "}
+                        {fmt(
+                          Number(liveDecision.projection.operationFeesUsdfc),
+                          4,
+                        )}{" "}
+                        USDFC in one-time fees and{" "}
+                        {fmt(
+                          Number(liveDecision.projection.depositNeededUsdfc),
+                          4,
+                        )}{" "}
+                        USDFC of new deposit.
+                      </p>
+                    </li>
+                    <li>
+                      <span>04 / GATE</span>
+                      <p>
+                        {fmt(
+                          Number(liveDecision.projection.projectedMonthlyUsdfc),
+                          4,
+                        )}{" "}
+                        USDFC / month against a{" "}
+                        {fmt(liveDecision.policy.maxMonthlyUsdfc, 2)} USDFC cap.{" "}
+                        {liveDecision.gate.reason}
+                        {liveDecision.spending &&
+                          ` Rolling 30-day fees ${fmt(Number(liveDecision.spending.feesUsedUsdfc), 3)}/${fmt(Number(liveDecision.spending.feeLimitUsdfc), 2)} USDFC. ${liveDecision.spending.reason}`}
+                      </p>
+                    </li>
+                  </ol>
                   <p className="decide-basis">{liveDecision.basis}</p>
                   <div className="decide-links">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        download(
+                          liveDecision,
+                          `memento-live-decision-${liveDecision.snapshot.epoch}.json`,
+                        )
+                      }
+                    >
+                      <Download size={12} /> Download this decision
+                    </button>
                     <a
                       href={`/api/decide?cap=${liveCap}`}
                       target="_blank"

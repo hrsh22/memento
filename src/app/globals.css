@@ -2613,6 +2613,60 @@ button.workspace:hover {
   font-weight: 500;
   text-transform: capitalize;
 }
+.decide-plain {
+  margin: 7px 0 0 !important;
+  font-size: 10.5px !important;
+  line-height: 1.65 !important;
+  opacity: 0.78;
+}
+.decide-trace {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  border-top: 1px solid #edf0e7;
+}
+.decide-trace li {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid #f2f4ed;
+}
+.decide-trace li:last-child {
+  border-bottom: 0;
+}
+.decide-trace span {
+  font-family: var(--font-mono-body);
+  font-size: 8px;
+  letter-spacing: 0.9px;
+  color: #a0a995;
+  padding-top: 3px;
+}
+.decide-trace p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #56604f;
+}
+.decide-trace a {
+  color: #6e8b4d;
+  border-bottom: 1px solid #dbe6cd;
+}
+.decide-links button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 0;
+  padding: 0 0 2px;
+  font-size: 10px;
+  font-family: inherit;
+  color: #6e8b4d;
+  border-bottom: 1px solid #dbe6cd;
+}
+.decide-links button:hover {
+  color: #46603a;
+}
 .decide-basis {
   margin: 13px 0 0;
   font-size: 9.5px;
@@ -2653,6 +2707,10 @@ button.workspace:hover {
   }
   .decide-numbers {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .decide-trace li {
+    grid-template-columns: 1fr;
+    gap: 5px;
   }
   .decide-verdict {
     flex-wrap: wrap;

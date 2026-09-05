@@ -9,7 +9,7 @@ import { readChain } from "./filecoin";
 import { readState } from "./store";
 
 const BASIS =
-  "Live Filecoin Pay reads and the onchain price list drive the same policy engine and budget gate the funded worker uses. Recurring cost is projected from that price list; before broadcasting, the funded worker additionally obtains an exact Synapse quote for the serialized archive and resolved provider contexts. This endpoint holds no signer and sends no transaction.";
+  "By design this deployment holds no private key, so no visitor can make it spend. Decisions here are read-only evaluations of live Filecoin Pay state through the same policy engine and budget gate the funded worker uses; signed transactions are only ever executed by that local worker. Recurring cost is projected from the onchain price list, and the worker additionally obtains an exact Synapse quote for the serialized archive and resolved provider contexts before broadcasting.";
 
 /** The gate compares integer base units, so every projection crosses over as 18-decimal units. */
 function units(value: number): bigint {

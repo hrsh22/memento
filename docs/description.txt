@@ -1,29 +1,18 @@
-Memento is an autonomous memory treasury built on Filecoin Pay and the Synapse SDK. It reads its own onchain balance and runway, works out which memories are worth paying to keep, funds a bounded reserve within limits it cannot exceed on its own, and leaves receipts anyone can check.
+Most storage agents just call an upload API. A human sets it up, a human funds it, and a human notices when the money runs out. Fine for a demo, useless if you leave an agent running for a few weeks.
 
-MAKE IT DECIDE, RIGHT NOW
-Go to https://memento-sigma-rosy.vercel.app/live, drag the monthly spending cap, and press "Run a live decision now". It reads this wallet's Filecoin Pay balance, runway, payment rails, and the onchain price list at the current epoch, then runs the same policy engine and budget gate the funded worker uses. Set the cap below the projected cost and the same funded wallet gets refused. You need no wallet, no key, and no signup. The deployment holds no private key, so nobody visiting it can make it spend.
+Memento reads its own Filecoin Pay balance and runway, works out what it can afford to keep, and turns down writes it cannot pay for. The decision is the point, not the upload.
 
-  curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.5"   gives verdict "store"
-  curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.05"  gives verdict "refuse"
+Try it: https://memento-sigma-rosy.vercel.app/live
 
-CHECK THE ARCHIVES ARE REALLY ON FILECOIN
-  curl -s https://memento-sigma-rosy.vercel.app/api/showcase
+No wallet, no signup. Drag the spending cap and hit "Run a live decision now". It reads this wallet's real balance and runway at the current epoch, then decides. Push the cap under what storage actually costs and you get to watch a wallet with money in it refuse its own write, and explain why it did.
 
-That re-downloads both provider copies and checks PieceCID inclusion in two live PDP datasets. It returns verified: true in about a second.
+It has already done this for real. Four signed decisions from one Calibration run: a refusal because the monthly cost went over the cap, an archive stored across two providers, a second refusal once it had used up its rolling fee allowance, and a duplicate upload it skipped. You can re-check any of them on the site. It downloads both copies again and confirms they are still sitting in two live PDP datasets.
 
-FOUR DECISIONS ALREADY ON RECORD
-These come from a real Calibration worker run and each one is signed. A funded wallet refused by the recurring cost cap. A 6,838 byte archive stored on two providers and hash checked. A second write refused because 0.022 already used plus 0.022 requested goes over a 0.03 tUSDFC rolling allowance. A duplicate upload prevented. A fifth receipt shows the agent topping up its own reserve.
+Built on Filecoin Pay and the Synapse SDK, storing through Warm Storage. The balances and proofs are real and on Calibration. The only simulated part is the Decision lab, which says so wherever it appears.
 
-HOW FILECOIN IS USED
-Synapse SDK 2.0.0 reads Filecoin Pay account summaries, reserves, runway, wallet balances, live price lists, and rails. The agent quotes the exact archive bytes against two resolved provider contexts. It enforces integer recurring cost limits plus durable rolling allowances for operation fees and reserve funding. When it can afford to, it runs the preparation deposit and approval transaction and stores the selected memories on Filecoin Warm Storage. Verification checks signatures, fresh retrieval from each registered provider, and PieceCID inclusion in both live PDP datasets. The balances, rails, and proofs are real and onchain on Calibration. Nothing is hardcoded or simulated outside the Decision lab, which is labelled as a simulation wherever it appears. No mainnet funds are involved.
+Video: https://memento-sigma-rosy.vercel.app/watch
+It opens with 25 seconds of real screen recording, not an animation.
 
-WATCH IT
-https://memento-sigma-rosy.vercel.app/watch opens with a 25 second screen recording of the deployed app. It is real footage rather than an animation. The cap moves from 0.50 to 0.10 USDFC while the account's own cost stays at 0.24, and the wallet is refused. Below that sits a 93 second visualization of the worker run that actually spent funds.
-
-AI BUILD LOG
-https://github.com/hrsh22/memento/blob/main/docs/AI-BUILD-LOG.md
-
-WHAT THIS DOES NOT CLAIM
-/api/decide projects the recurring cost from the live onchain price list. The funded worker gets an exact Synapse quote before it broadcasts anything. The spending limits are application level policy, not a separately deployed spending limit contract. Receipts prove integrity, not semantic correctness. The runtime is a deterministic policy workflow rather than an LLM improvising financial decisions. AI was used to design, build, critique, and test it.
-
-X POST: https://x.com/hrsh22/status/2096342218080714826
+Code: https://github.com/hrsh22/memento
+AI build log: https://github.com/hrsh22/memento/blob/main/docs/AI-BUILD-LOG.md
+X post: https://x.com/hrsh22/status/2096342218080714826

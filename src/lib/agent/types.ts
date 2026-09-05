@@ -1,11 +1,119 @@
-export type MemoryKind = 'core' | 'research' | 'trace' | 'artifact';
-export interface Memory { id: string; title: string; kind: MemoryKind; content: string; importance: number; accesses: number; ageDays: number; pinned: boolean; }
-export interface Policy { reserveDays: number; maxMonthlyUsdfc: number; minUtility: number; allowCompaction: boolean; }
-export type Disposition = 'keep' | 'compact' | 'defer';
-export interface MemoryDecision { id: string; title: string; kind: MemoryKind; action: Disposition; utility: number; originalBytes: number; retainedBytes: number; reason: string; content: string; sourceHash?: string; }
-export interface BudgetInput { availableUsdfc: number; existingMonthlyUsdfc: number; storagePerTibMonth: number; datasetFeeMonth: number; addBaseFee: number; addPieceFee: number; copies: number; newDataset: boolean; }
-export interface DecisionPlan { decisions: MemoryDecision[]; mode: 'abundant' | 'selective' | 'survival'; inputBytes: number; retainedBytes: number; baselineMonthly: number; plannedMonthly: number; baselineFees: number; plannedFees: number; baselineRunwayDays: number | null; plannedRunwayDays: number | null; protectedCount: number; deferredCount: number; compactedCount: number; retainedUtilityPercent: number; explanation: string; policy: Policy; budget: BudgetInput; }
-export interface ChainSnapshot { address: string; chainId: number; network: string; epoch: string; observedAt: string; funds: string; availableFunds: string; debt: string; totalLockup: string; monthlyRate: string; ratePerEpoch: string; runwayDays: number | null; walletUsdfc: string; walletFil: string; contracts: {pay: string; warmStorage: string; pdp: string; usdfc: string}; prices: {storagePerTibMonth: number; datasetFeeMonth: number; addBaseFee: number; addPieceFee: number;}; rails: {railId: string; paymentRate: string; endEpoch: string}[]; }
-export interface AgentEvent { id: string; at: string; stage: 'observe' | 'decide' | 'act' | 'verify' | 'error'; title: string; detail: string; }
-export interface Receipt { id: string; version: 1; createdAt: string; mode: 'calibration'; address: string; snapshot: ChainSnapshot; plan: DecisionPlan; action: 'stored' | 'deferred' | 'failed'; reason: string; payloadHash?: string; signature?: string; pieceCid?: string; copies?: {providerId: string; dataSetId: string; pieceId: string; retrievalUrl: string}[]; verified?: boolean; depositTx?: string; }
-export interface AgentState { running: boolean; events: AgentEvent[]; receipts: Receipt[]; lastSnapshot?: ChainSnapshot; lastError?: string; }
+export type MemoryKind = "core" | "research" | "trace" | "artifact";
+export interface Memory {
+  id: string;
+  title: string;
+  kind: MemoryKind;
+  content: string;
+  importance: number;
+  accesses: number;
+  ageDays: number;
+  pinned: boolean;
+}
+export interface Policy {
+  reserveDays: number;
+  maxMonthlyUsdfc: number;
+  minUtility: number;
+  allowCompaction: boolean;
+}
+export type Disposition = "keep" | "compact" | "defer";
+export interface MemoryDecision {
+  id: string;
+  title: string;
+  kind: MemoryKind;
+  action: Disposition;
+  utility: number;
+  originalBytes: number;
+  retainedBytes: number;
+  reason: string;
+  content: string;
+  sourceHash?: string;
+}
+export interface BudgetInput {
+  availableUsdfc: number;
+  existingMonthlyUsdfc: number;
+  storagePerTibMonth: number;
+  datasetFeeMonth: number;
+  addBaseFee: number;
+  addPieceFee: number;
+  copies: number;
+  newDataset: boolean;
+}
+export interface DecisionPlan {
+  decisions: MemoryDecision[];
+  mode: "abundant" | "selective" | "survival";
+  inputBytes: number;
+  retainedBytes: number;
+  baselineMonthly: number;
+  plannedMonthly: number;
+  baselineFees: number;
+  plannedFees: number;
+  baselineRunwayDays: number | null;
+  plannedRunwayDays: number | null;
+  protectedCount: number;
+  deferredCount: number;
+  compactedCount: number;
+  retainedUtilityPercent: number;
+  explanation: string;
+  policy: Policy;
+  budget: BudgetInput;
+}
+export interface ChainSnapshot {
+  address: string;
+  chainId: number;
+  network: string;
+  epoch: string;
+  observedAt: string;
+  funds: string;
+  availableFunds: string;
+  debt: string;
+  totalLockup: string;
+  monthlyRate: string;
+  ratePerEpoch: string;
+  runwayDays: number | null;
+  walletUsdfc: string;
+  walletFil: string;
+  contracts: { pay: string; warmStorage: string; pdp: string; usdfc: string };
+  prices: {
+    storagePerTibMonth: number;
+    datasetFeeMonth: number;
+    addBaseFee: number;
+    addPieceFee: number;
+  };
+  rails: { railId: string; paymentRate: string; endEpoch: string }[];
+}
+export interface AgentEvent {
+  id: string;
+  at: string;
+  stage: "observe" | "decide" | "act" | "verify" | "error";
+  title: string;
+  detail: string;
+}
+export interface Receipt {
+  id: string;
+  version: 1;
+  createdAt: string;
+  mode: "calibration";
+  address: string;
+  snapshot: ChainSnapshot;
+  plan: DecisionPlan;
+  action: "stored" | "deferred" | "failed";
+  reason: string;
+  payloadHash?: string;
+  signature?: string;
+  pieceCid?: string;
+  copies?: {
+    providerId: string;
+    dataSetId: string;
+    pieceId: string;
+    retrievalUrl: string;
+  }[];
+  verified?: boolean;
+  depositTx?: string;
+}
+export interface AgentState {
+  running: boolean;
+  events: AgentEvent[];
+  receipts: Receipt[];
+  lastSnapshot?: ChainSnapshot;
+  lastError?: string;
+}

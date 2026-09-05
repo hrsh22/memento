@@ -22,8 +22,9 @@ Loops requires seven things: title, short description, live demo link, repo link
 - https://memento-sigma-rosy.vercel.app/shots/01-landing.png
 - https://memento-sigma-rosy.vercel.app/shots/02-live-refusal.png
 - https://memento-sigma-rosy.vercel.app/shots/03-watch.png
+- https://memento-sigma-rosy.vercel.app/shots/04-verification.png
 
-**Public X post:** https://x.com/hrsh22/status/2096342218080714826
+**Public X post:** https://x.com/hrsh22/status/2096347741018619918
 
 **AI build log:** https://github.com/hrsh22/memento/blob/main/docs/AI-BUILD-LOG.md
 

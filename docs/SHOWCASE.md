@@ -71,7 +71,7 @@ is shorter than the worker-run video, it is real footage rather than an
 animation, and the approved-to-refused flip is legible on a phone. Media does
 not count against the character limit. Keep `memento-demo.mp4` for the site.
 
-**Published:** https://x.com/hrsh22/status/2096342218080714826, posted by the user on 5 September 2026. Nothing was posted
+**Published:** https://x.com/hrsh22/status/2096347741018619918, posted by the user on 5 September 2026. Nothing was posted
 by the agent.
 
 ## Reproducing the media

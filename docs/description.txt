@@ -15,4 +15,4 @@ It opens with 25 seconds of real screen recording, not an animation.
 
 Code: https://github.com/hrsh22/memento
 AI build log: https://github.com/hrsh22/memento/blob/main/docs/AI-BUILD-LOG.md
-X post: https://x.com/hrsh22/status/2096342218080714826
+X post: https://x.com/hrsh22/status/2096347741018619918

@@ -35,6 +35,7 @@ loops project create --event "$EVENT" \
   --screenshot-urls "$BASE/shots/01-landing.png" \
   --screenshot-urls "$BASE/shots/02-live-refusal.png" \
   --screenshot-urls "$BASE/shots/03-watch.png" \
+  --screenshot-urls "$BASE/shots/04-verification.png" \
   --pitch "$(cat docs/pitch.txt)" \
   --description "$(cat docs/description.txt)"
 

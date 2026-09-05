@@ -1013,6 +1013,18 @@ export function Memento({
               )}
             </section>
           )}
+          {mode === "lab" && (
+            <div className="lab-banner">
+              <FlaskConical size={17} />
+              <span>
+                <strong>Simulation.</strong> Nothing here touches the chain. The
+                numbers are a scenario, not this wallet.
+              </span>
+              <button type="button" onClick={() => setMode("live")}>
+                Switch to live onchain <ArrowUpRight size={13} />
+              </button>
+            </div>
+          )}
           {mode === "lab" &&
             agent.receipts.some((r) => r.action === "stored" && r.verified) && (
               <div className="evidence-strip">

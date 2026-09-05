@@ -1150,6 +1150,44 @@ input[type="range"] {
 .live-banner button {
   font-size: 9px;
 }
+.lab-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fdf7ec;
+  border: 1px solid #ecdcc4;
+  border-radius: 7px;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  color: #92663f;
+  font-size: 10px;
+}
+.lab-banner > span {
+  flex: 1;
+}
+.lab-banner strong {
+  font-weight: 600;
+}
+.lab-banner button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 9px;
+  color: #92663f;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid #e4cfae;
+  padding: 0 0 2px;
+}
+.lab-banner button:hover {
+  color: #6d4a2c;
+}
+@media (max-width: 650px) {
+  .lab-banner {
+    flex-wrap: wrap;
+  }
+}
 .error-banner {
   color: #ab734d;
   background: #fff8ed;

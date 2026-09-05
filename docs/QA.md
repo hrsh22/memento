@@ -64,3 +64,5 @@ The user has since deployed; public Chrome verification passed. Recorded evidenc
 - Video metadata loaded successfully in Chrome: 92.916667 seconds. Transcript expansion and signed-run download links work.
 - Native video playback tested with keyboard controls in Chrome; time advanced without media errors. Desktop and mobile walkthrough screenshots inspected. Mobile viewport and document width both 390 pixels; temporary emulation reset afterwards.
 - Landing "Watch a real agent run" and walkthrough "Open evidence explorer" links both navigate correctly.
+- All four archived pieces passed fresh independent retrieval from providers 4 and 2 and live dataset inclusion after the verifier upgrade. The first archive correctly reports its legacy financial signature as absent, while its archive signature passes.
+- Fixed long receipt dialogs scrolling directly to Export on open. Chrome now confirms initial focus on "Decision evidence" and dialog scroll position zero; lint, TypeScript, and production build passed again for this focused accessibility fix.

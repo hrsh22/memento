@@ -379,6 +379,7 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
   } | null>(null);
   const [verifyError, setVerifyError] = useState("");
   const refreshing = useRef(false);
+  const receiptTitle = useRef<HTMLHeadingElement>(null);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [labReceipts, setLabReceipts] = useState<
     { at: string; plan: DecisionPlan }[]
@@ -1772,9 +1773,11 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
           if (!o) setReceipt(null);
         }}
       >
-        <DialogContent className="detail-dialog">
+        <DialogContent className="detail-dialog" initialFocus={receiptTitle}>
           <DialogHeader>
-            <DialogTitle>Decision evidence</DialogTitle>
+            <DialogTitle ref={receiptTitle} tabIndex={-1}>
+              Decision evidence
+            </DialogTitle>
             <DialogDescription>
               Calibration receipt · {receipt?.id}
             </DialogDescription>

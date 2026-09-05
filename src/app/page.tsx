@@ -52,15 +52,16 @@ export default function Page() {
               decides what to keep, shorten, or leave behind.
             </p>
             <div className={styles.actions}>
-              <Link href="/demo" className={styles.primary}>
-                Try the decision lab <ArrowRight size={18} />
+              <Link href="/demo?live=1" className={styles.primary}>
+                Run a live decision <ArrowRight size={18} />
               </Link>
               <Link href="/watch" className={styles.secondary}>
                 Watch a real agent run <ArrowUpRight size={16} />
               </Link>
             </div>
             <p className={styles.noWallet}>
-              No signup. No wallet needed to explore.
+              Reads Calibration at the current epoch. No signup, no wallet, no
+              transaction.
             </p>
           </div>
           <aside
@@ -100,8 +101,8 @@ export default function Page() {
                 </p>
               </div>
             </div>
-            <Link href="/demo?evidence=1" className={styles.receiptLink}>
-              Inspect the recorded decision <ArrowRight size={16} />
+            <Link href="/demo?live=1" className={styles.receiptLink}>
+              Reproduce this refusal on live state <ArrowRight size={16} />
             </Link>
             <span className={styles.receiptLabel}>
               RECEIPT d95d79de · 05 SEP 2026
@@ -143,9 +144,10 @@ export default function Page() {
         <div className={styles.exploreNote}>
           <Check size={18} />
           <p>
-            <strong>Start in the lab:</strong> change a budget and watch the
-            decision. <strong>Then explore live evidence:</strong> recorded
-            testnet actions, current balances, and fresh archive verification.
+            <strong>Start live:</strong> move the spending cap and watch a
+            funded wallet refuse its own write, against Calibration right now.{" "}
+            <strong>Then check the evidence:</strong> four recorded decisions,
+            two provider copies, verified fresh on demand.
           </p>
         </div>
       </main>

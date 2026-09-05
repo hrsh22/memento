@@ -2,38 +2,43 @@
 
 **An AI agent should know what it can afford to remember.**
 
-Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It reads its own financial state, decides which memories deserve storage, funds a bounded reserve, and verifies the result. Built for the [FilecoinTLDR Builder Challenge — Cycle 4](https://www.loops.house/filecointldr-builder-challenge-cycle-4).
+Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It reads its own onchain balance and runway, decides which memories are worth paying to keep, funds a bounded reserve, and leaves a receipt anyone can verify. Built for the [FilecoinTLDR Builder Challenge — Cycle 4](https://www.loops.house/filecointldr-builder-challenge-cycle-4).
 
-The decision is the product: an unfunded agent refuses a write; a funded agent preserves valuable memories; an over-budget quote is rejected even when the wallet has funds.
+The decision is the product. An unfunded agent refuses a write. A funded agent preserves what matters. **An over-budget quote is rejected even when the wallet is full.**
 
-[Open the app](https://memento-sigma-rosy.vercel.app) · [Watch the real 93-second run](https://memento-sigma-rosy.vercel.app/watch)
+[Open the app](https://memento-sigma-rosy.vercel.app) · [Run a live decision](https://memento-sigma-rosy.vercel.app/demo) · [Watch a real run](https://memento-sigma-rosy.vercel.app/watch)
 
-## Try it
+## For judges: three checks, about 60 seconds
+
+**1. Make it decide, right now.** Open [the live tab](https://memento-sigma-rosy.vercel.app/demo), pick **Live onchain**, drag the monthly cap, and press **Run a live decision now**. It reads this wallet's Filecoin Pay balance, runway, rails, and the onchain price list at the current epoch, then runs the real policy engine and budget gate. Set the cap below the projected recurring cost and the same funded account is refused. No wallet, key, or signup needed.
 
 ```bash
-npm ci
-npm run dev
+curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.5"  | jq '{verdict, headline}'
+curl -s "https://memento-sigma-rosy.vercel.app/api/decide?cap=0.05" | jq '{verdict, headline}'
+# store  -> "Existing funds cover the reserve. Store without topping up."
+# refuse -> "The projected recurring cost exceeds the monthly spending cap."
 ```
 
-Open [localhost:3000](http://localhost:3000). **No wallet, API key, or paid service is needed to explore the app.**
+That endpoint holds no signer and never calls `createContexts` or `prepare`, so a public request cannot broadcast a transaction or create a dataset.
 
-The home page introduces the memory-budget problem and a real recorded decision. Choose **Try the decision lab** to enter `/demo`, or **Watch a real agent run** to follow four recorded financial decisions with independent verification. The sidebar agent card lets you customize the displayed agent and workspace names for the current demo session.
+**2. Confirm the archives are really on Filecoin.** This re-downloads both provider copies and checks PieceCID inclusion in two live PDP datasets:
 
-- **Decision lab:** move the budget slider, run the decision, inspect verbatim retained text, add your own memory, and change the retention policy. Clearly labeled simulation; no transactions.
-- **Live onchain:** actual Calibration treasury reads alongside timestamped, recorded integration evidence. Inspect the funded/refused decisions and click **Verify independently now** to re-download a real archive, validate signatures, and check PieceCID inclusion in both live PDP datasets.
-- **Memory vault:** keep, compact, or defer decisions with explicit reasons and transparent utility scores.
-- **Decision receipts:** download machine-readable evidence, including account observations, policy, exact SDK quotes, transaction IDs, source hashes, signatures, and provider/dataset/piece IDs.
+```bash
+curl -s https://memento-sigma-rosy.vercel.app/api/showcase | jq '.verified, .archive.onchainCopies'
+```
 
-## What actually runs autonomously
+**3. Read the account yourself.** `GET /api/chain` returns the raw Calibration snapshot — epoch, rails, lockup, runway — or check [the wallet on Blockscout](https://filecoin-testnet.blockscout.com/address/0xA704353cB48030557c307cB743581D49eFA1eF80).
+
+## What decides, and where
 
 ```text
-Filecoin Pay account + wallet + price list
+Filecoin Pay account + wallet + onchain price list
                    ↓
        importance / use / age policy
                    ↓
  protect originals → extract useful passages → defer noise
                    ↓
-        exact Synapse archive quote
+        exact Synapse quote for the real archive bytes
                    ↓
  recurring cap + rolling fees/top-ups + wallet + gas gate
            ↙                       ↘
@@ -42,27 +47,25 @@ Filecoin Pay account + wallet + price list
                    retrieve → SHA-256 → signed receipt
 ```
 
-The worker runs independently of the browser, once a minute. It also checks existing memory runway when content is unchanged: duplicate suppression does not disable reserve top-ups. It stops on failures that require reconciliation, and a filesystem lock prevents simultaneous CLI/API cycles. Successful archives remain in a durable deduplication ledger.
+The gate is `budgetGate` in `src/lib/agent/gate.ts`. It compares integer base units and returns the sentence that appears in the UI, the receipt, and the API. Every refusal a judge sees is that function's return value.
 
-```bash
-cp .env.example .env.local
-# Set a fresh Calibration-only FILECOIN_PRIVATE_KEY locally.
-npm run wallet:status
-npm run agent:once
-npm run agent:watch
-```
+| Where | What it decides on |
+| --- | --- |
+| `GET /api/decide` | Live chain read → real policy + gate. Read-only, judge-triggerable. |
+| `npm run agent:once` | The same decision, plus the exact Synapse quote, then executes. Needs a funded key. |
+| `/watch` | Four decisions from an actual recorded run, re-verified on demand. |
+| `/demo` → Decision lab | Labelled simulation for exploring the policy without touching the chain. |
 
-Get free test tokens from the [Calibration FIL faucet](https://faucet.calibnet.chainsafe-fil.io/funds.html) and [USDFC faucet](https://forest-explorer.chainsafe.dev/faucet/calibnet_usdfc). Default financial limits: **0.5 tUSDFC/month**, **2 tUSDFC per autonomous top-up**, and a **14-day runway reserve**. These are application-level policy limits, not a separately deployed spending-limit contract. The Synapse preparation transaction also approves the Warm Storage operator. Only use an isolated test wallet.
+## The four decisions already on record
 
-Custom memory inputs: set `MEMENTO_MEMORIES_PATH` to a JSON array matching `src/lib/agent/types.ts`. Inputs are validated before chain operations. `AGENT_MAX_TOPUP_USDFC` changes the deposit cap. `MEMENTO_DATA_DIR` selects a persistent worker directory.
+The [signed showcase run](public/showcase/run.json) captures an actual 135-second execution, presented as a 93-second captioned visualization with waiting intervals shortened:
 
-The durable rolling ledger separately limits operation fees to **0.10 tUSDFC / 30 days** and reserve funding to **2 tUSDFC / 30 days**, configurable with `AGENT_MAX_ROLLING_FEES_USDFC` and `AGENT_MAX_ROLLING_TOPUPS_USDFC`. Full quoted amounts are reserved before broadcast. Uncertain outcomes remain charged until reconciliation. Accounting begins at the recorded activation time; earlier transactions are not backfilled. tFIL gas is separate.
+1. **Refused** — a funded wallet still obeys the recurring-cost cap.
+2. **Stored** — a 6,838-byte archive on two providers, retrieved and hash-checked.
+3. **Refused** — cumulative fees: 0.022 used + 0.022 requested exceeds a 0.03 tUSDFC rolling allowance.
+4. **Prevented** — identical input, so no duplicate paid upload.
 
-## Real integration evidence
-
-The [public evidence bundle](public/evidence/latest.json) contains real Calibration runs using synthetic research fixtures and actual integration findings. There are no private keys in the bundle.
-
-The bundle now contains **10 real receipts and four archives**. The [signed showcase run](public/showcase/run.json) records an actual 135-second execution, presented in a 93-second captioned video with waiting intervals shortened: a recurring-cap refusal, a 6,838-byte archive, a cumulative fee refusal (0.022 used + 0.022 requested > 0.03 allowance), and duplicate prevention. All four run receipts are signed. `/watch` verifies the manifest and freshly retrieves both archive copies.
+All four run receipts are signed. `/watch` verifies the manifest and freshly retrieves both archive copies.
 
 First verified archive:
 
@@ -71,47 +74,65 @@ First verified archive:
 - PieceCID: `bafkzcibd6ivqsecksw5ufzydpbmlqhnhuda4vvmv76ni2g3vktatrpnzmwuuulzm`
 - Provider 4, dataset 33836; provider 2, dataset 33835
 
-The app’s verify endpoint retrieves each copy from its registered provider independently, checks both download hashes, the archive signature, decision ID, and onchain PieceCID inclusion in two distinct datasets. Newer receipts additionally sign the entire financial decision using canonical JSON. The first archive predates that extra receipt signature; its archive signature still verifies.
+The [public evidence bundle](public/evidence/latest.json) holds **10 real receipts and four archives**, with no private keys.
+
+## How Filecoin is used
+
+Synapse SDK 2.0.0 reads Filecoin Pay account summaries, reserves, runway, wallet balances, live price lists, and rails. The agent quotes the exact archive bytes against two resolved provider contexts, enforces integer recurring-cost limits and durable rolling allowances, executes the preparation deposit/approval when affordable, and stores selected memories on Filecoin Warm Storage. Fresh downloads from each registered provider must match the archive SHA-256. Independent verification also checks signatures and PieceCID inclusion in both live PDP datasets.
+
+Balances, rails, and proofs are real and onchain. Nothing is hardcoded or simulated outside the clearly labelled Decision lab.
+
+## Try it
 
 ```bash
-npm run evidence:verify
-npm run evidence:export
+npm ci
+npm run dev     # localhost:3000 — no wallet, API key, or paid service needed
 ```
 
-Export after the worker finishes, then commit `public/evidence/latest.json` to update the public demonstration. Do not export private memories. The public viewer uses this timestamped evidence when no local worker state exists; financial balances continue to come from live RPC calls.
+Run the worker for real (Calibration only):
 
-## The economics are deliberate
+```bash
+cp .env.example .env.local
+# Set a fresh Calibration-only FILECOIN_PRIVATE_KEY.
+npm run wallet:status
+npm run agent:once
+npm run agent:watch
+```
 
-Filecoin’s recurring price includes a per-dataset proving fee. Compressing a few kilobytes does **not** remove that fee. Memento’s primary savings come from refusing low-value writes and bundling selected memories into one piece, avoiding repeated operation fees. It never claims to have deleted existing paid data or instantly lowered existing rails.
+Free test tokens: [Calibration FIL faucet](https://faucet.calibnet.chainsafe-fil.io/funds.html) and [USDFC faucet](https://forest-explorer.chainsafe.dev/faucet/calibnet_usdfc). Use an isolated test wallet only.
 
-The lab comparison conservatively subtracts operation fees from available funds. Actual fees draw from lifecycle reserves and may trigger replenishment. The live executor obtains a fresh SDK quote for exact serialized archive bytes and resolved provider contexts, accounting for reserve, debt, rate changes, and one-time fees. Integer base units govern all live financial comparisons.
+Default limits: **0.5 tUSDFC/month**, **2 tUSDFC per autonomous top-up**, a **14-day runway reserve**, and rolling 30-day allowances of **0.10 tUSDFC** in operation fees and **2 tUSDFC** in reserve funding (`AGENT_MAX_ROLLING_FEES_USDFC`, `AGENT_MAX_ROLLING_TOPUPS_USDFC`, `AGENT_MAX_TOPUP_USDFC`). Set `MEMENTO_MEMORIES_PATH` to supply your own memories, `MEMENTO_DATA_DIR` for a persistent worker directory.
 
-Utility is a transparent heuristic: `importance × 0.72 + min(accesses,20) × 1.4 − ageDays × 0.7`, clamped to 0–100. Pinned sources always score 100. “Priority retained” measures the scores of retained memory items; it is not a claim that compaction preserves every fact. The runtime is a deterministic agent workflow, not an LLM pretending to make unbounded financial decisions. AI was used to design, build, critique, and test the product.
-
-Compaction preserves decimal values and URLs, retains all explicitly marked critical constraints in addition to ranked excerpts, and passes six annotated essential-fact fixtures. This is a small regression benchmark, not a claim of universal semantic preservation.
+The worker runs independently of the browser, once a minute. It re-checks runway even when content is unchanged, so duplicate suppression never disables reserve top-ups. It stops on failures needing reconciliation, and a filesystem lock prevents simultaneous CLI/API cycles.
 
 ## Verification
 
 ```bash
-npm run test
+npm run test        # 44 tests
 npm run lint
 npm run build
-# Optional: performs real bounded Calibration transactions with the local test wallet.
-npm run test:live
+npm run evidence:verify
+npm run test:live   # optional: real bounded Calibration transactions
 ```
 
-See [browser QA](docs/QA.md), [architecture and failure handling](docs/ARCHITECTURE.md), [AI build log](docs/AI-BUILD-LOG.md), and [judging alignment review](docs/JUDGING-REVIEW.md).
+Export with `npm run evidence:export` after the worker finishes, then commit `public/evidence/latest.json`. The public viewer falls back to this timestamped evidence when no local worker state exists; financial balances always come from live RPC.
 
-## Deploy to Vercel
+## How the policy works
 
-Import `hrsh22/memento`, choose the **Next.js** preset, and deploy with defaults. **No environment variables are required for the public demo.** Do not upload `.env.local` or add the operator wallet key to the public deployment. The Vercel app serves live reads and recorded, independently verifiable evidence. The autonomous writer runs locally or on a persistent Node host.
+Utility is a transparent heuristic: `importance × 0.72 + min(accesses,20) × 1.4 − ageDays × 0.7`, clamped to 0–100. Pinned sources always score 100. Compaction is verbatim sentence extraction — it preserves decimals and URLs, keeps every explicitly marked critical constraint alongside ranked excerpts, and passes six annotated essential-fact fixtures.
 
-See [deployment and handoff](docs/DEPLOYMENT.md). The user retains control of deployment, the X showcase post, and the final Loops submission.
+Filecoin's recurring price includes a per-dataset proving fee, so compressing a few kilobytes does not remove it. Memento's savings come from refusing low-value writes and bundling selected memories into one piece, avoiding repeated operation fees.
 
-## Stack
+## Limitations, stated plainly
 
-Next.js 16 · TypeScript · React 19 · Tailwind CSS 4 · shadcn/ui (Base UI) · Synapse SDK 2 · viem · Vitest.
+- **Not an LLM making money decisions.** The runtime is a deterministic policy workflow. AI was used to design, build, critique, and test the product; no model infers monetary decisions at run time, and there is no hidden LLM dependency.
+- **`/api/decide` projects, it does not quote.** Recurring cost comes from the live onchain price list. The funded worker additionally obtains an exact Synapse quote for serialized bytes and resolved provider contexts before broadcasting.
+- **`/watch` is a visualization, not a screen recording.** It replays a signed event log with original timestamps; playback sends no transactions.
+- **Spending limits are application-level policy**, not a separately deployed spending-limit contract. The Synapse preparation transaction also approves the Warm Storage operator.
+- **Receipts prove integrity, not meaning.** Signatures establish signer and record integrity; fresh retrieval checks both copies. Nothing here proves future availability, PDP challenge outcomes, or that compaction preserved every fact. "Priority retained" scores retained items — it is not a claim that compaction keeps everything.
+- **Accounting starts at activation.** The rolling ledger does not backfill earlier transactions. Full quoted amounts are reserved before broadcast; uncertain outcomes stay charged until reconciliation. tFIL gas is tracked separately.
+- **No mainnet.** Calibration testnet only. Memento never claims to have deleted paid data or lowered existing rails.
 
-## Sources
+## Build log
 
-[Filecoin Pay operations](https://docs.filecoin.cloud/developer-guides/payments/payment-operations/) · [Storage costs](https://docs.filecoin.cloud/developer-guides/storage/storage-costs/) · [Synapse quick start](https://docs.filecoin.cloud/getting-started/) · [Installed SDK source](https://github.com/FilOzone/synapse-sdk).
+[docs/AI-BUILD-LOG.md](docs/AI-BUILD-LOG.md) documents how this was built with AI, including where the tooling was wrong and what was corrected.

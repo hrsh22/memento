@@ -324,9 +324,17 @@ function StageFeed({
     </div>
   );
 }
-export function Memento({ evidence = false }: { evidence?: boolean }) {
+export function Memento({
+  evidence = false,
+  live = false,
+}: {
+  evidence?: boolean;
+  live?: boolean;
+}) {
   const [view, setView] = useState<View>(evidence ? "receipts" : "overview");
-  const [mode, setMode] = useState<"lab" | "live">(evidence ? "live" : "lab");
+  const [mode, setMode] = useState<"lab" | "live">(
+    evidence || live ? "live" : "lab",
+  );
   const [policy, setPolicy] = useState<Policy>(DEFAULT_POLICY);
   const [memories, setMemories] = useState<Memory[]>(SEED_MEMORIES);
   const [balance, setBalance] = useState(0.25);
@@ -740,7 +748,10 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
             </div>
           )}
           {mode === "live" && (
-            <section className="decide-live" aria-labelledby="decide-live-title">
+            <section
+              className="decide-live"
+              aria-labelledby="decide-live-title"
+            >
               <div className="decide-head">
                 <div className="decide-intro">
                   <span className="section-label">
@@ -883,8 +894,8 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
                     <p className="decide-plan">
                       Rolling 30-day fees{" "}
                       {fmt(Number(liveDecision.spending.feesUsedUsdfc), 3)}/
-                      {fmt(Number(liveDecision.spending.feeLimitUsdfc), 2)} USDFC
-                      · {liveDecision.spending.reason}
+                      {fmt(Number(liveDecision.spending.feeLimitUsdfc), 2)}{" "}
+                      USDFC · {liveDecision.spending.reason}
                     </p>
                   )}
                   <p className="decide-basis">{liveDecision.basis}</p>

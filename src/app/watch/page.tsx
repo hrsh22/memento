@@ -119,6 +119,19 @@ export default async function WatchPage() {
             ))}
           </ol>
         </details>
+        <div className="watch-live">
+          <div>
+            <strong>This run is recorded. Now make one happen.</strong>
+            <p>
+              Read the same account at the current epoch and run the same policy
+              engine and budget gate. Move the spending cap and a funded wallet
+              refuses its own write. Nothing is broadcast.
+            </p>
+          </div>
+          <Link href="/demo?live=1">
+            Run a live decision <ArrowUpRight size={15} />
+          </Link>
+        </div>
         <div className="watch-boundary">
           <strong>What this proves</strong>
           <p>

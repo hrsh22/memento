@@ -11,13 +11,25 @@ The captioned video visualizes 22 events captured during an actual 135-second Ca
 
 ## X post draft
 
-Built Memento for @FilecoinTLDR: an agent that knows what it can afford to remember.
+Most "AI storage agents" just call an upload API.
 
-It reads Filecoin Pay, stores useful memories, and refuses overspending. Four real decisions. Two verifiable copies.
+Memento reads its own Filecoin Pay balance and runway, then decides what it can afford to remember.
 
-https://memento-sigma-rosy.vercel.app/watch
+Drag the spending cap and watch a funded wallet refuse its own write — live, onchain, no signup:
+https://memento-sigma-rosy.vercel.app/demo
 
-Attach `public/showcase/memento-demo.mp4`. The user will publish this post and supply its real URL for submission. Nothing has been posted by the agent.
+Built for @FilecoinTLDR Builder Challenge Cycle 4.
+
+### Shorter variant
+
+An agent that knows what it can afford to remember.
+
+Memento reads its Filecoin Pay runway and refuses writes it can't afford — even with a full wallet. Move the cap yourself and watch it change its mind:
+https://memento-sigma-rosy.vercel.app/demo
+
+4 real decisions. 2 verifiable copies. @FilecoinTLDR
+
+Attach `public/showcase/memento-demo.mp4`. The user publishes this post and supplies the real URL for submission. Nothing has been posted by the agent.
 
 ## Reproducing the media
 

@@ -22,3 +22,13 @@ Added durable rolling allowances for operation fees and reserve funding, preserv
 Captured an actual four-scenario Calibration run: refusal under a strict recurring cap, one new archive, cumulative fee refusal, and duplicate prevention. Signed the complete 22-event transcript and each financial decision. Generated a 93-second captioned visualization of the captured log and a public page that re-verifies the signature and both stored copies. Playback is explicitly labeled as recorded and does not execute new transactions.
 
 The user retains X posting and final submission control. The evaluator supplies qualitative alignment instructions, not an official numeric score.
+
+## Live decision endpoint, 5 September 2026
+
+Re-read the challenge brief against the deployed product and found the weakest point: the brief asks that a judge "see the agent notice something, weigh it, and act – not just read a log afterwards," and every decision on the site was recorded. The live tab paired current balances with stale events, which reads as a dashboard over history rather than an agent deciding.
+
+Added `GET /api/decide`. It reads Filecoin Pay at the current epoch and runs the same `planMemories` policy engine and `budgetGate` the funded worker uses. Rejected the alternative of reusing the worker's `createContexts`/`prepare` path for an exact SDK quote: `createContexts` can create a dataset onchain, and a public unauthenticated endpoint must not be able to spend or write. The endpoint therefore loads no signer and projects recurring cost from the live onchain price list, with that limit stated in the response payload, the UI, and the README.
+
+Extracted `projectDecision` as a pure function so the lockup, fee, and deposit projection is testable, and covered every refusal branch the gate can return. Test count went from 37 to 44.
+
+Rewrote the README to lead with three checks a judge can run in about a minute and consolidated the honest caveats into one Limitations section, rather than interleaving them with the claims they qualify.

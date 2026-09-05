@@ -1,6 +1,6 @@
 # Deployment handoff
 
-The user deployed https://memento-sigma-rosy.vercel.app. Pushing main updates the linked deployment. No Loops submission has been performed.
+The user deployed https://memento-sigma-rosy.vercel.app. Pushing main updates the linked deployment. The Loops submission was completed on 5 September 2026.
 
 ## Public Vercel demo
 

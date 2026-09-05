@@ -2416,3 +2416,38 @@ button.workspace:hover {
   white-space: nowrap;
   display: block;
 }
+.spend-evidence {
+  border: 1px solid #cfdcbf;
+  background: #f1f5e9;
+  border-radius: 8px;
+  padding: 18px;
+  margin: 18px 0;
+  font-size: 12px;
+}
+.spend-evidence > strong {
+  color: #38502c;
+}
+.spend-evidence p {
+  margin-top: 5px;
+  color: #60714e;
+}
+.spend-evidence dl {
+  margin: 13px 0;
+}
+.spend-evidence dl > div {
+  margin-top: 9px;
+}
+.spend-evidence dt {
+  color: #66705e;
+}
+.spend-evidence dd {
+  margin: 3px 0 0;
+  font-family: var(--font-mono-body);
+  font-size: 10px;
+}
+.spend-evidence small {
+  font-size: 10px;
+  color: #6c755e;
+  line-height: 1.5;
+  display: block;
+}

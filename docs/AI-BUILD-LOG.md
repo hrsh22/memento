@@ -14,3 +14,11 @@ Built collaboratively by Harsh Gupta and Codex for FilecoinTLDR Builder Challeng
 10. Prepared deployment instructions, judging review, a submission draft, and public showcase copy. Harsh chose to deploy on Vercel personally. No final Loops submission or public social post was made.
 
 Runtime note: AI assisted the development and critique. The running agent is a transparent deterministic policy workflow. There is no hidden LLM API dependency or claim that a model inferred monetary decisions during the demo.
+
+## Judging feedback improvements, 6 September 2026
+
+Added durable rolling allowances for operation fees and reserve funding, preserving reservations before broadcast and across restarts. Added independent retrieval from both registered providers, decimal/URL-safe extraction with protected critical constraints, and explicit priority-retention labeling. Expanded regression coverage to 37 tests.
+
+Captured an actual four-scenario Calibration run: refusal under a strict recurring cap, one new archive, cumulative fee refusal, and duplicate prevention. Signed the complete 22-event transcript and each financial decision. Generated a 93-second captioned visualization of the captured log and a public page that re-verifies the signature and both stored copies. Playback is explicitly labeled as recorded and does not execute new transactions.
+
+The user retains X posting and final submission control. The evaluator supplies qualitative alignment instructions, not an official numeric score.

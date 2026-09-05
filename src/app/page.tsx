@@ -55,8 +55,8 @@ export default function Page() {
               <Link href="/demo" className={styles.primary}>
                 Try the decision lab <ArrowRight size={18} />
               </Link>
-              <Link href="/demo?evidence=1" className={styles.secondary}>
-                See real Filecoin evidence <ArrowUpRight size={16} />
+              <Link href="/watch" className={styles.secondary}>
+                Watch a real agent run <ArrowUpRight size={16} />
               </Link>
             </div>
             <p className={styles.noWallet}>
@@ -78,7 +78,7 @@ export default function Page() {
             </h2>
             <div className={styles.quote}>
               <div>
-                <span>Monthly spending limit</span>
+                <span>Recurring cost limit</span>
                 <strong>
                   0.10 <small>USDFC</small>
                 </strong>

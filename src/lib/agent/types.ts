@@ -112,6 +112,7 @@ export interface Receipt {
   contentFingerprint?: string;
   decisionSignature?: string;
   broadcastAttempted?: boolean;
+  spending?: SpendAssessment;
   quote?: {
     projectedMonthlyUsdfc: string;
     depositNeededUsdfc: string;
@@ -127,4 +128,28 @@ export interface AgentState {
   receipts: Receipt[];
   lastSnapshot?: ChainSnapshot;
   lastError?: string;
+  spendingLedger?: SpendingLedger;
+}
+export interface SpendingLedger {
+  enabledAt: string;
+  entries: {
+    id: string;
+    address: string;
+    at: string;
+    feesUsdfc: string;
+    depositUsdfc: string;
+  }[];
+}
+export interface SpendAssessment {
+  allowed: boolean;
+  reason: string;
+  trackingSince: string;
+  windowStart: string;
+  windowDays: number;
+  feeLimitUsdfc: string;
+  depositLimitUsdfc: string;
+  feesUsedUsdfc: string;
+  depositsUsedUsdfc: string;
+  requestedFeesUsdfc: string;
+  requestedDepositUsdfc: string;
 }

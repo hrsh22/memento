@@ -3,6 +3,7 @@ import { budgetGate } from "../agent/gate";
 import type { Receipt } from "../agent/types";
 import { getSynapse, readChain } from "./filecoin";
 import { addEvent, readState, saveReceipt, writeState } from "./store";
+import { checkSpending, reserveSpending } from "./spending";
 /** Duplicate content still gets treasury health checks: idempotence must not
  * disable reserve maintenance when no new memories arrive. */
 export async function maintainReserve(receipt: Receipt): Promise<Receipt> {
@@ -41,6 +42,18 @@ export async function maintainReserve(receipt: Receipt): Promise<Receipt> {
     await saveReceipt(receipt);
     return receipt;
   }
+  const spending = await checkSpending(receipt, "0", formatUnits(deposit, 18));
+  await addEvent(
+    "decide",
+    "Checking cumulative reserve funding",
+    spending.reason,
+  );
+  if (!spending.allowed) {
+    receipt.reason = spending.reason;
+    await saveReceipt(receipt);
+    return receipt;
+  }
+  await reserveSpending(receipt);
   receipt.action = "pending";
   receipt.broadcastAttempted = true;
   await saveReceipt(receipt);

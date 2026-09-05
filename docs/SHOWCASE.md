@@ -1,46 +1,34 @@
-# Public showcase kit — draft, not posted
+# Public showcase kit
 
-## Two-minute demo script
+## Ready-to-share recording
 
-**0:00–0:15 · Hook**
+- Watch: https://memento-sigma-rosy.vercel.app/watch
+- MP4: https://memento-sigma-rosy.vercel.app/showcase/memento-demo.mp4
+- Signed source: https://memento-sigma-rosy.vercel.app/showcase/run.json
+- Local attachment: `public/showcase/memento-demo.mp4` (1280 × 720, H.264, approximately 1.1 MB, 93 seconds).
 
-“Agents can store everything. But can they decide what is worth paying to remember? This is Memento: a memory treasury with a survival instinct.”
-
-Show the introduction, then click Try the decision lab to enter the overview. Mention that the Decision Lab is a simulation and the Live Onchain tab contains actual evidence.
-
-**0:15–0:40 · Visible decision**
-
-Keep the default scenario budget at 0.25 USDFC. Click Run decision. Show observe → decide → act → verify. Open Experiment 024: 4.4 KB becomes 279 bytes of verbatim source excerpts. Pinned core memories remain intact; noisy traces are deferred. Move the budget higher to show compaction changing.
-
-“Most of the practical saving here is fewer paid writes. Tiny files still incur dataset proving fees; we account for that.”
-
-**0:40–1:10 · Real money, real refusal**
-
-Click Inspect live evidence. Open the strict-cap refusal: the wallet was funded, but approximately 0.24 USDFC/month exceeded the 0.10 cap. The agent refused without a transaction. Then open the latest committed archive: two memories compacted, three deferred, exact archive 6,912 bytes, real reserve quote.
-
-**1:10–1:40 · Verify it yourself**
-
-Click Verify independently now. Show fresh download SHA-256, archive signature, financial receipt signature, and inclusion in two live PDP datasets. Open the provider link or transaction explorer.
-
-“This is live retrieval and chain inclusion, not an animation saying ‘verified.’ It does not claim future proof success or semantic correctness.”
-
-**1:40–2:00 · Autonomous maintenance**
-
-Open the reserve top-up receipt. Show the approximately 0.016 tUSDFC deposit made on unchanged input. No duplicate archive was uploaded.
-
-“The worker runs without browser clicks. It decides when to store, when to refuse, and when to fund existing memories. Memory is a budget decision.”
-
-## Recording notes
-
-Use the browser at normal desktop size, hide unrelated tabs, and record a short screen walkthrough. Narrate the lab/live distinction once early. Do not show `.env.local` or the terminal containing credentials. The public deployment can demonstrate independent verification without the worker running; label recorded activity accurately. An additional local live-worker segment is optional.
+The captioned video visualizes 22 events captured during an actual 135-second Calibration run. Waiting intervals are shortened; original timestamps and all events remain in the signed transcript. It is an event-log visualization, not a screen recording or a new transaction during playback. The four decisions are a recurring-cost refusal, an affordable two-provider archive, cumulative fee refusal, and duplicate prevention. On `/watch`, click **Verify this run independently** to verify the run signature, four signed decisions, and fresh retrieval from both providers.
 
 ## X post draft
 
 Built Memento for @FilecoinTLDR: an agent that knows what it can afford to remember.
 
-Real Filecoin Pay. Budget refusals. Reserve top-ups. Two-provider archives with signed, verifiable decisions.
+It reads Filecoin Pay, stores useful memories, and refuses overspending. Four real decisions. Two verifiable copies.
 
-Demo: [ADD VERCEL URL]
-Code: https://github.com/hrsh22/memento
+https://memento-sigma-rosy.vercel.app/watch
 
-[Attach a short screen recording. This draft has not been posted.]
+Attach `public/showcase/memento-demo.mp4`. The user will publish this post and supply its real URL for submission. Nothing has been posted by the agent.
+
+## Reproducing the media
+
+`scripts/record-run.ts` captured the real run using the funded local test wallet. Running it performs bounded Calibration transactions; the checked-in evidence already exists, so it is unnecessary for judges. Its fixed demonstration inputs are intended for the captured scenario, not repeated fresh uploads.
+
+To render the existing signed log again without transactions:
+
+```bash
+python3 -m venv /tmp/memento-video-tools
+/tmp/memento-video-tools/bin/pip install Pillow==12.3.0 imageio-ffmpeg==0.6.0
+/tmp/memento-video-tools/bin/python scripts/render-showcase.py
+```
+
+The renderer uses macOS Avenir Next when available and falls back to DejaVu Sans. It writes MP4, poster, and WebVTT captions under `public/showcase`.

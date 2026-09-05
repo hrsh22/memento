@@ -350,7 +350,7 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
     receipts: [],
   });
   const [chainError, setChainError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
@@ -362,6 +362,11 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
     hashMatches: boolean;
     decisionSignatureValid?: boolean | null;
     onchainConfirmed: boolean;
+    retrievalCopies?: {
+      providerId: string;
+      bytes: number;
+      hashMatches: boolean;
+    }[];
     bytes: number;
     checkedAt: string;
     onchainCopies: {
@@ -551,6 +556,10 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
             </div>
             <ArrowUpRight size={15} />
           </div>
+          <Link className="nav-item" href="/watch">
+            <Play size={18} />
+            <span>Watch a real agent run</span>
+          </Link>
           <button className="nav-item" onClick={() => setHelp(true)}>
             <CircleHelp size={18} />
             <span>How Memento works</span>
@@ -892,8 +901,8 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
                   <span>
                     <ShieldCheck size={15} />{" "}
                     {mode === "live"
-                      ? "Lab utility retained"
-                      : "Utility retained"}
+                      ? "Lab priority retained"
+                      : "Priority retained"}
                   </span>
                   <strong>
                     {plan.retainedUtilityPercent}
@@ -1389,10 +1398,15 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
               ) : (
                 <div className="empty-state panel large">
                   <Radio size={35} />
-                  <h3>Ready for real evidence.</h3>
+                  <h3>
+                    {loading
+                      ? "Reading decision receipts…"
+                      : "Ready for real evidence."}
+                  </h3>
                   <p>
-                    Completed operator cycles will appear here. Scenario results
-                    never appear as onchain receipts.
+                    {loading
+                      ? "Loading the recorded decisions and current Filecoin account."
+                      : "Completed operator cycles will appear here. Scenario results never appear as onchain receipts."}
                   </p>
                   <Button variant="outline" onClick={() => void refresh()}>
                     Refresh evidence <RefreshCw size={14} />
@@ -1817,6 +1831,40 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
                   </>
                 )}
               </div>
+              {receipt.spending && (
+                <div className="spend-evidence">
+                  <strong>
+                    {receipt.spending.allowed
+                      ? "Cumulative budget passed"
+                      : "Cumulative budget refused"}
+                  </strong>
+                  <p>30-day allowances at this decision</p>
+                  <dl>
+                    <div>
+                      <dt>Operation fees</dt>
+                      <dd>
+                        {fmt(Number(receipt.spending.feesUsedUsdfc), 3)} used +{" "}
+                        {fmt(Number(receipt.spending.requestedFeesUsdfc), 3)}{" "}
+                        requested / {receipt.spending.feeLimitUsdfc} USDFC
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Reserve funding</dt>
+                      <dd>
+                        {fmt(Number(receipt.spending.depositsUsedUsdfc), 4)}{" "}
+                        used +{" "}
+                        {fmt(Number(receipt.spending.requestedDepositUsdfc), 4)}{" "}
+                        requested / {receipt.spending.depositLimitUsdfc} USDFC
+                      </dd>
+                    </div>
+                  </dl>
+                  <small>
+                    Tracking enabled{" "}
+                    {new Date(receipt.spending.trackingSince).toLocaleString()}.
+                    Earlier activity is outside this ledger.
+                  </small>
+                </div>
+              )}
               <div className="detail-meta">
                 <span>{receipt.plan.protectedCount} protected</span>
                 <span>{receipt.plan.compactedCount} compacted</span>
@@ -1876,6 +1924,13 @@ export function Memento({ evidence = false }: { evidence?: boolean }) {
                     {verification.bytes.toLocaleString()} bytes retrieved ·{" "}
                     {new Date(verification.checkedAt).toLocaleTimeString()}
                   </p>
+                  {verification.retrievalCopies?.map((copy) => (
+                    <p key={copy.providerId}>
+                      {copy.hashMatches ? "✓" : "×"} Provider {copy.providerId}:{" "}
+                      {copy.bytes.toLocaleString()} bytes independently
+                      retrieved and checked
+                    </p>
+                  ))}
                   <span>
                     Dataset inclusion and retrieval integrity. Not a claim of
                     future availability or semantic correctness.

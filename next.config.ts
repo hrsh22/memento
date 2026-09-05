@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   devIndicators: false,
-  outputFileTracingIncludes: { "/api/*": ["./public/evidence/latest.json"] },
+  outputFileTracingIncludes: {
+    "/api/*": ["./public/evidence/latest.json", "./public/showcase/run.json"],
+  },
   async headers() {
     return [
       {

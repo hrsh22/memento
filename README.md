@@ -6,6 +6,8 @@ Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It r
 
 The decision is the product: an unfunded agent refuses a write; a funded agent preserves valuable memories; an over-budget quote is rejected even when the wallet has funds.
 
+[Open the app](https://memento-sigma-rosy.vercel.app) · [Watch the real 93-second run](https://memento-sigma-rosy.vercel.app/watch)
+
 ## Try it
 
 ```bash
@@ -15,7 +17,7 @@ npm run dev
 
 Open [localhost:3000](http://localhost:3000). **No wallet, API key, or paid service is needed to explore the app.**
 
-The home page introduces the memory-budget problem and a real recorded decision. Choose **Try the decision lab** to enter `/demo`, or **See real Filecoin evidence** to open the live receipt view directly. The sidebar agent card lets you customize the displayed agent and workspace names for the current demo session.
+The home page introduces the memory-budget problem and a real recorded decision. Choose **Try the decision lab** to enter `/demo`, or **Watch a real agent run** to follow four recorded financial decisions with independent verification. The sidebar agent card lets you customize the displayed agent and workspace names for the current demo session.
 
 - **Decision lab:** move the budget slider, run the decision, inspect verbatim retained text, add your own memory, and change the retention policy. Clearly labeled simulation; no transactions.
 - **Live onchain:** actual Calibration treasury reads alongside timestamped, recorded integration evidence. Inspect the funded/refused decisions and click **Verify independently now** to re-download a real archive, validate signatures, and check PieceCID inclusion in both live PDP datasets.
@@ -33,7 +35,7 @@ Filecoin Pay account + wallet + price list
                    ↓
         exact Synapse archive quote
                    ↓
- monthly cap + top-up cap + wallet + gas gate
+ recurring cap + rolling fees/top-ups + wallet + gas gate
            ↙                       ↘
      refuse the write       fund reserve → store 2 copies
                                    ↓
@@ -54,9 +56,13 @@ Get free test tokens from the [Calibration FIL faucet](https://faucet.calibnet.c
 
 Custom memory inputs: set `MEMENTO_MEMORIES_PATH` to a JSON array matching `src/lib/agent/types.ts`. Inputs are validated before chain operations. `AGENT_MAX_TOPUP_USDFC` changes the deposit cap. `MEMENTO_DATA_DIR` selects a persistent worker directory.
 
+The durable rolling ledger separately limits operation fees to **0.10 tUSDFC / 30 days** and reserve funding to **2 tUSDFC / 30 days**, configurable with `AGENT_MAX_ROLLING_FEES_USDFC` and `AGENT_MAX_ROLLING_TOPUPS_USDFC`. Full quoted amounts are reserved before broadcast. Uncertain outcomes remain charged until reconciliation. Accounting begins at the recorded activation time; earlier transactions are not backfilled. tFIL gas is separate.
+
 ## Real integration evidence
 
 The [public evidence bundle](public/evidence/latest.json) contains real Calibration runs using synthetic research fixtures and actual integration findings. There are no private keys in the bundle.
+
+The bundle now contains **10 real receipts and four archives**. The [signed showcase run](public/showcase/run.json) records an actual 135-second execution, presented in a 93-second captioned video with waiting intervals shortened: a recurring-cap refusal, a 6,838-byte archive, a cumulative fee refusal (0.022 used + 0.022 requested > 0.03 allowance), and duplicate prevention. All four run receipts are signed. `/watch` verifies the manifest and freshly retrieves both archive copies.
 
 First verified archive:
 
@@ -65,7 +71,7 @@ First verified archive:
 - PieceCID: `bafkzcibd6ivqsecksw5ufzydpbmlqhnhuda4vvmv76ni2g3vktatrpnzmwuuulzm`
 - Provider 4, dataset 33836; provider 2, dataset 33835
 
-The app’s verify endpoint checks the archive signature, fresh download hash, decision ID, and onchain PieceCID inclusion. Newer receipts additionally sign the entire financial decision using canonical JSON. The first archive predates that extra receipt signature; its archive signature still verifies.
+The app’s verify endpoint retrieves each copy from its registered provider independently, checks both download hashes, the archive signature, decision ID, and onchain PieceCID inclusion in two distinct datasets. Newer receipts additionally sign the entire financial decision using canonical JSON. The first archive predates that extra receipt signature; its archive signature still verifies.
 
 ```bash
 npm run evidence:verify
@@ -80,7 +86,9 @@ Filecoin’s recurring price includes a per-dataset proving fee. Compressing a f
 
 The lab comparison conservatively subtracts operation fees from available funds. Actual fees draw from lifecycle reserves and may trigger replenishment. The live executor obtains a fresh SDK quote for exact serialized archive bytes and resolved provider contexts, accounting for reserve, debt, rate changes, and one-time fees. Integer base units govern all live financial comparisons.
 
-Utility is a transparent heuristic: `importance × 0.72 + min(accesses,20) × 1.4 − ageDays × 0.7`, clamped to 0–100. Pinned sources always score 100. “Utility retained” measures the scores of retained memory items; it is not a claim that compaction preserves every fact. The runtime is a deterministic agent workflow, not an LLM pretending to make unbounded financial decisions. AI was used to design, build, critique, and test the product.
+Utility is a transparent heuristic: `importance × 0.72 + min(accesses,20) × 1.4 − ageDays × 0.7`, clamped to 0–100. Pinned sources always score 100. “Priority retained” measures the scores of retained memory items; it is not a claim that compaction preserves every fact. The runtime is a deterministic agent workflow, not an LLM pretending to make unbounded financial decisions. AI was used to design, build, critique, and test the product.
+
+Compaction preserves decimal values and URLs, retains all explicitly marked critical constraints in addition to ranked excerpts, and passes six annotated essential-fact fixtures. This is a small regression benchmark, not a claim of universal semantic preservation.
 
 ## Verification
 

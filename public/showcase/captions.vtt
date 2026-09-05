@@ -1,0 +1,73 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.000
+A funded wallet does not override the budget. Four decisions from an actual worker run.
+
+00:00:06.000 --> 00:00:09.292
+Reading my storage treasury. Querying Filecoin Pay account summary, wallet balances, payment rails, and the onchain price list.
+
+00:00:09.292 --> 00:00:12.583
+2 protected · 2 compacted · 3 deferred. Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees.
+
+00:00:12.583 --> 00:00:15.875
+Pricing the exact archive. Requesting an SDK quote for 6,838 actual bytes and two provider copies, including the 14-day reserve.
+
+00:00:15.875 --> 00:00:19.167
+Write deferred autonomously. The projected recurring cost exceeds the monthly spending cap. Quote: 0.2400001393252032 USDFC/month; deposit 0 USDFC.
+
+00:00:19.167 --> 00:00:22.458
+Reading my storage treasury. Querying Filecoin Pay account summary, wallet balances, payment rails, and the onchain price list.
+
+00:00:22.458 --> 00:00:25.750
+2 protected · 2 compacted · 3 deferred. Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees.
+
+00:00:25.750 --> 00:00:29.042
+Pricing the exact archive. Requesting an SDK quote for 6,838 actual bytes and two provider copies, including the 14-day reserve.
+
+00:00:29.042 --> 00:00:32.333
+Budget gate passed. Existing funds cover the reserve. Store without topping up. Quote: 0.2400001393252032 USDFC/month; deposit 0 USDFC.
+
+00:00:32.333 --> 00:00:35.625
+Cumulative spending gate passed. This operation fits both rolling 30-day spending allowances. Fees already reserved: 0/0.03 USDFC; requested 0.022. Reserve funding: 0/2 USDFC; requested 0.
+
+00:00:35.625 --> 00:00:39.833
+Storing the selected memories. Synapse is storing and committing the archive on two independent providers.
+
+00:00:39.833 --> 00:00:44.042
+Retrieving the archive. Downloading the PieceCID through Synapse and comparing SHA-256 with the original archive.
+
+00:00:44.042 --> 00:00:48.250
+Every byte accounted for. SHA-256 matches. bafkzcibdrifary6weyplnu67x5gxyq2xsrgfqnpxtnxh3ccynk6hgkei464shcrf. This is retrieval integrity; ongoing PDP proof status is independently inspectable onchain.
+
+00:00:48.250 --> 00:00:52.458
+Checking both providers independently. Retrieve the same archive directly from each registered provider and validate PieceCID and SHA-256.
+
+00:00:52.458 --> 00:00:56.667
+Both provider copies passed. Two independently downloaded copies match the signed archive hash and both live datasets include the PieceCID.
+
+00:00:56.667 --> 00:00:59.958
+Reading my storage treasury. Querying Filecoin Pay account summary, wallet balances, payment rails, and the onchain price list.
+
+00:00:59.958 --> 00:01:03.250
+2 protected · 2 compacted · 3 deferred. Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees.
+
+00:01:03.250 --> 00:01:06.542
+Pricing the exact archive. Requesting an SDK quote for 7,390 actual bytes and two provider copies, including the 14-day reserve.
+
+00:01:06.542 --> 00:01:09.833
+Budget gate passed. Existing funds cover the reserve. Store without topping up. Quote: 0.2400001729674624 USDFC/month; deposit 0 USDFC.
+
+00:01:09.833 --> 00:01:13.125
+Cumulative spending refused. The rolling 30-day operation-fee budget is exhausted. Defer this write. Fees already reserved: 0.022/0.03 USDFC; requested 0.022. Reserve funding: 0/2 USDFC; requested 0.
+
+00:01:13.125 --> 00:01:16.417
+Reading my storage treasury. Querying Filecoin Pay account summary, wallet balances, payment rails, and the onchain price list.
+
+00:01:16.417 --> 00:01:19.708
+2 protected · 2 compacted · 3 deferred. Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees.
+
+00:01:19.708 --> 00:01:23.917
+Duplicate write prevented. The same memories already have a verified archive and the reserve remains healthy. Prevent a duplicate paid write.
+
+00:01:23.917 --> 00:01:32.917
+Verify the recorded run, four signed decisions, and both independently retrieved provider copies.

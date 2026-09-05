@@ -5,6 +5,7 @@ import {
   rename,
   open,
   unlink,
+  appendFile,
 } from "node:fs/promises";
 import path from "node:path";
 import { privateKeyToAccount } from "viem/accounts";
@@ -44,15 +45,21 @@ export async function addEvent(
   detail: string,
 ) {
   const state = await readState();
-  state.events.unshift({
+  const event: AgentEvent = {
     id: crypto.randomUUID(),
     at: new Date().toISOString(),
     stage,
     title,
     detail,
-  });
+  };
+  state.events.unshift(event);
   state.events = state.events.slice(0, 100);
   await writeState(state);
+  if (process.env.MEMENTO_RECORD_PATH)
+    await appendFile(
+      process.env.MEMENTO_RECORD_PATH,
+      JSON.stringify(event) + "\n",
+    );
 }
 export async function saveReceipt(receipt: Receipt) {
   const state = await readState();

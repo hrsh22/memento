@@ -1,0 +1,222 @@
+.watch-page {
+  max-width: 1080px;
+  margin: auto;
+  padding: 0 35px;
+  color: #293c2d;
+}
+.watch-page header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0;
+  border-bottom: 1px solid #e0e6d7;
+}
+.watch-page a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.watch-page header a {
+  font-size: 12px;
+}
+.watch-page main {
+  padding: 55px 0 20px;
+}
+.watch-eyebrow {
+  font: 10px var(--font-mono-body);
+  letter-spacing: 1.5px;
+  color: #6b8152;
+}
+.watch-page h1 {
+  font-size: 56px;
+  line-height: 1.12;
+  letter-spacing: -2.7px;
+  font-weight: 500;
+  margin: 20px 0;
+}
+.watch-intro {
+  max-width: 650px;
+  font-size: 16px;
+  color: #69785c;
+  line-height: 1.8;
+}
+.watch-video {
+  margin-top: 35px;
+  border: 1px solid #dce3d0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #263a2c;
+}
+.watch-video video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+.watch-caption {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #65765a;
+  margin: 12px 0 20px;
+}
+.watch-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.run-verify-message {
+  max-width: 510px;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 12px;
+  color: #506b3e;
+}
+.watch-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  border-block: 1px solid #dce3d0;
+  margin: 35px 0;
+  padding: 28px 0;
+}
+.watch-facts span {
+  display: block;
+  font-size: 11px;
+  color: #6c7c5e;
+}
+.watch-facts strong {
+  font-size: 34px;
+  font-weight: 400;
+  display: block;
+  margin-top: 9px;
+  letter-spacing: -1px;
+}
+.watch-facts small {
+  font: 9px var(--font-mono-body);
+  letter-spacing: 0;
+}
+.watch-decisions h2 {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.7px;
+  margin: 36px 0 20px;
+}
+.watch-decisions article {
+  display: flex;
+  gap: 22px;
+  border-top: 1px solid #e0e6d7;
+  padding: 25px 0;
+}
+.watch-number {
+  font: 17px var(--font-mono-body);
+  color: #8b9b72;
+}
+.watch-decisions h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 8px 0;
+}
+.watch-decisions article p:not(.watch-eyebrow) {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #647555;
+}
+.watch-decisions article code {
+  font: 9px var(--font-mono-body);
+  display: block;
+  margin-top: 10px;
+  color: #7a886b;
+  overflow-wrap: anywhere;
+}
+.watch-decisions article > svg {
+  margin-left: auto;
+}
+.watch-transcript {
+  background: #edf1e4;
+  border: 1px solid #dce3d0;
+  border-radius: 9px;
+  padding: 20px;
+  margin: 20px 0;
+}
+.watch-transcript summary {
+  font-size: 13px;
+  cursor: pointer;
+}
+.watch-transcript ol {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+}
+.watch-transcript li {
+  display: flex;
+  gap: 22px;
+  border-top: 1px solid #d6dfc8;
+  padding: 15px 0;
+}
+.watch-transcript time {
+  font: 10px var(--font-mono-body);
+  flex-shrink: 0;
+  color: #687b53;
+}
+.watch-transcript strong {
+  font-size: 12px;
+}
+.watch-transcript p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #647555;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+.watch-boundary {
+  font-size: 12px;
+  color: #647555;
+  line-height: 1.8;
+  padding: 22px 0;
+}
+.watch-boundary p {
+  margin-top: 8px;
+}
+.watch-page footer {
+  border-top: 1px solid #e0e6d7;
+  padding: 25px 0;
+  font: 9px var(--font-mono-body);
+  letter-spacing: 1px;
+  color: #738565;
+}
+@media (max-width: 650px) {
+  .watch-page {
+    padding: 0 20px;
+  }
+  .watch-page h1 {
+    font-size: 39px;
+  }
+  .watch-intro {
+    font-size: 14px;
+  }
+  .watch-page main {
+    padding-top: 35px;
+  }
+  .watch-facts {
+    gap: 15px;
+  }
+  .watch-facts strong {
+    font-size: 26px;
+  }
+  .watch-facts small {
+    display: block;
+    margin-top: 8px;
+  }
+  .watch-decisions article {
+    gap: 12px;
+  }
+  .watch-transcript li {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .watch-page header {
+    gap: 20px;
+  }
+}

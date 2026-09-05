@@ -2,7 +2,7 @@
 
 ## Automated
 
-- 17 tests: pressure-dependent decisions, pinned source preservation, no fabricated runway with zero rate, invalid financial inputs, verbatim extraction, per-dataset fee behavior, bundling fee arithmetic, bigint spending gates, canonical signatures, tamper detection, schema validation, and cross-process exclusion/lock release.
+- Initial 17 tests: pressure-dependent decisions, pinned source preservation, no fabricated runway with zero rate, invalid financial inputs, verbatim extraction, per-dataset fee behavior, bundling fee arithmetic, bigint spending gates, canonical signatures, tamper detection, schema validation, and cross-process exclusion/lock release.
 - ESLint: clean.
 - TypeScript: checked with incremental cache disabled.
 - Next.js production build: successful.
@@ -20,7 +20,7 @@ Follow-up integration:
 4. Replaying the normalized input prevented another archive upload. Low runway triggered a bounded maintenance deposit of approximately 0.016 tUSDFC.
 5. All three stored archives independently passed fresh retrieval, archive signature, decision ID, and PieceCID inclusion in both live PDP datasets. The two newer archives also passed full financial receipt signatures; the first predates that added signature layer.
 
-Latest verified archive: `bafkzcibdyaeqq7bicexnvgcwkti4rmj5fpt5hwt3e2xm7amyqk32ldjfsdlzoszy`, 6,912 serialized bytes. Providers 4 and 2; datasets 33836 and 33835; piece 2 on both. Verification was repeated through the actual Chrome UI and returned **Fresh verification passed**.
+Previous verified archive: `bafkzcibdyaeqq7bicexnvgcwkti4rmj5fpt5hwt3e2xm7amyqk32ldjfsdlzoszy`, 6,912 serialized bytes. Providers 4 and 2; datasets 33836 and 33835; piece 2 on both. Verification was repeated through the actual Chrome UI and returned **Fresh verification passed**.
 
 ## Chrome interaction tests
 
@@ -43,7 +43,7 @@ Used the installed Chrome extension / computer-use browser, not a separate headl
 
 The decision lab is explicitly simulated. No lab transaction is broadcast. Its conservative fee projection is not the exact lifecycle reserve ledger. The real writer uses the SDK quote. Public archives contain synthetic research fixtures and actual integration findings, not user-private data. No mainnet transaction, Vercel deployment, X post, or final hackathon submission was made.
 
-Public deployment smoke testing remains for after the user deploys. Recorded evidence includes timestamps; it is not presented as a continuously running hosted writer.
+The user has since deployed; public Chrome verification passed. Recorded evidence includes timestamps; it is not presented as a continuously running hosted writer.
 
 ## Introduction and profile update, 6 September 2026
 
@@ -53,3 +53,14 @@ Public deployment smoke testing remains for after the user deploys. Recorded evi
 - Desktop full-page and 390×844 screenshots inspected. Mobile content width equals viewport width, with no horizontal overflow.
 - Removed all em dashes from application source and public text assets; checked rendered introduction text as well.
 - Scoped dashboard main-element spacing to the dashboard so the introduction keeps its own layout. Account explorer links now wait for an observed address.
+
+## Budget and real-run upgrade, 6 September 2026
+
+- All 37 tests pass across seven files, including rolling-window expiry, cumulative refusal, deposits, account separation, clock rollback, invalid/duplicate ledger entries, persisted reservations across restart, missing-ledger refusal, six essential-fact compaction fixtures, signed-run verification, and transcript/financial tamper detection.
+- Lint, TypeScript, and production build passed after the upgrade.
+- Actual run 2026-09-05 19:39:59 to 19:42:14 UTC: recurring-cap refusal, stored archive `54587a5b`, rolling-fee refusal `0a94e53e`, duplicate prevention `ae818059`. Ten receipts and four archives now exported.
+- New archive: 6,838 bytes, two providers. A 0.022 fee reservation caused the next 0.022 request to exceed a demonstration allowance of 0.03. No second upload occurred.
+- Chrome on the production build without signing credentials verified the manifest, all four decision signatures, and fresh independent retrieval of both copies at 01:22 IST.
+- Video metadata loaded successfully in Chrome: 92.916667 seconds. Transcript expansion and signed-run download links work.
+- Native video playback tested with keyboard controls in Chrome; time advanced without media errors. Desktop and mobile walkthrough screenshots inspected. Mobile viewport and document width both 390 pixels; temporary emulation reset afterwards.
+- Landing "Watch a real agent run" and walkthrough "Open evidence explorer" links both navigate correctly.

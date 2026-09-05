@@ -15,7 +15,8 @@
     "evidence:export": "tsx --env-file-if-exists=.env.local scripts/export-evidence.ts",
     "test:live": "tsx --env-file=.env.local scripts/validate-live.ts",
     "typecheck": "tsc --noEmit --incremental false",
-    "format:check": "prettier --check src scripts next.config.ts"
+    "format:check": "prettier --check src scripts next.config.ts",
+    "showcase:record": "tsx --env-file=.env.local scripts/record-run.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

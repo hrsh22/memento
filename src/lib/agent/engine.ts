@@ -24,9 +24,9 @@ export function utility(memory: Memory): number {
 /** Verbatim, ordered sentence extraction. No model-generated facts. */
 export function compact(content: string): string {
   const sentences = content
-    .match(/[^.!?\n]+[.!?]?/g)
-    ?.map((s) => s.trim())
-    .filter(Boolean) ?? [content];
+    .split(/(?<=[.!?])\s+|\n+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
   const ranked = sentences.map((text, index) => ({
     text,
     index,
@@ -39,9 +39,24 @@ export function compact(content: string): string {
           ? 2
           : 0,
   }));
-  const picked = ranked
+  const protectedIndexes = new Set(
+    ranked
+      .filter((s) =>
+        /\b(must|never|critical|recovery|mission|constraint|unless)\b/i.test(
+          s.text,
+        ),
+      )
+      .map((s) => s.index),
+  );
+  const preferred = ranked
     .sort((a, b) => b.score - a.score || a.index - b.index)
-    .slice(0, 4)
+    .slice(0, 4);
+  const picked = ranked
+    .filter(
+      (s) =>
+        protectedIndexes.has(s.index) ||
+        preferred.some((p) => p.index === s.index),
+    )
     .sort((a, b) => a.index - b.index);
   const extract = picked.map((s) => s.text).join(" ");
   return bytes(extract) < bytes(content) ? extract : content;

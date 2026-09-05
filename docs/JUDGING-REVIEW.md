@@ -1,79 +1,63 @@
 # FilecoinTLDR alignment review
 
-Evaluated on 6 September 2026 (IST), against application commit `1254237`, using a newly fetched `loops evaluate --event filecointldr-builder-challenge-cycle-4 --sponsor filecointldr` prompt. The command returns a rubric and review instructions; this report is the coding agent's assessment of the repository and deployed product. It is not independent judging or a Loops-generated score.
+Reassessed on 6 September 2026 (IST) after fetching the current `loops evaluate --event filecointldr-builder-challenge-cycle-4 --sponsor filecointldr` prompt. This is the coding agent's review of the repository and browser-tested product, not independent judging. Loops returns review instructions, not a numeric judging result.
 
-Public demo: https://memento-sigma-rosy.vercel.app
+Public app: https://memento-sigma-rosy.vercel.app
+
+Real-run walkthrough: https://memento-sigma-rosy.vercel.app/watch
 
 ## Alignment summary
 
-Memento implements the central challenge: it reads Filecoin Pay financial state, changes memory retention under pressure, refuses unaffordable quotes, stores selected data, and replenishes a reserve without repeating an upload. The public product now has a clear introduction, an interactive scenario lab, actual recorded decisions, current chain data, and fresh archive verification. Its main remaining weaknesses are visibility of a new autonomous decision, incomplete public showcase evidence, and limits in long-running budget accounting.
+Memento directly implements the challenge: live financial observations drive memory admission, bounded reserve funding, and refusal. The original gaps in cumulative spending, independent retrieval of both copies, loading feedback, and a concrete real-run walkthrough have been addressed. Public showcase completion remains user-owned: the X post and final Loops submission are not yet verified.
 
-## Verified strengths
+## What's genuinely strong
 
-- **Financial observations drive behavior.** [`src/lib/server/filecoin.ts:28`](../src/lib/server/filecoin.ts#L28) reads account summary, wallet balances, gas, rails, and price lists. [`src/lib/server/runner.ts:49`](../src/lib/server/runner.ts#L49) passes those observations into the planner; [`src/lib/agent/engine.ts:80`](../src/lib/agent/engine.ts#L80) changes retention mode with runway.
-- **Genuine refusal before paid execution.** [`src/lib/server/runner.ts:140`](../src/lib/server/runner.ts#L140) checks the exact SDK quote with integer token units, and returns before execution if the gate fails. Recorded receipt `d95d79de` rejected approximately 0.24 USDFC/month under a 0.10 cap despite available wallet funds. The earlier `a56362eb` receipt records an unfunded refusal. Both are in [`public/evidence/latest.json`](../public/evidence/latest.json).
-- **Actual Filecoin storage.** [`src/lib/server/runner.ts:129`](../src/lib/server/runner.ts#L129) prepares two provider contexts and exact serialized bytes; line 196 uploads through Synapse. Three recorded archives have PieceCIDs and provider/dataset identifiers.
-- **Reserve maintenance works on unchanged input.** [`src/lib/server/runner.ts:84`](../src/lib/server/runner.ts#L84) detects a previously stored input and calls [`src/lib/server/maintain.ts:8`](../src/lib/server/maintain.ts#L8). Receipt `820789bb` records a roughly 0.016 tUSDFC top-up without a duplicate upload.
-- **Evidence is independently checkable.** [`src/lib/server/verify.ts:11`](../src/lib/server/verify.ts#L11) checks archive and available financial signatures, retrieves and hashes bytes, checks decision identity, and reads inclusion in both live datasets. At 00:58:51 IST, the deployed Chrome UI freshly verified the latest 6,912-byte archive, both signatures, SHA-256, and two dataset inclusions. This is retrieval/inclusion evidence, not a claim about future PDP challenge success.
-- **A usable product and reproducible checks.** The landing page at [`src/app/page.tsx`](../src/app/page.tsx) explains the problem and offers lab/evidence routes. The deployed evidence route loaded all six receipts. All 17 tests passed again during this review, and [CI for the reviewed application commit](https://github.com/hrsh22/memento/actions/runs/33985612825) passed tests, lint, TypeScript, and production build. Prior desktop/mobile interaction checks are recorded in [`docs/QA.md`](QA.md).
+- **Observe, decide, act:** `src/lib/server/filecoin.ts` reads Filecoin Pay, wallet balances, rates, and rails. `runner.ts` passes the observations through `src/lib/agent/engine.ts`, prepares exact bytes with two provider contexts, and checks financial gates before execution. `maintain.ts` replenishes an existing reserve without uploading a duplicate.
+- **Cumulative limits are implemented:** `src/lib/agent/spending.ts` uses integer units for separate rolling 30-day fee/funding allowances. `src/lib/server/spending.ts` persists reservations under the worker lock before broadcast. Integration tests cover restart persistence and missing-ledger refusal. Reservations survive uncertain failures.
+- **Real refusal demonstrated:** `public/showcase/run.json` records receipt `0a94e53e`: 0.022 tUSDFC reserved plus 0.022 requested exceeds the configured 0.03 allowance. The next paid upload was refused. The same continuous run includes a recurring-rate refusal, an actual 6,838-byte archive, and duplicate prevention.
+- **Real Filecoin integration:** `runner.ts` stores through Synapse. `src/lib/server/verify.ts` resolves both provider URLs from the registry, independently downloads and validates both copies, and checks PieceCID inclusion in two distinct live datasets. Four real archives and ten decisions are present in `public/evidence/latest.json`.
+- **Inspectable evidence:** `src/lib/server/recording.ts` verifies the signed complete run manifest, all four signed financial decisions, and fresh archive evidence. `/watch` exposes the captioned 93-second event visualization, original event transcript, signed download, and independent verification button. Chrome verified all four signatures and both provider copies on the credential-free production build.
+- **Better memory regression coverage:** `src/lib/agent/engine.ts` preserves decimal values, URLs, and explicitly marked critical constraints in addition to ranked verbatim excerpts. Six annotated essential-fact fixtures pass. The UI now says "Priority retained" rather than suggesting measured factual retention.
+- **Working product:** the introduction, editable profile, scenario lab, real receipt views, video playback, and verification are wired. All 37 tests, lint, TypeScript, and production build pass. Chrome desktop and 390-pixel mobile checks show working navigation and no horizontal overflow.
 
 ## Gaps and risks
 
-### 1. A new autonomous decision is not visible from the public viewer
-
-The event specifically values watching the agent notice, weigh, and act. The public site's animated Run decision flow is a simulation ([`src/components/memento.tsx:469`](../src/components/memento.tsx#L469)); real activity is recorded, with current balances and fresh verification. The actual worker loop exists ([`scripts/agent.ts:11`](../scripts/agent.ts#L11)), but runs locally or on a persistent host. The viewer is labeled honestly, so this is a demonstration gap rather than a fake integration.
-
-Most useful improvement: capture one uninterrupted real worker cycle with its observed state, policy decision, and receipt visible. A live read-only feed from a persistent worker would make this stronger, but should not require giving the public site spending credentials.
-
-### 2. The monthly cap is a recurring-rate cap, not a complete monthly spending ledger
-
-[`src/lib/server/runner.ts:137`](../src/lib/server/runner.ts#L137) compares existing recurring rates plus the quoted rate delta against the monthly cap. Operation fees are recorded at line 151, but do not accumulate against a rolling spending cap. Top-ups are limited per operation ([`src/lib/server/maintain.ts:31`](../src/lib/server/maintain.ts#L31)); there is no aggregate time-window allowance. Many changing inputs could incur repeated one-off fees while recurring charges remain under the limit. Wallet balance and per-operation gates still constrain each execution.
-
-Most useful improvement: explicitly label the existing limit as recurring storage cost, and add a cumulative operation-fee/top-up budget with a durable accounting window if long-running autonomy is claimed.
-
-### 3. Public showcase and submission completeness are not verified
-
-The deployed demo and GitHub repo are public and working. A published demo recording and X showcase URL have not been supplied or verified; [`docs/SHOWCASE.md`](SHOWCASE.md) still contains draft material. A fresh `loops project get` returned `exists: false`. No project record was created during evaluation, consistent with the user's approval requirement.
-
-Most useful improvement: finish the recording and public post, then review the final submission fields. Do not submit placeholder links.
-
-### 4. Memory quality and persistence are prototype-level
-
-Utility depends on input priorities, access counts, and age ([`src/lib/agent/engine.ts:10`](../src/lib/agent/engine.ts#L10)); compaction keeps four keyword-ranked verbatim sentences (line 25). The retained-utility metric gives compacted memories their full heuristic score (line 145), so it is not a measured percentage of facts preserved. Pinned memories are protected, but extraction can omit essential relationships. There is no downstream task-quality benchmark.
-
-The writer uses a filesystem ledger and exclusive lock ([`src/lib/server/store.ts:80`](../src/lib/server/store.ts#L80)); ambiguous broadcasts stop for manual reconciliation. This is cautious for a prototype, but not unattended fault recovery. Existing archives are not deleted and current rails are not cancelled. Avoid claiming automatic reclamation of previously paid storage.
+1. **Public showcase is incomplete until the user posts.** `docs/SHOWCASE.md` has a ready MP4 and post draft. `docs/SUBMISSION-DRAFT.md` has actual demo/video URLs and one explicit X URL placeholder. No social post or project submission was performed. The current evaluator says no submitted project record was provided.
+2. **Recorded execution remains recorded.** The walkthrough visualizes events captured from actual executions, with waiting intervals shortened. It is not a screen recording of the browser or a continuously hosted public writer. Inputs and policy changes are predetermined scenario stimuli; the worker makes its own financial decisions in response. A judge can rerun the local worker, inspect exact signed events, and freshly retrieve the archives.
+3. **Operational boundaries remain deliberate.** The filesystem-backed writer needs a persistent host. Ambiguous broadcasts stop for manual reconciliation. Spending tracking starts at its recorded activation timestamp, with earlier transactions excluded. Operation fees, funding, recurring rates, and gas are distinct. These are app-level guards, not a custom onchain spending-limit contract.
+4. **Memory quality is bounded.** Six regression fixtures establish specific essential-fact preservation, not general downstream task success. Priority remains a transparent heuristic. Existing paid pieces and rails are not automatically deleted or cancelled. Current retrieval and inclusion do not guarantee future availability.
 
 ## Per-criterion assessment
 
-| Published criterion              | Current assessment                                                                                               | Most useful improvement                                                                                                                                        |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Autonomous budget decisions, 30% | Strong implemented observation/refusal/retention/top-up loop; exact-byte quote gates and deduplication are real. | Show a new real decision end to end and account for cumulative non-recurring spend.                                                                            |
-| Working demo quality, 25%        | Public deployment works; introduction and lab are clear; real receipts and fresh verification passed in Chrome.  | Add the real-worker walkthrough and use a loading state instead of briefly showing an empty receipt history while fetching.                                    |
-| Meaningful use of Filecoin, 20%  | Real Filecoin Pay, Synapse uploads, two-provider dataset inclusion, signatures, and retrieval.                   | Keep exact transaction/inclusion evidence visible; distinguish retrieval from future availability and avoid overclaiming independent retrieval of both copies. |
-| Clarity and public showcase, 15% | Landing page, README, build log, repository, and public demo exist.                                              | Supply and verify the actual video and X post, then complete the user-approved submission.                                                                     |
+| Published criterion              | Current state                                                                                                                            | Remaining improvement                                                                                                             |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Autonomous budget decisions, 30% | Live observations drive admission, refusal, reserve top-up, and deduplication. Durable cumulative allowances now guard repeated actions. | Persistent hosting and automated reconciliation would strengthen operation beyond the hackathon prototype.                        |
+| Working demo quality, 25%        | Public explorer, interactive lab, actual captured run, signed transcript, fresh two-copy verification, and 37 passing tests.             | An additional narrated screen walkthrough would provide more product context than the event visualization alone.                  |
+| Meaningful use of Filecoin, 20%  | Actual Pay balances/rails, Synapse uploads, two registry-resolved provider retrievals, and both PDP dataset inclusions.                  | Preserve the clear distinction between observed integrity and future availability. No missing sponsor integration was identified. |
+| Clarity and public showcase, 15% | Plain-language introduction, public app/repo, video, build log, and complete technical submission copy.                                  | User must publish the X showcase and insert its real URL before final submission.                                                 |
 
-Published weights sum to 90. No missing 10-point criterion is invented.
+The published weights total 90. This review does not invent a missing criterion.
 
 ## Bounty fit
 
-The first, second, and third prizes share the same challenge and are ranking awards, not separate integration tracks. Technical alignment is substantial for each. Submission/showcase completeness remains partial until the required real links and user-approved submission exist. This review cannot predict placement.
+The 1st, 2nd, and 3rd prizes share the same challenge; they are ranked awards, not separate integration tracks. Technical requirements are met in this prototype. For each prize, overall submission readiness remains partial until the public X showcase and final submission are completed by the user. The review cannot predict placement.
 
 ## Top three next steps
 
-1. Record an uninterrupted real worker decision and show the signed result through the public verifier. Lead with a financially meaningful refusal or bounded top-up.
-2. Clarify the recurring-cost cap, and implement cumulative one-off spending limits before claiming comprehensive unattended budget control.
-3. Publish the reviewed video/X showcase, add the real URLs to the submission draft, and obtain the user's explicit final-submission approval.
+1. Watch the real-run page and use its verifier. The finished video and signed evidence are ready for the user's review.
+2. Publish the prepared X post with the MP4, then replace the X URL placeholder in the submission draft.
+3. Review the exact submission fields and submit before 6 September 00:00 UTC (05:30 IST). Final submission remains under user control.
 
-## Separate, informal score estimate requested by the user
+## Separate informal estimate requested by the user
 
-The Loops evaluator explicitly provides qualitative feedback and no numeric scores. The following is the coding agent's subjective estimate, added only because the user requested one. It is not an output of the Loops service, an official judge score, an independent review, or a placement prediction. The same agent built and reviewed the product, so this estimate should not be treated as external validation.
+The evaluator's normal output is qualitative. Since the user explicitly asked for a score, this separate estimate is provided as a subjective readiness aid only. It is not a Loops-generated score, independent validation, or a prediction. The same coding agent implemented and reviewed this product.
 
-| Criterion                   | Estimated points | Reason for the deduction                                                                                                        |
-| --------------------------- | ---------------: | ------------------------------------------------------------------------------------------------------------------------------- |
-| Autonomous budget decisions |          24 / 30 | Good real decisions; limited cumulative accounting and limited public visibility of a new decision.                             |
-| Working demo quality        |          22 / 25 | Public app and verification work; real execution is presented as recorded evidence, with a small loading-state rough edge.      |
-| Meaningful use of Filecoin  |          18 / 20 | Substantial real integration; verification checks inclusion and a retrieved payload, not a complete ongoing availability audit. |
-| Clarity and public showcase |           8 / 15 | Clear app and documentation; published video/X evidence and final submission remain unverified/incomplete.                      |
-| Total on the listed rubric  |      **72 / 90** | **Approximately 80 / 100 when normalized across the four published criteria.**                                                  |
+| Criterion                   | Informal estimate | Remaining deduction                                                                              |
+| --------------------------- | ----------------: | ------------------------------------------------------------------------------------------------ |
+| Autonomous budget decisions |           29 / 30 | Manual recovery for ambiguous broadcasts limits unattended operation.                            |
+| Working demo quality        |           24 / 25 | Real events are visualized; an additional narrated product screen walkthrough would be stronger. |
+| Meaningful use of Filecoin  |           20 / 20 | The required integrations are implemented and independently retrievable.                         |
+| Clarity and public showcase |           11 / 15 | Public X showcase and final submission are still pending.                                        |
+| Total                       |       **84 / 90** | **Approximately 93 / 100 normalized over the listed criteria.**                                  |
 
-Treat 80/100 as a rough current-readiness estimate, not a measured result. No new paid transaction, project creation, final submission, or social post was performed for this review.
+Treat this as a rough 90–95 readiness range, not precise measurement. A defensible 100/100 cannot be asserted while showcase requirements are incomplete, and final judging remains outside the builder's control. Posting does not automatically guarantee any particular score.

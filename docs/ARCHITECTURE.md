@@ -19,7 +19,7 @@
 3. Synapse upload → successful provider IDs, dataset IDs, piece IDs, PieceCID.
 4. Fresh SDK download → hash comparison and matching decision ID.
 5. Final financial receipt → canonical JSON → separate agent signature for newer receipts.
-6. Independent verification → new download, both signatures when present, and PDP Verifier reads confirming that the PieceCID is included in both live datasets.
+6. Independent verification → a separate fresh download from each provider URL resolved through the onchain registry, both signatures when present, and PDP Verifier reads confirming that the PieceCID is included in both live datasets.
 
 `getNextChallengeEpoch` is read for context. Dataset inclusion is not a claim that all future proofs succeed. Retrieval integrity is not semantic correctness. The signature establishes which wallet attested the receipt, not an external guarantee of the policy’s wisdom.
 
@@ -43,3 +43,13 @@ User-added lab memories exist only in React memory for that browser session. The
 - Multi-call RPC observations are not a single atomic snapshot; the runner requotes immediately before execution. No other program should spend from this isolated test wallet concurrently.
 - The worker uses a persistent filesystem and is unsuitable for stateless serverless writes.
 - The shipped archive data is synthetic research material plus actual integration results. It is not a production memory corpus.
+
+## Rolling accounting and captured-run verification
+
+`src/lib/agent/spending.ts` sums per-account reservations in a rolling 30-day window using integer token units. `src/lib/server/spending.ts` checks separate operation-fee and reserve-funding allowances under the worker lock, then persists the complete quoted reservation before any broadcast. Both upload and reserve-maintenance paths use it. Future timestamps remain charged across clock rollback. An exhausted cap refuses execution; uncertain transactions do not automatically refund the allowance. Missing accounting with existing assessed receipts fails closed.
+
+Accounting starts at the ledger's explicit activation timestamp. Legacy transactions are not backfilled. The policy separates recurring-rate, one-off-fee, reserve-funding, wallet-balance, and gas checks. It does not describe deposits as consumed storage fees or claim to cap tFIL gas expenditure.
+
+`scripts/record-run.ts` captured actual events from four sequential scenarios. `public/showcase/run.json` includes all original events, four financial receipts, fresh two-provider verification, and a wallet signature over the canonical manifest hash. `src/lib/server/recording.ts` verifies that manifest and every decision, then independently re-verifies the stored archive. The video is a clearly labeled visualization of these events with waiting intervals shortened. Viewing it does not invoke the writer.
+
+Compaction now preserves decimal sentence boundaries, URLs, and all explicitly marked critical constraints in addition to ranked excerpts. Six annotated fixtures cover essential facts. This is a regression benchmark, not a downstream task-quality or universal semantic guarantee.

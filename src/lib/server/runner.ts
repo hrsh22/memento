@@ -5,6 +5,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { planMemories } from "../agent/engine";
 import { memoriesSchema, policySchema } from "../agent/schema";
 import { maintainReserve } from "./maintain";
+import { checkSpending, reserveSpending } from "./spending";
 import { budgetGate } from "../agent/gate";
 import { DEFAULT_POLICY, SEED_MEMORIES } from "../agent/memories";
 import type { Memory, Policy, Receipt } from "../agent/types";
@@ -161,6 +162,24 @@ export async function runCycle(
         await saveReceipt(receipt);
         return receipt;
       }
+      const spending = await checkSpending(
+        receipt,
+        receipt.quote.operationFeesUsdfc,
+        receipt.quote.depositNeededUsdfc,
+      );
+      await addEvent(
+        "decide",
+        spending.allowed
+          ? "Cumulative spending gate passed"
+          : "Cumulative spending refused",
+        `${spending.reason} Fees already reserved: ${spending.feesUsedUsdfc}/${spending.feeLimitUsdfc} USDFC; requested ${spending.requestedFeesUsdfc}. Reserve funding: ${spending.depositsUsedUsdfc}/${spending.depositLimitUsdfc} USDFC; requested ${spending.requestedDepositUsdfc}.`,
+      );
+      if (!spending.allowed) {
+        receipt.reason = spending.reason;
+        await saveReceipt(receipt);
+        return receipt;
+      }
+      await reserveSpending(receipt);
       receipt.action = "pending";
       receipt.broadcastAttempted = true;
       await saveReceipt(receipt);

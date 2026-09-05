@@ -940,7 +940,7 @@ export function Memento({
                         {liveDecision.plan.explanation} Kept{" "}
                         {liveDecision.plan.protectedCount} protected, compacted{" "}
                         {liveDecision.plan.compactedCount}, deferred{" "}
-                        {liveDecision.plan.deferredCount} —{" "}
+                        {liveDecision.plan.deferredCount}.{" "}
                         {size(liveDecision.plan.retainedBytes)} selected out of{" "}
                         {size(liveDecision.plan.inputBytes)}.
                       </p>

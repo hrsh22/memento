@@ -28,7 +28,7 @@ export default async function WatchPage() {
           A funded wallet. A useful memory. A second request that goes too far.
           Follow Memento as it reads Filecoin, weighs the cost, and acts.
         </p>
-        <p className="watch-step">01 — A LIVE DECISION, SCREEN-RECORDED</p>
+        <p className="watch-step">01 / A LIVE DECISION, SCREEN-RECORDED</p>
         <div className="watch-video">
           <video
             controls
@@ -56,7 +56,7 @@ export default async function WatchPage() {
             <Download size={15} /> Download clip
           </a>
         </div>
-        <p className="watch-step">02 — THE WORKER RUN THAT SPENT REAL FUNDS</p>
+        <p className="watch-step">02 / THE WORKER RUN THAT SPENT REAL FUNDS</p>
         <div className="watch-video">
           <video
             controls

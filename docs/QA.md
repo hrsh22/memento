@@ -1,4 +1,4 @@
-# QA evidence — 5 September 2026
+# QA evidence, 5 September 2026
 
 ## Automated
 

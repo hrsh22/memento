@@ -1,4 +1,4 @@
-# AI build log — 5 September 2026
+# AI build log, 5 September 2026
 
 Built collaboratively by Harsh Gupta and Codex for FilecoinTLDR Builder Challenge Cycle 4.
 
@@ -37,7 +37,7 @@ Rewrote the README to lead with three checks a judge can run in about a minute a
 
 Consulted the Loops mentor twice. Its first answer recommended building the live decision endpoint that had already shipped, so the session was corrected with the deployed URLs; the second answer, working from the real state, identified two gaps worth acting on and confirmed a third judgement.
 
-Gap one: the live panel reported a verdict and six figures with no visible inference, which reads as a black box. Added a four-step trace — observe the account at this epoch, select under policy, price against the onchain price list, gate — rendered from the same response, plus one plain sentence for a reader who does not know what a payment rail is.
+Gap one: the live panel reported a verdict and six figures with no visible inference, which reads as a black box. Added a four-step trace rendered from the same response, covering what it observed at this epoch, what it selected under policy, what it priced against the onchain price list, and which limit the gate applied, plus one plain sentence for a reader who does not know what a payment rail is.
 
 Gap two: no artifact per live decision. Added a JSON download. Live decisions are deliberately unsigned because the public deployment holds no key; that is now stated as a safety property rather than buried as a caveat.
 

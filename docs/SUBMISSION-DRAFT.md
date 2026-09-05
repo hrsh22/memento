@@ -1,4 +1,4 @@
-# Submission draft — user approval required
+# Submission draft, user approval required
 
 Nothing has been submitted to Loops House. The X post is published and its URL is filled in below. Every field here is final and verified.
 
@@ -77,7 +77,7 @@ placeholder URL survives, prints who you are authenticated as, then calls
 
 `loops project create` accepts all the fields, so no follow-up `update` is
 needed. If a project somehow already exists the call fails rather than
-overwriting — change `create` to `update` in the script and re-run.
+overwriting. Change `create` to `update` in the script and re-run.
 
 `--bounty-ids` is omitted deliberately: 1st/2nd/3rd Prize are placement awards,
 not selectable tracks, and the CLI exposes no ids for them. Update is a PATCH,

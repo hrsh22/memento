@@ -4,7 +4,7 @@
 #
 # `loops project create` accepts every field, so this is a single call. Nothing
 # here is destructive: one project exists per user per event, and if one already
-# exists this fails rather than overwriting — switch `create` to `update` then.
+# exists this fails rather than overwriting. Switch `create` to `update` then.
 #
 # --bounty-ids is omitted deliberately. 1st/2nd/3rd Prize are placement awards,
 # not selectable tracks, and the CLI exposes no ids for them.

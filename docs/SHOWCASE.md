@@ -4,9 +4,9 @@
 
 Two videos, two kinds of evidence.
 
-**A. Live decision (real screen capture, 25s)** — `public/showcase/live-decision.mp4` (1280 x 800, H.264, ~536 KB). Captured from the deployed app on 5 September 2026. The monthly cap moves 0.50 -> 0.10 USDFC against an unchanged 0.24 cost and the funded wallet is refused. Two idle pauses were cut; nothing else is edited. Poster: `public/showcase/live-decision-poster.png`.
+**A. Live decision (real screen capture, 25s):** `public/showcase/live-decision.mp4` (1280 x 800, H.264, ~536 KB). Captured from the deployed app on 5 September 2026. The monthly cap moves 0.50 -> 0.10 USDFC against an unchanged 0.24 cost and the funded wallet is refused. Two idle pauses were cut; nothing else is edited. Poster: `public/showcase/live-decision-poster.png`.
 
-**B. Worker run (event-log visualization, 93s)** — the run that actually spent funds.
+**B. Worker run (event-log visualization, 93s):** the run that actually spent funds.
 
 - Watch: https://memento-sigma-rosy.vercel.app/watch
 - MP4: https://memento-sigma-rosy.vercel.app/showcase/memento-demo.mp4
@@ -31,7 +31,7 @@ public link.
 ```
 Having funds doesn't mean spending them.
 
-Memento reads its own Filecoin Pay runway and refuses writes it can't afford — even with a full wallet.
+Memento reads its own Filecoin Pay runway and refuses writes it can't afford, even with a full wallet.
 
 Move the cap yourself, live onchain, no signup:
 https://memento-sigma-rosy.vercel.app/live
@@ -66,12 +66,12 @@ https://memento-sigma-rosy.vercel.app/live
 @FilecoinTLDR
 ```
 
-**Attach `public/showcase/live-decision.mp4`** — the 25-second screen capture. It
+**Attach `public/showcase/live-decision.mp4`**, the 25-second screen capture. It
 is shorter than the worker-run video, it is real footage rather than an
 animation, and the approved-to-refused flip is legible on a phone. Media does
 not count against the character limit. Keep `memento-demo.mp4` for the site.
 
-**Published:** https://x.com/hrsh22/status/2096342218080714826 — posted by the user on 5 September 2026. Nothing was posted
+**Published:** https://x.com/hrsh22/status/2096342218080714826, posted by the user on 5 September 2026. Nothing was posted
 by the agent.
 
 ## Reproducing the media

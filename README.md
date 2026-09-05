@@ -2,7 +2,7 @@
 
 **An AI agent should know what it can afford to remember.**
 
-Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It reads its own onchain balance and runway, decides which memories are worth paying to keep, funds a bounded reserve, and leaves a receipt anyone can verify. Built for the [FilecoinTLDR Builder Challenge — Cycle 4](https://www.loops.house/filecointldr-builder-challenge-cycle-4).
+Memento is an autonomous memory treasury on **Filecoin Pay + Synapse SDK**. It reads its own onchain balance and runway, decides which memories are worth paying to keep, funds a bounded reserve, and leaves a receipt anyone can verify. Built for the [FilecoinTLDR Builder Challenge, Cycle 4](https://www.loops.house/filecointldr-builder-challenge-cycle-4).
 
 The decision is the product. An unfunded agent refuses a write. A funded agent preserves what matters. **An over-budget quote is rejected even when the wallet is full.**
 
@@ -27,9 +27,9 @@ That endpoint holds no signer and never calls `createContexts` or `prepare`, so 
 curl -s https://memento-sigma-rosy.vercel.app/api/showcase | jq '.verified, .archive.onchainCopies'
 ```
 
-**3. Watch it happen, if you would rather not click.** [`/watch`](https://memento-sigma-rosy.vercel.app/watch) opens with a 25-second **screen recording of the deployed app** — not an animation — where the cap moves from 0.50 to 0.10 USDFC against an unchanged 0.24 cost and the funded wallet is refused. Below it is the 93-second visualization of the worker run that actually spent funds.
+**3. Watch it happen, if you would rather not click.** [`/watch`](https://memento-sigma-rosy.vercel.app/watch) opens with a 25-second **screen recording of the deployed app**, real footage rather than an animation, where the cap moves from 0.50 to 0.10 USDFC against an unchanged 0.24 cost and the funded wallet is refused. Below it is the 93-second visualization of the worker run that actually spent funds.
 
-**4. Read the account yourself.** `GET /api/chain` returns the raw Calibration snapshot — epoch, rails, lockup, runway — or check [the wallet on Blockscout](https://filecoin-testnet.blockscout.com/address/0xA704353cB48030557c307cB743581D49eFA1eF80).
+**4. Read the account yourself.** `GET /api/chain` returns the raw Calibration snapshot with epoch, rails, lockup and runway. Or check [the wallet on Blockscout](https://filecoin-testnet.blockscout.com/address/0xA704353cB48030557c307cB743581D49eFA1eF80).
 
 ## What decides, and where
 
@@ -62,10 +62,10 @@ The gate is `budgetGate` in `src/lib/agent/gate.ts`. It compares integer base un
 
 The [signed showcase run](public/showcase/run.json) captures an actual 135-second execution, presented as a 93-second captioned visualization with waiting intervals shortened:
 
-1. **Refused** — a funded wallet still obeys the recurring-cost cap.
-2. **Stored** — a 6,838-byte archive on two providers, retrieved and hash-checked.
-3. **Refused** — cumulative fees: 0.022 used + 0.022 requested exceeds a 0.03 tUSDFC rolling allowance.
-4. **Prevented** — identical input, so no duplicate paid upload.
+1. **Refused.** A funded wallet still obeys the recurring-cost cap.
+2. **Stored.** A 6,838-byte archive on two providers, retrieved and hash-checked.
+3. **Refused.** Cumulative fees: 0.022 used + 0.022 requested exceeds a 0.03 tUSDFC rolling allowance.
+4. **Prevented.** Identical input, so no duplicate paid upload.
 
 All four run receipts are signed. `/watch` verifies the manifest and freshly retrieves both archive copies.
 
@@ -88,7 +88,7 @@ Balances, rails, and proofs are real and onchain. Nothing is hardcoded or simula
 
 ```bash
 npm ci
-npm run dev     # localhost:3000 — no wallet, API key, or paid service needed
+npm run dev     # localhost:3000, no wallet or API key needed
 ```
 
 Run the worker for real (Calibration only):
@@ -121,7 +121,7 @@ Export with `npm run evidence:export` after the worker finishes, then commit `pu
 
 ## How the policy works
 
-Utility is a transparent heuristic: `importance × 0.72 + min(accesses,20) × 1.4 − ageDays × 0.7`, clamped to 0–100. Pinned sources always score 100. Compaction is verbatim sentence extraction — it preserves decimals and URLs, keeps every explicitly marked critical constraint alongside ranked excerpts, and passes six annotated essential-fact fixtures.
+Utility is a transparent heuristic: `importance × 0.72 + min(accesses,20) × 1.4 − ageDays × 0.7`, clamped to 0–100. Pinned sources always score 100. Compaction is verbatim sentence extraction. It preserves decimals and URLs, keeps every explicitly marked critical constraint alongside ranked excerpts, and passes six annotated essential-fact fixtures.
 
 Filecoin's recurring price includes a per-dataset proving fee, so compressing a few kilobytes does not remove it. Memento's savings come from refusing low-value writes and bundling selected memories into one piece, avoiding repeated operation fees.
 
@@ -131,7 +131,7 @@ Filecoin's recurring price includes a per-dataset proving fee, so compressing a 
 - **`/api/decide` projects, it does not quote.** Recurring cost comes from the live onchain price list. The funded worker additionally obtains an exact Synapse quote for serialized bytes and resolved provider contexts before broadcasting.
 - **Two videos, two kinds of evidence.** The live-decision clip is a real screen capture with two idle pauses cut. The worker-run video is a visualization of a signed event log with original timestamps, not a screen capture; playback sends no transactions.
 - **Spending limits are application-level policy**, not a separately deployed spending-limit contract. The Synapse preparation transaction also approves the Warm Storage operator.
-- **Receipts prove integrity, not meaning.** Signatures establish signer and record integrity; fresh retrieval checks both copies. Nothing here proves future availability, PDP challenge outcomes, or that compaction preserved every fact. "Priority retained" scores retained items — it is not a claim that compaction keeps everything.
+- **Receipts prove integrity, not meaning.** Signatures establish signer and record integrity; fresh retrieval checks both copies. Nothing here proves future availability, PDP challenge outcomes, or that compaction preserved every fact. "Priority retained" scores retained items. It is not a claim that compaction keeps everything.
 - **Accounting starts at activation.** The rolling ledger does not backfill earlier transactions. Full quoted amounts are reserved before broadcast; uncertain outcomes stay charged until reconciliation. tFIL gas is tracked separately.
 - **No mainnet.** Calibration testnet only. Memento never claims to have deleted paid data or lowered existing rails.
 

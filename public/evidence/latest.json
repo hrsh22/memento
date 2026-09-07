@@ -2,6 +2,27 @@
   "running": false,
   "events": [
     {
+      "id": "6a8ed5fe-339c-45b9-96b8-370c4e5f992a",
+      "at": "2026-09-07T00:47:39.969Z",
+      "stage": "act",
+      "title": "Duplicate write prevented",
+      "detail": "The same memories already have a verified archive and the reserve remains healthy. Prevent a duplicate paid write."
+    },
+    {
+      "id": "857db37d-e73f-457a-bfe3-12851e90b0fb",
+      "at": "2026-09-07T00:47:39.965Z",
+      "stage": "decide",
+      "title": "2 protected · 2 compacted · 3 deferred",
+      "detail": "Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees."
+    },
+    {
+      "id": "e3eb30d1-d5ad-4fe8-86bf-5d2cfa585866",
+      "at": "2026-09-07T00:47:39.034Z",
+      "stage": "observe",
+      "title": "Reading my storage treasury",
+      "detail": "Querying Filecoin Pay account summary, wallet balances, payment rails, and the onchain price list."
+    },
+    {
       "id": "a12b4f5a-059c-4b99-8a31-cfd561663cb3",
       "at": "2026-09-06T22:47:55.490Z",
       "stage": "act",
@@ -640,6 +661,187 @@
     }
   ],
   "receipts": [
+    {
+      "id": "9ce45525-c3c2-49b3-8e27-9b1b8c6eab27",
+      "version": 1,
+      "createdAt": "2026-09-07T00:47:39.964Z",
+      "mode": "calibration",
+      "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
+      "snapshot": {
+        "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
+        "chainId": 314159,
+        "network": "Filecoin Calibration",
+        "epoch": "4047188",
+        "observedAt": "2026-09-07T00:47:39.959Z",
+        "funds": "1.230072388052319242",
+        "availableFunds": "0.11710002031557084",
+        "debt": "0",
+        "totalLockup": "1.112972367736748402",
+        "monthlyRate": "0.2400001393252032",
+        "ratePerEpoch": "2777779390338",
+        "runwayDays": 14.637152777777779,
+        "walletUsdfc": "99.999876353380296782",
+        "walletFil": "99.999876353380296782",
+        "contracts": {
+          "pay": "0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0",
+          "warmStorage": "0x02925630df557F957f70E112bA06e50965417CA0",
+          "pdp": "0x85e366Cf9DD2c0aE37E963d9556F5f4718d6417C",
+          "usdfc": "0xb3042734b608a1B16e9e86B374A3f3e389B4cDf0"
+        },
+        "prices": {
+          "storagePerTibMonth": 2.5,
+          "datasetFeeMonth": 0.12,
+          "addBaseFee": 0.008,
+          "addPieceFee": 0.003
+        },
+        "rails": [
+          {
+            "railId": "38482",
+            "paymentRate": "0.000001388889695169",
+            "endEpoch": "0"
+          },
+          {
+            "railId": "38483",
+            "paymentRate": "0.000001388889695169",
+            "endEpoch": "0"
+          }
+        ]
+      },
+      "plan": {
+        "decisions": [
+          {
+            "id": "mission",
+            "title": "Mission & safety boundaries",
+            "kind": "core",
+            "action": "keep",
+            "utility": 100,
+            "originalBytes": 335,
+            "retainedBytes": 335,
+            "reason": "Protected by policy. Preserve every source byte.",
+            "content": "Mission: preserve useful research while respecting a finite storage budget. Never discard a pinned memory. Never claim a receipt proves semantic correctness. Use Calibration only. Stop new uploads if financial telemetry is unavailable. Mission owner: the researcher. Recoverable source documents stay local until the user removes them.",
+            "sourceHash": "2c1fafddaa0bb87910c365bd5e19b495669e4dd3e44dadbd3f65efba56d4d0f1"
+          },
+          {
+            "id": "discovery",
+            "title": "The result that changed the experiment",
+            "kind": "research",
+            "action": "keep",
+            "utility": 95,
+            "originalBytes": 375,
+            "retainedBytes": 375,
+            "reason": "Utility 95/100 justifies keeping the original.",
+            "content": "Finding: batching related observations into one archive avoids repeated per-piece fees. Evidence: the Filecoin Warm Storage price list distinguishes base fees and per-piece fees. Keep source hashes in a manifest. Critical: compression reduces bytes, but a dataset proving fee remains until the dataset is empty. Conclusion: optimize the decision unit, not just payload bytes.",
+            "sourceHash": "fd9b9c29cd6e388f12d70644a1c5365e56b13bc8f7a141f1df4b48454f95070c"
+          },
+          {
+            "id": "experiment",
+            "title": "Experiment 024 · working notes",
+            "kind": "research",
+            "action": "compact",
+            "utility": 66,
+            "originalBytes": 4480,
+            "retainedBytes": 279,
+            "reason": "Preserve the highest-signal verbatim excerpts; omit repeated context under selective policy.",
+            "content": "Result: the retrieval check matched the uploaded SHA-256. We tested a memory bundle, downloaded it, and compared every byte. Important: this checks retrieval integrity, not an independently verified PDP challenge. The archive contains an extractive summary and the source digest.",
+            "sourceHash": "b71dcd554ff90f38b703148dc65b2f82bed6b816ad602c607b77982748504847"
+          },
+          {
+            "id": "tool-trace",
+            "title": "Repeated tool-call traces",
+            "kind": "trace",
+            "action": "defer",
+            "utility": 9,
+            "originalBytes": 16851,
+            "retainedBytes": 0,
+            "reason": "Utility 9/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
+            "content": "",
+            "sourceHash": "fb0d6a4d9efc66cbb8d89ecd746282fbd4c3cb132a55b291cf307d086371eae5"
+          },
+          {
+            "id": "drafts",
+            "title": "Superseded answer drafts",
+            "kind": "artifact",
+            "action": "defer",
+            "utility": 18,
+            "originalBytes": 6896,
+            "retainedBytes": 0,
+            "reason": "Utility 18/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
+            "content": "",
+            "sourceHash": "0e358e30818ca0fcc39d56273218671844abfdbe137892d40c3d02b2f4b3d7da"
+          },
+          {
+            "id": "recovery",
+            "title": "Recovery & provenance manifest",
+            "kind": "core",
+            "action": "keep",
+            "utility": 100,
+            "originalBytes": 360,
+            "retainedBytes": 360,
+            "reason": "Protected by policy. Preserve every source byte.",
+            "content": "Recovery procedure: locate the receipt by content hash. Download the bundle from a successful provider. Verify SHA-256 before reading memories. Each compacted memory names its original SHA-256 digest. Source excerpts are verbatim and ordered. If a provider fails, try another copy. Retention decisions are policy outputs, not guarantees of factual correctness.",
+            "sourceHash": "d6e36739fc13bd19aed25ae8f62383396726a34920330107a27ec5bd46fe58a6"
+          },
+          {
+            "id": "provider-notes",
+            "title": "Provider comparison notes",
+            "kind": "research",
+            "action": "compact",
+            "utility": 52,
+            "originalBytes": 1842,
+            "retainedBytes": 283,
+            "reason": "Preserve the highest-signal verbatim excerpts; omit repeated context under selective policy.",
+            "content": "Observation: provider redundancy requires separate datasets, with separate proving fees. Result: two copies protect against a single unavailable provider. Important: keep the receipt with provider ID, dataset ID, piece ID, and retrieval URL. Step 1: fetched the same provider status.",
+            "sourceHash": "651564afe2520965c8fba63579f23e7c08df169b8ac6ece45c26abc0a1b03b64"
+          },
+          {
+            "id": "scratch",
+            "title": "Expired scratchpad",
+            "kind": "trace",
+            "action": "defer",
+            "utility": 0,
+            "originalBytes": 9068,
+            "retainedBytes": 0,
+            "reason": "Utility 0/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
+            "content": "",
+            "sourceHash": "d377c2a05e703749547d1e39bb9a6b68da09f1033d9db1ade0d531819e6660c2"
+          }
+        ],
+        "mode": "selective",
+        "inputBytes": 40207,
+        "retainedBytes": 1632,
+        "baselineMonthly": 0.24000032216547057,
+        "plannedMonthly": 0.24000014674667997,
+        "baselineFees": 0.176,
+        "plannedFees": 0.022,
+        "baselineRunwayDays": 0,
+        "plannedRunwayDays": 11.887495270902756,
+        "protectedCount": 2,
+        "deferredCount": 3,
+        "compactedCount": 2,
+        "retainedUtilityPercent": 94,
+        "explanation": "Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees.",
+        "policy": {
+          "reserveDays": 14,
+          "maxMonthlyUsdfc": 0.5,
+          "minUtility": 32,
+          "allowCompaction": true
+        },
+        "budget": {
+          "availableUsdfc": 0.11710002031557085,
+          "existingMonthlyUsdfc": 0.2400001393252032,
+          "storagePerTibMonth": 2.5,
+          "datasetFeeMonth": 0.12,
+          "addBaseFee": 0.008,
+          "addPieceFee": 0.003,
+          "copies": 2,
+          "newDataset": false
+        }
+      },
+      "action": "deferred",
+      "reason": "The same memories already have a verified archive and the reserve remains healthy. Prevent a duplicate paid write.",
+      "contentFingerprint": "ad12356a518cab8cc17fd3f758125bd921d5748383824d7c16beefef229b49cb",
+      "decisionSignature": "0x2c6be5aa52b01399f7bac74280b8bd432ed59be1221e73b73bc131f269afcf801f6581c3a63b9650607e88b107726e9c1253008ae3f7b41aa01b455c0b8aeb971b"
+    },
     {
       "id": "90145864-20bd-4f14-b5cf-b8bf9953d822",
       "version": 1,
@@ -4303,189 +4505,21 @@
         }
       ],
       "verified": true
-    },
-    {
-      "id": "a56362eb-074c-41cd-9987-4ad7514b149d",
-      "version": 1,
-      "createdAt": "2026-09-05T15:45:09.353Z",
-      "mode": "calibration",
-      "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
-      "snapshot": {
-        "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
-        "chainId": 314159,
-        "network": "Filecoin Calibration",
-        "epoch": "4043223",
-        "observedAt": "2026-09-05T15:45:09.352Z",
-        "funds": "0",
-        "availableFunds": "0",
-        "debt": "0",
-        "totalLockup": "0",
-        "monthlyRate": "0",
-        "ratePerEpoch": "0",
-        "runwayDays": null,
-        "walletUsdfc": "0",
-        "walletFil": "0",
-        "contracts": {
-          "pay": "0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0",
-          "warmStorage": "0x02925630df557F957f70E112bA06e50965417CA0",
-          "pdp": "0x85e366Cf9DD2c0aE37E963d9556F5f4718d6417C",
-          "usdfc": "0xb3042734b608a1B16e9e86B374A3f3e389B4cDf0"
-        },
-        "prices": {
-          "storagePerTibMonth": 2.5,
-          "datasetFeeMonth": 0.12,
-          "addBaseFee": 0.008,
-          "addPieceFee": 0.003
-        },
-        "rails": []
-      },
-      "plan": {
-        "decisions": [
-          {
-            "id": "mission",
-            "title": "Mission & safety boundaries",
-            "kind": "core",
-            "action": "keep",
-            "utility": 100,
-            "originalBytes": 335,
-            "retainedBytes": 335,
-            "reason": "Protected by policy. Preserve every source byte.",
-            "content": "Mission: preserve useful research while respecting a finite storage budget. Never discard a pinned memory. Never claim a receipt proves semantic correctness. Use Calibration only. Stop new uploads if financial telemetry is unavailable. Mission owner: the researcher. Recoverable source documents stay local until the user removes them.",
-            "sourceHash": "2c1fafddaa0bb87910c365bd5e19b495669e4dd3e44dadbd3f65efba56d4d0f1"
-          },
-          {
-            "id": "discovery",
-            "title": "The result that changed the experiment",
-            "kind": "research",
-            "action": "keep",
-            "utility": 95,
-            "originalBytes": 375,
-            "retainedBytes": 375,
-            "reason": "Utility 95/100 justifies keeping the original.",
-            "content": "Finding: batching related observations into one archive avoids repeated per-piece fees. Evidence: the Filecoin Warm Storage price list distinguishes base fees and per-piece fees. Keep source hashes in a manifest. Critical: compression reduces bytes, but a dataset proving fee remains until the dataset is empty. Conclusion: optimize the decision unit, not just payload bytes.",
-            "sourceHash": "fd9b9c29cd6e388f12d70644a1c5365e56b13bc8f7a141f1df4b48454f95070c"
-          },
-          {
-            "id": "experiment",
-            "title": "Experiment 024 · working notes",
-            "kind": "research",
-            "action": "keep",
-            "utility": 66,
-            "originalBytes": 4480,
-            "retainedBytes": 4480,
-            "reason": "Utility 66/100 justifies keeping the original.",
-            "content": "Result: the retrieval check matched the uploaded SHA-256. We tested a memory bundle, downloaded it, and compared every byte. Important: this checks retrieval integrity, not an independently verified PDP challenge. The archive contains an extractive summary and the source digest. Step 1: fetched the same provider status. Response 200. Provider available. Latency 80ms. No new information. Repeated diagnostic context.\nStep 2: fetched the same provider status. Response 200. Provider available. Latency 81ms. No new information. Repeated diagnostic context.\nStep 3: fetched the same provider status. Response 200. Provider available. Latency 82ms. No new information. Repeated diagnostic context.\nStep 4: fetched the same provider status. Response 200. Provider available. Latency 83ms. No new information. Repeated diagnostic context.\nStep 5: fetched the same provider status. Response 200. Provider available. Latency 84ms. No new information. Repeated diagnostic context.\nStep 6: fetched the same provider status. Response 200. Provider available. Latency 85ms. No new information. Repeated diagnostic context.\nStep 7: fetched the same provider status. Response 200. Provider available. Latency 86ms. No new information. Repeated diagnostic context.\nStep 8: fetched the same provider status. Response 200. Provider available. Latency 87ms. No new information. Repeated diagnostic context.\nStep 9: fetched the same provider status. Response 200. Provider available. Latency 88ms. No new information. Repeated diagnostic context.\nStep 10: fetched the same provider status. Response 200. Provider available. Latency 89ms. No new information. Repeated diagnostic context.\nStep 11: fetched the same provider status. Response 200. Provider available. Latency 90ms. No new information. Repeated diagnostic context.\nStep 12: fetched the same provider status. Response 200. Provider available. Latency 91ms. No new information. Repeated diagnostic context.\nStep 13: fetched the same provider status. Response 200. Provider available. Latency 92ms. No new information. Repeated diagnostic context.\nStep 14: fetched the same provider status. Response 200. Provider available. Latency 93ms. No new information. Repeated diagnostic context.\nStep 15: fetched the same provider status. Response 200. Provider available. Latency 94ms. No new information. Repeated diagnostic context.\nStep 16: fetched the same provider status. Response 200. Provider available. Latency 95ms. No new information. Repeated diagnostic context.\nStep 17: fetched the same provider status. Response 200. Provider available. Latency 96ms. No new information. Repeated diagnostic context.\nStep 18: fetched the same provider status. Response 200. Provider available. Latency 97ms. No new information. Repeated diagnostic context.\nStep 19: fetched the same provider status. Response 200. Provider available. Latency 98ms. No new information. Repeated diagnostic context.\nStep 20: fetched the same provider status. Response 200. Provider available. Latency 99ms. No new information. Repeated diagnostic context.\nStep 21: fetched the same provider status. Response 200. Provider available. Latency 100ms. No new information. Repeated diagnostic context.\nStep 22: fetched the same provider status. Response 200. Provider available. Latency 101ms. No new information. Repeated diagnostic context.\nStep 23: fetched the same provider status. Response 200. Provider available. Latency 102ms. No new information. Repeated diagnostic context.\nStep 24: fetched the same provider status. Response 200. Provider available. Latency 103ms. No new information. Repeated diagnostic context.\nStep 25: fetched the same provider status. Response 200. Provider available. Latency 104ms. No new information. Repeated diagnostic context.\nStep 26: fetched the same provider status. Response 200. Provider available. Latency 105ms. No new information. Repeated diagnostic context.\nStep 27: fetched the same provider status. Response 200. Provider available. Latency 106ms. No new information. Repeated diagnostic context.\nStep 28: fetched the same provider status. Response 200. Provider available. Latency 107ms. No new information. Repeated diagnostic context.\nStep 29: fetched the same provider status. Response 200. Provider available. Latency 108ms. No new information. Repeated diagnostic context.\nStep 30: fetched the same provider status. Response 200. Provider available. Latency 109ms. No new information. Repeated diagnostic context.",
-            "sourceHash": "b71dcd554ff90f38b703148dc65b2f82bed6b816ad602c607b77982748504847"
-          },
-          {
-            "id": "tool-trace",
-            "title": "Repeated tool-call traces",
-            "kind": "trace",
-            "action": "defer",
-            "utility": 9,
-            "originalBytes": 16851,
-            "retainedBytes": 0,
-            "reason": "Utility 9/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
-            "content": "",
-            "sourceHash": "fb0d6a4d9efc66cbb8d89ecd746282fbd4c3cb132a55b291cf307d086371eae5"
-          },
-          {
-            "id": "drafts",
-            "title": "Superseded answer drafts",
-            "kind": "artifact",
-            "action": "defer",
-            "utility": 18,
-            "originalBytes": 6896,
-            "retainedBytes": 0,
-            "reason": "Utility 18/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
-            "content": "",
-            "sourceHash": "0e358e30818ca0fcc39d56273218671844abfdbe137892d40c3d02b2f4b3d7da"
-          },
-          {
-            "id": "recovery",
-            "title": "Recovery & provenance manifest",
-            "kind": "core",
-            "action": "keep",
-            "utility": 100,
-            "originalBytes": 360,
-            "retainedBytes": 360,
-            "reason": "Protected by policy. Preserve every source byte.",
-            "content": "Recovery procedure: locate the receipt by content hash. Download the bundle from a successful provider. Verify SHA-256 before reading memories. Each compacted memory names its original SHA-256 digest. Source excerpts are verbatim and ordered. If a provider fails, try another copy. Retention decisions are policy outputs, not guarantees of factual correctness.",
-            "sourceHash": "d6e36739fc13bd19aed25ae8f62383396726a34920330107a27ec5bd46fe58a6"
-          },
-          {
-            "id": "provider-notes",
-            "title": "Provider comparison notes",
-            "kind": "research",
-            "action": "keep",
-            "utility": 52,
-            "originalBytes": 1842,
-            "retainedBytes": 1842,
-            "reason": "Utility 52/100 justifies keeping the original.",
-            "content": "Observation: provider redundancy requires separate datasets, with separate proving fees. Result: two copies protect against a single unavailable provider. Important: keep the receipt with provider ID, dataset ID, piece ID, and retrieval URL. Step 1: fetched the same provider status. Response 200. Provider available. Latency 80ms. No new information. Repeated diagnostic context.\nStep 2: fetched the same provider status. Response 200. Provider available. Latency 81ms. No new information. Repeated diagnostic context.\nStep 3: fetched the same provider status. Response 200. Provider available. Latency 82ms. No new information. Repeated diagnostic context.\nStep 4: fetched the same provider status. Response 200. Provider available. Latency 83ms. No new information. Repeated diagnostic context.\nStep 5: fetched the same provider status. Response 200. Provider available. Latency 84ms. No new information. Repeated diagnostic context.\nStep 6: fetched the same provider status. Response 200. Provider available. Latency 85ms. No new information. Repeated diagnostic context.\nStep 7: fetched the same provider status. Response 200. Provider available. Latency 86ms. No new information. Repeated diagnostic context.\nStep 8: fetched the same provider status. Response 200. Provider available. Latency 87ms. No new information. Repeated diagnostic context.\nStep 9: fetched the same provider status. Response 200. Provider available. Latency 88ms. No new information. Repeated diagnostic context.\nStep 10: fetched the same provider status. Response 200. Provider available. Latency 89ms. No new information. Repeated diagnostic context.\nStep 11: fetched the same provider status. Response 200. Provider available. Latency 90ms. No new information. Repeated diagnostic context.\nStep 12: fetched the same provider status. Response 200. Provider ava",
-            "sourceHash": "651564afe2520965c8fba63579f23e7c08df169b8ac6ece45c26abc0a1b03b64"
-          },
-          {
-            "id": "scratch",
-            "title": "Expired scratchpad",
-            "kind": "trace",
-            "action": "defer",
-            "utility": 0,
-            "originalBytes": 9068,
-            "retainedBytes": 0,
-            "reason": "Utility 0/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
-            "content": "",
-            "sourceHash": "d377c2a05e703749547d1e39bb9a6b68da09f1033d9db1ade0d531819e6660c2"
-          }
-        ],
-        "mode": "abundant",
-        "inputBytes": 40207,
-        "retainedBytes": 7392,
-        "baselineMonthly": 0.24000018284026736,
-        "plannedMonthly": 0.24000003361492417,
-        "baselineFees": 0.176,
-        "plannedFees": 0.022,
-        "baselineRunwayDays": 0,
-        "plannedRunwayDays": 0,
-        "protectedCount": 2,
-        "deferredCount": 3,
-        "compactedCount": 0,
-        "retainedUtilityPercent": 94,
-        "explanation": "The reserve is healthy. Retain useful originals, while declining low-value noise.",
-        "policy": {
-          "reserveDays": 14,
-          "maxMonthlyUsdfc": 0.5,
-          "minUtility": 32,
-          "allowCompaction": true
-        },
-        "budget": {
-          "availableUsdfc": 0,
-          "existingMonthlyUsdfc": 0,
-          "storagePerTibMonth": 2.5,
-          "datasetFeeMonth": 0.12,
-          "addBaseFee": 0.008,
-          "addPieceFee": 0.003,
-          "copies": 2,
-          "newDataset": true
-        }
-      },
-      "action": "deferred",
-      "reason": "The wallet cannot fund the reserve needed for this upload."
     }
   ],
   "lastSnapshot": {
     "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
     "chainId": 314159,
     "network": "Filecoin Calibration",
-    "epoch": "4046948",
-    "observedAt": "2026-09-06T22:47:55.466Z",
+    "epoch": "4047188",
+    "observedAt": "2026-09-07T00:47:39.959Z",
     "funds": "1.230072388052319242",
-    "availableFunds": "0.11776668736925196",
+    "availableFunds": "0.11710002031557084",
     "debt": "0",
-    "totalLockup": "1.112305700683067282",
+    "totalLockup": "1.112972367736748402",
     "monthlyRate": "0.2400001393252032",
     "ratePerEpoch": "2777779390338",
-    "runwayDays": 14.72048611111111,
+    "runwayDays": 14.637152777777779,
     "walletUsdfc": "99.999876353380296782",
     "walletFil": "99.999876353380296782",
     "contracts": {
@@ -4526,5 +4560,5 @@
     ]
   },
   "evidenceMode": "recorded",
-  "exportedAt": "2026-09-06T22:47:55.963Z"
+  "exportedAt": "2026-09-07T00:47:40.591Z"
 }

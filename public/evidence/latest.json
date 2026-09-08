@@ -2,6 +2,27 @@
   "running": false,
   "events": [
     {
+      "id": "75d39f10-57f0-4f92-9762-61949e0630bc",
+      "at": "2026-09-08T00:04:17.152Z",
+      "stage": "act",
+      "title": "Duplicate write prevented",
+      "detail": "The same memories already have a verified archive and the reserve remains healthy. Prevent a duplicate paid write."
+    },
+    {
+      "id": "3989beef-f28c-437a-8748-019278a51c43",
+      "at": "2026-09-08T00:04:17.148Z",
+      "stage": "decide",
+      "title": "2 protected · 2 compacted · 3 deferred",
+      "detail": "Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees."
+    },
+    {
+      "id": "1f61ed87-19b7-4eec-8d47-b91421f91d0a",
+      "at": "2026-09-08T00:04:16.360Z",
+      "stage": "observe",
+      "title": "Reading my storage treasury",
+      "detail": "Querying Filecoin Pay account summary, wallet balances, payment rails, and the onchain price list."
+    },
+    {
       "id": "b7182c47-5061-4860-bc77-8cbbe300faab",
       "at": "2026-09-07T21:19:10.733Z",
       "stage": "act",
@@ -679,30 +700,190 @@
       "stage": "verify",
       "title": "Retrieving the archive",
       "detail": "Downloading the PieceCID through Synapse and comparing SHA-256 with the original archive."
-    },
-    {
-      "id": "550f68f6-0e53-4e2b-806f-fa67620a52e9",
-      "at": "2026-09-05T15:51:14.256Z",
-      "stage": "act",
-      "title": "Storing the selected memories",
-      "detail": "Synapse is storing and committing the archive on two independent providers."
-    },
-    {
-      "id": "f3314a68-22dc-475f-8a09-4eeab54ec6c7",
-      "at": "2026-09-05T15:51:14.247Z",
-      "stage": "act",
-      "title": "Reserve transaction confirmed",
-      "detail": "0x432ed1903e1a29d5db8cf827f1b41a154efe595e99ad0027053046940bbc52a2"
-    },
-    {
-      "id": "aab91a6d-5291-4898-9156-57dc41a788e1",
-      "at": "2026-09-05T15:49:52.434Z",
-      "stage": "act",
-      "title": "Funding storage reserve",
-      "detail": "Executing the SDK deposit/approval transaction on Calibration only."
     }
   ],
   "receipts": [
+    {
+      "id": "0eaa8449-5287-4d1c-809c-31a487640a81",
+      "version": 1,
+      "createdAt": "2026-09-08T00:04:17.147Z",
+      "mode": "calibration",
+      "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
+      "snapshot": {
+        "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
+        "chainId": 314159,
+        "network": "Filecoin Calibration",
+        "epoch": "4049981",
+        "observedAt": "2026-09-08T00:04:17.142Z",
+        "funds": "1.246611334205909582",
+        "availableFunds": "0.125880628631947146",
+        "debt": "0",
+        "totalLockup": "1.120730705573962436",
+        "monthlyRate": "0.2400001393252032",
+        "ratePerEpoch": "2777779390338",
+        "runwayDays": 15.735069444444445,
+        "walletUsdfc": "99.999845622025842088",
+        "walletFil": "99.999845622025842088",
+        "contracts": {
+          "pay": "0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0",
+          "warmStorage": "0x02925630df557F957f70E112bA06e50965417CA0",
+          "pdp": "0x85e366Cf9DD2c0aE37E963d9556F5f4718d6417C",
+          "usdfc": "0xb3042734b608a1B16e9e86B374A3f3e389B4cDf0"
+        },
+        "prices": {
+          "storagePerTibMonth": 2.5,
+          "datasetFeeMonth": 0.12,
+          "addBaseFee": 0.008,
+          "addPieceFee": 0.003
+        },
+        "rails": [
+          {
+            "railId": "38482",
+            "paymentRate": "0.000001388889695169",
+            "endEpoch": "0"
+          },
+          {
+            "railId": "38483",
+            "paymentRate": "0.000001388889695169",
+            "endEpoch": "0"
+          }
+        ]
+      },
+      "plan": {
+        "decisions": [
+          {
+            "id": "mission",
+            "title": "Mission & safety boundaries",
+            "kind": "core",
+            "action": "keep",
+            "utility": 100,
+            "originalBytes": 335,
+            "retainedBytes": 335,
+            "reason": "Protected by policy. Preserve every source byte.",
+            "content": "Mission: preserve useful research while respecting a finite storage budget. Never discard a pinned memory. Never claim a receipt proves semantic correctness. Use Calibration only. Stop new uploads if financial telemetry is unavailable. Mission owner: the researcher. Recoverable source documents stay local until the user removes them.",
+            "sourceHash": "2c1fafddaa0bb87910c365bd5e19b495669e4dd3e44dadbd3f65efba56d4d0f1"
+          },
+          {
+            "id": "discovery",
+            "title": "The result that changed the experiment",
+            "kind": "research",
+            "action": "keep",
+            "utility": 95,
+            "originalBytes": 375,
+            "retainedBytes": 375,
+            "reason": "Utility 95/100 justifies keeping the original.",
+            "content": "Finding: batching related observations into one archive avoids repeated per-piece fees. Evidence: the Filecoin Warm Storage price list distinguishes base fees and per-piece fees. Keep source hashes in a manifest. Critical: compression reduces bytes, but a dataset proving fee remains until the dataset is empty. Conclusion: optimize the decision unit, not just payload bytes.",
+            "sourceHash": "fd9b9c29cd6e388f12d70644a1c5365e56b13bc8f7a141f1df4b48454f95070c"
+          },
+          {
+            "id": "experiment",
+            "title": "Experiment 024 · working notes",
+            "kind": "research",
+            "action": "compact",
+            "utility": 66,
+            "originalBytes": 4480,
+            "retainedBytes": 279,
+            "reason": "Preserve the highest-signal verbatim excerpts; omit repeated context under selective policy.",
+            "content": "Result: the retrieval check matched the uploaded SHA-256. We tested a memory bundle, downloaded it, and compared every byte. Important: this checks retrieval integrity, not an independently verified PDP challenge. The archive contains an extractive summary and the source digest.",
+            "sourceHash": "b71dcd554ff90f38b703148dc65b2f82bed6b816ad602c607b77982748504847"
+          },
+          {
+            "id": "tool-trace",
+            "title": "Repeated tool-call traces",
+            "kind": "trace",
+            "action": "defer",
+            "utility": 9,
+            "originalBytes": 16851,
+            "retainedBytes": 0,
+            "reason": "Utility 9/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
+            "content": "",
+            "sourceHash": "fb0d6a4d9efc66cbb8d89ecd746282fbd4c3cb132a55b291cf307d086371eae5"
+          },
+          {
+            "id": "drafts",
+            "title": "Superseded answer drafts",
+            "kind": "artifact",
+            "action": "defer",
+            "utility": 18,
+            "originalBytes": 6896,
+            "retainedBytes": 0,
+            "reason": "Utility 18/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
+            "content": "",
+            "sourceHash": "0e358e30818ca0fcc39d56273218671844abfdbe137892d40c3d02b2f4b3d7da"
+          },
+          {
+            "id": "recovery",
+            "title": "Recovery & provenance manifest",
+            "kind": "core",
+            "action": "keep",
+            "utility": 100,
+            "originalBytes": 360,
+            "retainedBytes": 360,
+            "reason": "Protected by policy. Preserve every source byte.",
+            "content": "Recovery procedure: locate the receipt by content hash. Download the bundle from a successful provider. Verify SHA-256 before reading memories. Each compacted memory names its original SHA-256 digest. Source excerpts are verbatim and ordered. If a provider fails, try another copy. Retention decisions are policy outputs, not guarantees of factual correctness.",
+            "sourceHash": "d6e36739fc13bd19aed25ae8f62383396726a34920330107a27ec5bd46fe58a6"
+          },
+          {
+            "id": "provider-notes",
+            "title": "Provider comparison notes",
+            "kind": "research",
+            "action": "compact",
+            "utility": 52,
+            "originalBytes": 1842,
+            "retainedBytes": 283,
+            "reason": "Preserve the highest-signal verbatim excerpts; omit repeated context under selective policy.",
+            "content": "Observation: provider redundancy requires separate datasets, with separate proving fees. Result: two copies protect against a single unavailable provider. Important: keep the receipt with provider ID, dataset ID, piece ID, and retrieval URL. Step 1: fetched the same provider status.",
+            "sourceHash": "651564afe2520965c8fba63579f23e7c08df169b8ac6ece45c26abc0a1b03b64"
+          },
+          {
+            "id": "scratch",
+            "title": "Expired scratchpad",
+            "kind": "trace",
+            "action": "defer",
+            "utility": 0,
+            "originalBytes": 9068,
+            "retainedBytes": 0,
+            "reason": "Utility 0/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
+            "content": "",
+            "sourceHash": "d377c2a05e703749547d1e39bb9a6b68da09f1033d9db1ade0d531819e6660c2"
+          }
+        ],
+        "mode": "selective",
+        "inputBytes": 40207,
+        "retainedBytes": 1632,
+        "baselineMonthly": 0.24000032216547057,
+        "plannedMonthly": 0.24000014674667997,
+        "baselineFees": 0.176,
+        "plannedFees": 0.022,
+        "baselineRunwayDays": 0,
+        "plannedRunwayDays": 12.985070639343373,
+        "protectedCount": 2,
+        "deferredCount": 3,
+        "compactedCount": 2,
+        "retainedUtilityPercent": 94,
+        "explanation": "Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees.",
+        "policy": {
+          "reserveDays": 14,
+          "maxMonthlyUsdfc": 0.5,
+          "minUtility": 32,
+          "allowCompaction": true
+        },
+        "budget": {
+          "availableUsdfc": 0.12588062863194716,
+          "existingMonthlyUsdfc": 0.2400001393252032,
+          "storagePerTibMonth": 2.5,
+          "datasetFeeMonth": 0.12,
+          "addBaseFee": 0.008,
+          "addPieceFee": 0.003,
+          "copies": 2,
+          "newDataset": false
+        }
+      },
+      "action": "deferred",
+      "reason": "The same memories already have a verified archive and the reserve remains healthy. Prevent a duplicate paid write.",
+      "contentFingerprint": "ad12356a518cab8cc17fd3f758125bd921d5748383824d7c16beefef229b49cb",
+      "decisionSignature": "0x999b3e3c9e49a3a39bd96af5c15346eefdf4d335d6fbb7b390edfbc62735f16233601e9a1e5ca584afa089600b8333a385417f57b899d55b002c740ce00951891b"
+    },
     {
       "id": "9ffda44a-371f-487b-ac4f-05f609d362b0",
       "version": 1,
@@ -3434,199 +3615,6 @@
       "decisionSignature": "0x7beac34692c7069d33c101c66e12936420e3f479c9228ea3a7222e7769de2d067b2cf1cbabe4e816b2e5ff220e30cae15069e8412882d9cb5787b180699a432f1c"
     },
     {
-      "id": "ae818059-faec-48e6-b462-f0b9e8c775e2",
-      "version": 1,
-      "createdAt": "2026-09-05T19:42:14.182Z",
-      "mode": "calibration",
-      "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
-      "snapshot": {
-        "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
-        "chainId": 314159,
-        "network": "Filecoin Calibration",
-        "epoch": "4043697",
-        "observedAt": "2026-09-05T19:42:14.178Z",
-        "funds": "1.230072388052319242",
-        "availableFunds": "0.126797248167240798",
-        "debt": "0",
-        "totalLockup": "1.103275139885078444",
-        "monthlyRate": "0.2400001393252032",
-        "ratePerEpoch": "2777779390338",
-        "runwayDays": 15.849305555555556,
-        "walletUsdfc": "99.999876353380296782",
-        "walletFil": "99.999876353380296782",
-        "contracts": {
-          "pay": "0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0",
-          "warmStorage": "0x02925630df557F957f70E112bA06e50965417CA0",
-          "pdp": "0x85e366Cf9DD2c0aE37E963d9556F5f4718d6417C",
-          "usdfc": "0xb3042734b608a1B16e9e86B374A3f3e389B4cDf0"
-        },
-        "prices": {
-          "storagePerTibMonth": 2.5,
-          "datasetFeeMonth": 0.12,
-          "addBaseFee": 0.008,
-          "addPieceFee": 0.003
-        },
-        "rails": [
-          {
-            "railId": "38482",
-            "paymentRate": "0.000001388889695169",
-            "endEpoch": "0"
-          },
-          {
-            "railId": "38483",
-            "paymentRate": "0.000001388889695169",
-            "endEpoch": "0"
-          }
-        ]
-      },
-      "plan": {
-        "decisions": [
-          {
-            "id": "mission",
-            "title": "Mission & safety boundaries",
-            "kind": "core",
-            "action": "keep",
-            "utility": 100,
-            "originalBytes": 335,
-            "retainedBytes": 335,
-            "reason": "Protected by policy. Preserve every source byte.",
-            "content": "Mission: preserve useful research while respecting a finite storage budget. Never discard a pinned memory. Never claim a receipt proves semantic correctness. Use Calibration only. Stop new uploads if financial telemetry is unavailable. Mission owner: the researcher. Recoverable source documents stay local until the user removes them.",
-            "sourceHash": "2c1fafddaa0bb87910c365bd5e19b495669e4dd3e44dadbd3f65efba56d4d0f1"
-          },
-          {
-            "id": "discovery",
-            "title": "The result that changed the experiment",
-            "kind": "research",
-            "action": "keep",
-            "utility": 95,
-            "originalBytes": 375,
-            "retainedBytes": 375,
-            "reason": "Utility 95/100 justifies keeping the original.",
-            "content": "Finding: batching related observations into one archive avoids repeated per-piece fees. Evidence: the Filecoin Warm Storage price list distinguishes base fees and per-piece fees. Keep source hashes in a manifest. Critical: compression reduces bytes, but a dataset proving fee remains until the dataset is empty. Conclusion: optimize the decision unit, not just payload bytes.",
-            "sourceHash": "fd9b9c29cd6e388f12d70644a1c5365e56b13bc8f7a141f1df4b48454f95070c"
-          },
-          {
-            "id": "experiment",
-            "title": "Experiment 024 · working notes",
-            "kind": "research",
-            "action": "compact",
-            "utility": 66,
-            "originalBytes": 4480,
-            "retainedBytes": 279,
-            "reason": "Preserve the highest-signal verbatim excerpts; omit repeated context under selective policy.",
-            "content": "Result: the retrieval check matched the uploaded SHA-256. We tested a memory bundle, downloaded it, and compared every byte. Important: this checks retrieval integrity, not an independently verified PDP challenge. The archive contains an extractive summary and the source digest.",
-            "sourceHash": "b71dcd554ff90f38b703148dc65b2f82bed6b816ad602c607b77982748504847"
-          },
-          {
-            "id": "tool-trace",
-            "title": "Repeated tool-call traces",
-            "kind": "trace",
-            "action": "defer",
-            "utility": 9,
-            "originalBytes": 16851,
-            "retainedBytes": 0,
-            "reason": "Utility 9/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
-            "content": "",
-            "sourceHash": "fb0d6a4d9efc66cbb8d89ecd746282fbd4c3cb132a55b291cf307d086371eae5"
-          },
-          {
-            "id": "drafts",
-            "title": "Superseded answer drafts",
-            "kind": "artifact",
-            "action": "defer",
-            "utility": 18,
-            "originalBytes": 6896,
-            "retainedBytes": 0,
-            "reason": "Utility 18/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
-            "content": "",
-            "sourceHash": "0e358e30818ca0fcc39d56273218671844abfdbe137892d40c3d02b2f4b3d7da"
-          },
-          {
-            "id": "recovery",
-            "title": "Recovery & provenance manifest",
-            "kind": "core",
-            "action": "keep",
-            "utility": 100,
-            "originalBytes": 360,
-            "retainedBytes": 360,
-            "reason": "Protected by policy. Preserve every source byte.",
-            "content": "Recovery procedure: locate the receipt by content hash. Download the bundle from a successful provider. Verify SHA-256 before reading memories. Each compacted memory names its original SHA-256 digest. Source excerpts are verbatim and ordered. If a provider fails, try another copy. Retention decisions are policy outputs, not guarantees of factual correctness.",
-            "sourceHash": "d6e36739fc13bd19aed25ae8f62383396726a34920330107a27ec5bd46fe58a6"
-          },
-          {
-            "id": "provider-notes",
-            "title": "Provider comparison notes",
-            "kind": "research",
-            "action": "compact",
-            "utility": 52,
-            "originalBytes": 1842,
-            "retainedBytes": 283,
-            "reason": "Preserve the highest-signal verbatim excerpts; omit repeated context under selective policy.",
-            "content": "Observation: provider redundancy requires separate datasets, with separate proving fees. Result: two copies protect against a single unavailable provider. Important: keep the receipt with provider ID, dataset ID, piece ID, and retrieval URL. Step 1: fetched the same provider status.",
-            "sourceHash": "651564afe2520965c8fba63579f23e7c08df169b8ac6ece45c26abc0a1b03b64"
-          },
-          {
-            "id": "scratch",
-            "title": "Expired scratchpad",
-            "kind": "trace",
-            "action": "defer",
-            "utility": 0,
-            "originalBytes": 9068,
-            "retainedBytes": 0,
-            "reason": "Utility 0/100 is below the 32 threshold. Keep the source local; spend no storage on it.",
-            "content": "",
-            "sourceHash": "d377c2a05e703749547d1e39bb9a6b68da09f1033d9db1ade0d531819e6660c2"
-          },
-          {
-            "id": "spending-ledger-rollout",
-            "title": "A budget that remembers prior spending",
-            "kind": "research",
-            "action": "keep",
-            "utility": 82,
-            "originalBytes": 265,
-            "retainedBytes": 265,
-            "reason": "Utility 82/100 justifies keeping the original.",
-            "content": "Result: Memento now reserves operation fees and reserve funding in a persistent rolling 30-day ledger before any transaction. Critical: pending or failed attempts remain charged. The ledger records its activation time and does not pretend to cover earlier activity.",
-            "sourceHash": "cc0e6c16654dcb1f837876c0b93ede4a6547feb6dfbc0b2b6c1ed90e43e6489a"
-          }
-        ],
-        "mode": "selective",
-        "inputBytes": 40472,
-        "retainedBytes": 1897,
-        "baselineMonthly": 0.24000032337055105,
-        "plannedMonthly": 0.24000014795176045,
-        "baselineFees": 0.19799999999999998,
-        "plannedFees": 0.022,
-        "baselineRunwayDays": 0,
-        "plannedRunwayDays": 13.099647945421875,
-        "protectedCount": 2,
-        "deferredCount": 3,
-        "compactedCount": 2,
-        "retainedUtilityPercent": 95,
-        "explanation": "Runway is tightening. Preserve useful knowledge and bundle it into one piece to avoid repeated transaction fees.",
-        "policy": {
-          "reserveDays": 14,
-          "maxMonthlyUsdfc": 0.5,
-          "minUtility": 32,
-          "allowCompaction": true
-        },
-        "budget": {
-          "availableUsdfc": 0.1267972481672408,
-          "existingMonthlyUsdfc": 0.2400001393252032,
-          "storagePerTibMonth": 2.5,
-          "datasetFeeMonth": 0.12,
-          "addBaseFee": 0.008,
-          "addPieceFee": 0.003,
-          "copies": 2,
-          "newDataset": false
-        }
-      },
-      "action": "deferred",
-      "reason": "The same memories already have a verified archive and the reserve remains healthy. Prevent a duplicate paid write.",
-      "contentFingerprint": "ac5df5cb25931dc93d38eda6ac25194d8246726a9f0080b348b2f1cde074e295",
-      "decisionSignature": "0xfd94ce91aa567b6ce8bab0ad6d7259cf0bfdec8f208d051fb5efd8a687c41f7d66a7e320be0324af265af02512aebe8519f71b3139496f1e029971e583a51f5c1b"
-    },
-    {
       "id": "54587a5b-c83a-47c5-aa1d-6b54c4e2bbc3",
       "version": 1,
       "createdAt": "2026-09-05T19:40:07.113Z",
@@ -4670,15 +4658,15 @@
     "address": "0xA704353cB48030557c307cB743581D49eFA1eF80",
     "chainId": 314159,
     "network": "Filecoin Calibration",
-    "epoch": "4049651",
-    "observedAt": "2026-09-07T21:19:10.723Z",
+    "epoch": "4049981",
+    "observedAt": "2026-09-08T00:04:17.142Z",
     "funds": "1.246611334205909582",
-    "availableFunds": "0.126797295830758686",
+    "availableFunds": "0.125880628631947146",
     "debt": "0",
-    "totalLockup": "1.119814038375150896",
+    "totalLockup": "1.120730705573962436",
     "monthlyRate": "0.2400001393252032",
     "ratePerEpoch": "2777779390338",
-    "runwayDays": 15.849652777777777,
+    "runwayDays": 15.735069444444445,
     "walletUsdfc": "99.999845622025842088",
     "walletFil": "99.999845622025842088",
     "contracts": {
@@ -4726,5 +4714,5 @@
     ]
   },
   "evidenceMode": "recorded",
-  "exportedAt": "2026-09-07T21:19:11.336Z"
+  "exportedAt": "2026-09-08T00:04:17.758Z"
 }
